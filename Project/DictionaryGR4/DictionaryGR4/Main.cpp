@@ -1,4 +1,9 @@
+#include "Word.h"
 #include <wx/wx.h>
+#include "Definition.h"
+
+
+
 
 class App : public wxApp {
 public:
@@ -16,3 +21,5 @@ public:
 };
 
 wxIMPLEMENT_APP(App);
+
+
