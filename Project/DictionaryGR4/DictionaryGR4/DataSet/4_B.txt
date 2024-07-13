@@ -3295,7 +3295,7 @@ bereave	(v. t.) To take away.
 bereaved	(imp. & p. p.) of Bereave
 bereavement	(n.) The state of being bereaved; deprivation; esp., the loss of a relative by death.
 bereaver	(n.) One who bereaves.
-bereaving.	(p. pr. & vb. n.) of Bereave
+bereaving	(p. pr. & vb. n.) of Bereave
 bereft	() of Bereave
 bereft	() imp. & p. p. of Bereave.
 beretta	(n.) Same as Berretta.

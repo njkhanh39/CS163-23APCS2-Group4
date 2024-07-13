@@ -135,7 +135,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="Definition.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainFrame.cpp" />
+    <ClCompile Include="SearchTree.cpp" />
+    <ClCompile Include="Word.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.h" />
+    <ClInclude Include="Definition.h" />
+    <ClInclude Include="MainFrame.h" />
+    <ClInclude Include="SearchTree.h" />
+    <ClInclude Include="Word.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
