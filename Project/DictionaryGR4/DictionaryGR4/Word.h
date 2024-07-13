@@ -1,35 +1,31 @@
-#pragma once
 #include <iostream>
 #include <string>
-#include <vector>
+#include <algorithm>
 #include <list>
-#include <wx/wx.h>
+#include "Definition.h"
+using namespace std;
+
 class Definition;
 
 class Word {
 private:
-    std::string text;
-    std::list<Definition*> defList;
+	string text;
+	list<Definition*> defList;
 public:
-    //constructors,destructor
+	Word() {
+		text = "";
+	}
 
-    Word(const std::string& wordText)
-        : text(wordText) {}
-    Word();
-    ~Word();
+	Word(const string word) {
+		text = word;
+	}
 
-    //setters - adders
+	~Word() {
+		for (auto& d : defList) delete d;
+	}
 
-    void addDefinition(const std::string& defText);
-
-    void setText(std::string s);
-
-    //getters
-
-    std::list<Definition*> getDefinitions();
-
-    //voids
-
-    //void wxPrintWord();
-   
+	void addDefinition(string& def) {
+		Definition* newDef = new Definition(def, this);
+		defList.push_back(newDef);
+	}
 };

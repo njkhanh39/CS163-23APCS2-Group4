@@ -1,26 +1,20 @@
-#pragma once
 #include <iostream>
 #include <string>
-#include <vector>
+#include <algorithm>
 #include <list>
-#include <wx/wx.h>
+
+
+using namespace std;
+
 class Word;
 
 class Definition {
 private:
-    std::string text;
-    Word* owner;
+	string text;
+	Word* owner;
 public:
-    //constructors,destructor
-
-    Definition(const std::string& defText, Word* owningWord)
-        : text(defText), owner(owningWord) {}
-
-    //setters
-
-    //getters
-    std::string getDefinitionString();
-
-
+	Definition(string& defText, Word* owningWord) {
+		text = defText;
+		owner = owningWord;
+	}
 };
-
