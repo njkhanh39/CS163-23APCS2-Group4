@@ -1,9 +1,14 @@
 #include "Definition.h"
+
+//constructor
 Definition::Definition(string& defText, Word* owningWord) {
 	text = defText;
 	owner = owningWord;
 }
 
-string Definition::getDefinition() {
+//getters
+
+
+string Definition::getStringDefinition() {
 	return text;
 }

@@ -9,22 +9,55 @@ using namespace std;
 
 MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) {
 
+	//font
+	wxFont font(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+
 	//controls
 	
 	panel = new wxPanel(this, 10001, wxDefaultPosition, wxSize(800, 300));
 	panel->SetBackgroundColour(wxColor(100, 100, 200));
 
 	button = new wxButton(panel, 10001, "Enter", wxPoint(40, 150), wxSize(70, 40));
-	listBox = new wxListBox(panel, wxID_ANY, wxPoint(120, 200), wxSize(400, 400));
+	listBox = new wxListBox(panel, wxID_ANY, wxPoint(120, 200), wxSize(220, 300));	
+
+	wordView = new wxListBox(panel, wxID_ANY, wxPoint(350, 150), wxSize(220, 40));
+	defView = new wxListBox(panel, wxID_ANY, wxPoint(350, 200), wxSize(380, 300));
+
 	textCtrl = new wxTextCtrl(panel, wxID_ANY, "", wxPoint(120, 150), wxSize(220,40));
+
+
+
+	// Set font
+	listBox->SetFont(font);
+	button->SetFont(font);
+	textCtrl->SetFont(font);
+	wordView->SetFont(font);
+	
+
+	//event handling
 
 	textCtrl->Bind(wxEVT_TEXT, &MainFrame::OnTextWritten, this);
 
-
+	listBox->Bind(wxEVT_LISTBOX, &MainFrame::OnViewWord, this);
 	
 	CreateStatusBar();
 }
 MainFrame::~MainFrame() {
+
+}
+
+void MainFrame::OnViewWord(wxCommandEvent& evt) {
+	wordView->Clear();
+	defView->Clear();
+	int i = listBox->GetSelection();
+
+	string temp = string(listBox->GetString(i));
+
+	wordView->AppendString(temp);
+
+	list<string> defs = dict.searchStringDefinitions(temp);
+
+	for (auto& st : defs) defView->AppendString(st);
 
 }
 
@@ -40,29 +73,21 @@ void MainFrame::OnTextWritten(wxCommandEvent& evt) {
 	
 	string word = string(s);
 
-	for (auto& c : word) c = tolower(c);
-
-	bool yes = false;
-
-	if ((int)word.length() == 1 && searchTree.empty()) {
-		char key = word[0];
-		if(searchTree.loadData(key)) yes = true;
-		wxLogStatus("Loading data...");
-	}
-	else if ((int)word.length() == 0) {
-	    if(!searchTree.empty()) searchTree.clear();
-		wxLogStatus("Clearing Search Tree...");
-	}
-	else {
-		wxLogStatus("Doing nothing...");
+	if (word.empty()) {
+		wordView->Clear();
+		defView->Clear();
 	}
 
+	dict.chooseLanguage("DataSetEngEng");
+	dict.runSearchEngine(word, true);
 
 	listBox->Clear();
 
-	list<string> defs = searchTree.getStringDefinitions(word);
-	for (auto& d : defs) listBox->AppendString(d);
+	list<Word> listWord;
+
+	listWord = dict.relatedWord(word, 10);
 	
+	for (auto& w : listWord) listBox->AppendString(w.getWord());
 	
 }
 

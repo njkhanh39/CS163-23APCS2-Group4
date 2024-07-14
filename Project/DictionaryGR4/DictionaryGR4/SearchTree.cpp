@@ -1,8 +1,6 @@
 #include "SearchTree.h"
-void Trie::traverse() {
-    std::string temp;
-    traverseHelp(root, temp);
-}
+
+//mapping a character to a child[i]
 
 char Trie::indexToChar(int i) {
     if (i == 0) return ' ';
@@ -27,41 +25,12 @@ int Trie::charToIndex(char s) {
     return -1;
 }
 
-void Trie::traverseHelp(Node*& pRoot, std::string& s) {
-    if (!pRoot) return;
-    if (pRoot->exist == 1) std::cout << s << '\n';
-    for (int i = 0; i < 40; ++i) {
-        if (pRoot->child[i]) {
-
-            s.push_back(indexToChar(i));
-
-            traverseHelp(pRoot->child[i], s);
-            s.pop_back();
-        }
-    }
-}
-
-bool Trie::empty() {
-    for (int i = 0; i < 40; ++i) {
-        if (root->child[i]) return false;
-    }
-    return true;
-}
-
-void Trie::deleteHelper(Node*& pRoot) {
-    if (!pRoot) return;
-    for (int i = 0; i < 40; ++i) {
-        deleteHelper(pRoot->child[i]);
-    }
-    cur = 0;
-    delete pRoot;
-}
-
 
 void Trie::addWord(string word, string& def) {
     Node* p = root;
     for (auto f : word) {
         int c = charToIndex(f);
+        if (c == -1) return; //invalid
 
         if (p->child[c] == NULL) p->child[c] = new Node();
 
@@ -74,15 +43,49 @@ void Trie::addWord(string word, string& def) {
     ++cur;
 }
 
+bool Trie::empty() {
+    for (int i = 0; i < 40; ++i) {
+        if (root->child[i]) return false;
+    }
+    return true;
+}
+
+bool Trie::findWord(string s) {
+    Node* p = root;
+    for (auto f : s) {
+        int c = charToIndex(f);
+        if (c == -1) return false; //invalid
+
+        if (p->child[c] == NULL) return false;
+        p = p->child[c];
+    }
+    return (p->exist != 0);
+}
+
+
 void Trie::clear() {
-    deleteHelper(root);
+    deleteHelperAll(root);
     root = new Node();
 }
 
-bool Trie::delete_string_recursive(Node* p, string& s, int i) {
+void Trie::deleteHelperAll(Node*& pRoot) {
+    if (!pRoot) return;
+    for (int i = 0; i < 40; ++i) {
+        deleteHelperAll(pRoot->child[i]);
+    }
+    cur = 0;
+    delete pRoot;
+}
+
+
+
+
+
+bool Trie::deleteWordRecursive(Node* p, string& s, int i) {
     if (i != (int)s.size()) {
-        int c = charToIndex(s[i]);
-        bool isChildDeleted = delete_string_recursive(p->child[c], s, i + 1);
+        int c = charToIndex(s[i]); 
+        if (c == -1) return false; //invalid
+        bool isChildDeleted = deleteWordRecursive(p->child[c], s, i + 1);
         if (isChildDeleted) p->child[c] = NULL;
     }
     else p->exist--;
@@ -98,27 +101,19 @@ bool Trie::delete_string_recursive(Node* p, string& s, int i) {
     return false;
 }
 
-void Trie::delete_string(string s) {
-    if (find_string(s) == false) return;
+void Trie::removeWord(string s) {
+    if (findWord(s) == false) return;
 
-    delete_string_recursive(root, s, 0);
+    deleteWordRecursive(root, s, 0);
 }
 
-bool Trie::find_string(string s) {
+//get definitions of a string s
+list<Definition> Trie::getDefinitions(string s) {
+    list<Definition> empty;
     Node* p = root;
     for (auto f : s) {
         int c = charToIndex(f);
-        if (p->child[c] == NULL) return false;
-        p = p->child[c];
-    }
-    return (p->exist != 0);
-}
-
-list<Definition*> Trie::getDefinitions(string s) {
-    list<Definition*> empty;
-    Node* p = root;
-    for (auto f : s) {
-        int c = charToIndex(f);
+        if (c == -1) return empty; //invalid
         if (p->child[c] == NULL) return empty;
         p = p->child[c];
     }
@@ -129,11 +124,13 @@ list<Definition*> Trie::getDefinitions(string s) {
     return empty;
 }
 
+
 list<string> Trie::getStringDefinitions(string s) {
     list<string> empty;
     Node* p = root;
     for (auto f : s) {
         int c = charToIndex(f);
+        if (c == -1) return empty; //invalid
         if (p->child[c] == NULL) return empty;
         p = p->child[c];
     }
@@ -142,4 +139,62 @@ list<string> Trie::getStringDefinitions(string s) {
     }
 
     return empty;
+}
+
+void Trie::helperGetWordsPrefix(string prefix, Node* cur, list<Word>& ans, bool& done, int& desired) {
+    if (!cur || done) return;
+    
+    string temp = prefix;
+    for (int i = 0; i < 40; ++i) {
+        if ((int)ans.size() == desired) {
+            done = true;
+            return;
+        }
+        bool yes = false;
+        if (cur->child[i]) {
+            temp.push_back(indexToChar(i));
+            if (cur->child[i]->exist != 0) {
+               
+                cur->child[i]->emptyWord.setWord(temp);
+
+                ans.push_back(cur->child[i]->emptyWord); //add to ans
+
+                cur->child[i]->emptyWord.setWord("");
+            }
+            yes = true;
+        }
+
+
+        helperGetWordsPrefix(temp, cur->child[i], ans, done, desired);
+        if (yes && !temp.empty()) temp.pop_back();
+    }
+
+
+}
+
+list<Word> Trie::getWordsWithPrefix(string s, int& desired) {
+    list<Word> empty;
+    Node* p = root;
+    for (auto f : s) {
+        int c = charToIndex(f);
+        if (c == -1) return empty; //invalid
+        if (p->child[c] == NULL) return empty;
+        p = p->child[c];
+    }
+    if (p->exist != 0) {
+        p->emptyWord.setWord(s);
+
+        empty.push_back(p->emptyWord);
+        p->emptyWord.setWord("");
+    }
+
+    bool done = false;
+
+    helperGetWordsPrefix(s, p, empty, done, desired);
+
+    return empty;
+}
+
+int Trie::getSize() {
+    return cur;
 }

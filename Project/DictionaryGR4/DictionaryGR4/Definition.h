@@ -14,7 +14,11 @@ private:
 	Word* owner;
 public:
 	Definition(string& defText, Word* owningWord);
+	Definition() {
+		text = "";
+		owner = nullptr;
+	}
 
-	string getDefinition();
+	string getStringDefinition();
 };
 

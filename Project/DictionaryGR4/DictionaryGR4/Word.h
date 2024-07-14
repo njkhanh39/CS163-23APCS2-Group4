@@ -10,7 +10,7 @@ class Definition;
 class Word {
 private:
 	string text;
-	list<Definition*> defList;
+	list<Definition> defList;
 public:
 	Word() {
 		text = "";
@@ -20,20 +20,23 @@ public:
 		text = word;
 	}
 
-	~Word() {
-		for (auto& d : defList) delete d;
-	}
 
 	//getters
 
 	string getWord();
 
-	list<Definition*> getDefinitions();
+	
+	list<Definition> getDefinitions();
 
 	list<string> getStringDefinitions();
+
+	//adders and setters
 
 	void addDefinition(string& def);
 
 	void addDefinition(Definition& def);
 
+	void setWord(string word) {
+		text = word;
+	}
 };

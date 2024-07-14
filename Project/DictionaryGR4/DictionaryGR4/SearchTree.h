@@ -3,7 +3,7 @@
 #include "fstream"
 
 class Trie {
-public:
+private:
     struct Node {
         Node* child[40];
         int exist, cnt;
@@ -17,50 +17,55 @@ public:
 
     int cur;
     Node* root;
+
+public:
     Trie() : cur(0) { root = new Node(); };
 
-    ~Trie() { deleteHelper(root); }
+    ~Trie() { deleteHelperAll(root); }
+
+    //mapping a character to a child[i]
 
     char indexToChar(int i);
 
     int charToIndex(char s);
 
-    //debugging
-
-    void traverse();
-
-    //for console, does not work here
-    void traverseHelp(Node*& pRoot, std::string& s);
-
-
-
-    //adding, finding
 
     //add a word with definition
     void addWord(string word, string& def);
 
-    bool find_string(string s);
-
+    //check if a word is empty
     bool empty();
 
-    //deleting
+    //check if a word exists in search tree
+    bool findWord(string s);
+
+    //clearing search tree
     void clear();
 
-    void deleteHelper(Node*& pRoot);
+    void deleteHelperAll(Node*& pRoot);
 
-    bool delete_string_recursive(Node* p, string& s, int i);
+    bool deleteWordRecursive(Node* p, string& s, int i);
 
-    void delete_string(string s);
-
+    //remove a word from Trie
+    void removeWord(string s);
 
     //get definitions of a string s
-    list<Definition*> getDefinitions(string s);
+    list<Definition> getDefinitions(string s);
 
+    //get string definitions as strings 
     list<string> getStringDefinitions(string s);
+
+    void helperGetWordsPrefix(string prefix, Node* cur, list<Word>& ans, bool& done, int& desired);
+
+    //Get words with prefix s, with desired limit (max ... words)
+    list<Word> getWordsWithPrefix(string s, int& desired);
+
+    //return number of added words (even duplicates)
+    int getSize();
 
     //load
 
-    bool loadData(char key) {
+    bool loadDataEngEng(char key) {
         string s;
 
         key = tolower(key);
