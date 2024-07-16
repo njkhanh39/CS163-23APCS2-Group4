@@ -85,7 +85,7 @@ void MainFrame::OnTextWritten(wxCommandEvent& evt) {
 
 	list<Word> listWord;
 
-	listWord = dict.relatedWord(word, 10);
+	listWord = dict.relatedWord(word, 20);
 	
 	for (auto& w : listWord) listBox->AppendString(w.getWord());
 	

@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Definition.cpp" />
+    <ClCompile Include="Dictionary.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="SearchTree.cpp" />
