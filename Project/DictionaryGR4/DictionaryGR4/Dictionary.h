@@ -16,7 +16,7 @@ public:
 		return true;
 	}
 
-	//Pass in search bar's current word, true/false for LogMessaging on Status Bar
+	//Pass in search bar's current word, true/false for LogMessaging on Status Bar.
 	void runSearchEngine(string word, bool yesLogMessage) {
 		if (activeDataSet == EngEng) EngineHelperENG_ENG(word, yesLogMessage);
 	}
