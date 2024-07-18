@@ -15,5 +15,9 @@ private:
 
 	void OnMousePosition(wxMouseEvent& evt);	
 	void OnViewWord(wxCommandEvent& evt);
-	void OnTextWritten(wxCommandEvent& evt);
+
+	void OnTextCtrlWordToDef(wxCommandEvent& evt);
+	
+
+	void OnButtonDefToWord(wxCommandEvent& evt);
 };

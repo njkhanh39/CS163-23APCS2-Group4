@@ -76,17 +76,13 @@ public:
         if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
 
         
-        if (num == 1) s = "DataSet\\1_Apostrophe.txt";
-        else if (num == 2) s = "DataSet\\2_Hyperphen.txt";
+        if (num == 1) s = "DataSet\\1.txt";
+        else if (num == 2) s = "DataSet\\2.txt";
         else {
             num -= 10;
             string idx = to_string(num);
-            key = toupper(key);
-            string temp;
-            temp.push_back('_');
-            temp.push_back(key);
 
-            s = "DataSet\\" + idx + temp + ".txt";
+            s = "DataSet\\"+  idx + ".txt";
         }
         //cout << "Loading file: " << s << '\n';
         ifstream fin;
@@ -115,4 +111,7 @@ public:
         return true;
     }
 };
+
+
+
 

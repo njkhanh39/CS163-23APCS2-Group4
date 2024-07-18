@@ -18,33 +18,60 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 	panel->SetBackgroundColour(wxColor(100, 100, 200));
 
 	button = new wxButton(panel, 10001, "Enter", wxPoint(40, 150), wxSize(70, 40));
-	listBox = new wxListBox(panel, wxID_ANY, wxPoint(120, 200), wxSize(220, 300));	
+	listBox = new wxListBox(panel, wxID_ANY, wxPoint(20, 200), wxSize(700, 300));	
 
-	wordView = new wxListBox(panel, wxID_ANY, wxPoint(350, 150), wxSize(220, 40));
-	defView = new wxListBox(panel, wxID_ANY, wxPoint(350, 200), wxSize(380, 300));
+	//wordView = new wxListBox(panel, wxID_ANY, wxPoint(350, 150), wxSize(220, 40));
+	//defView = new wxListBox(panel, wxID_ANY, wxPoint(350, 200), wxSize(380, 300));
 
 	textCtrl = new wxTextCtrl(panel, wxID_ANY, "", wxPoint(120, 150), wxSize(220,40));
 
 
 
 	// Set font
-	listBox->SetFont(font);
+	//listBox->SetFont(font);
 	button->SetFont(font);
 	textCtrl->SetFont(font);
-	wordView->SetFont(font);
+	//wordView->SetFont(font);
 	
 
 	//event handling
 
-	textCtrl->Bind(wxEVT_TEXT, &MainFrame::OnTextWritten, this);
+	button->Bind(wxEVT_BUTTON, &MainFrame::OnButtonDefToWord, this);
 
-	listBox->Bind(wxEVT_LISTBOX, &MainFrame::OnViewWord, this);
+
+
+	//textCtrl->Bind(wxEVT_TEXT, &MainFrame::OnTextWritten, this);
+
+	//listBox->Bind(wxEVT_LISTBOX, &MainFrame::OnViewWord, this);
 	
 	CreateStatusBar();
 }
 MainFrame::~MainFrame() {
 
 }
+
+void MainFrame::OnButtonDefToWord(wxCommandEvent& evt) {
+	wxString wstr = textCtrl->GetValue();
+
+
+	string word = string(wstr);
+
+	if (word == "" || word == " ") {
+		listBox->Clear();
+		return;
+	}
+
+	listBox->Clear();
+
+	list<Word> ans = dict.searchDefToWord(word);
+
+	for (auto& w : ans) {
+		string def = w.getStringDefinitions().back();
+		string ww = w.getWord();
+		listBox->Append(ww + "-" + def);
+	}
+}
+
 
 void MainFrame::OnViewWord(wxCommandEvent& evt) {
 	wordView->Clear();
@@ -68,7 +95,7 @@ void MainFrame::OnMousePosition(wxMouseEvent& evt) {
 	wxLogStatus(message);
 }
 
-void MainFrame::OnTextWritten(wxCommandEvent& evt) {
+void MainFrame::OnTextCtrlWordToDef(wxCommandEvent& evt) {
 	wxString s = evt.GetString();
 	
 	string word = string(s);

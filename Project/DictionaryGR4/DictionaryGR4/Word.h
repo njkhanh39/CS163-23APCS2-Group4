@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <vector>
 #include <list>
 #include "Definition.h"
 using namespace std;
@@ -18,6 +19,28 @@ public:
 
 	Word(const string word) {
 		text = word;
+	}
+
+	// Equality operator
+	bool operator==(const Word& other) const {
+		return text == other.text;
+	}
+
+	// Inequality operator
+	bool operator!=(const Word& other) const {
+		return !(*this == other);
+	}
+
+	// Less than operator
+	bool operator<(const Word& other) const {
+		if (text < other.text) return true;
+		return false;
+	}
+
+	// Greater than operator
+	bool operator>(const Word& other) const {
+		if (text > other.text) return true;
+		return false;
 	}
 
 
