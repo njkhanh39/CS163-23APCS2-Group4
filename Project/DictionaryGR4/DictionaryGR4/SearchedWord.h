@@ -14,12 +14,30 @@ private:
 	ostringstream dateStream;
 	ostringstream timeStream;
 public:
-	SearchedWord(const string word) {
+
+	SearchedWord(string word) {
 		setWord(word);
 	}
+
 	SearchedWord() {
 		setWord("");
 	}
+
+    // Copy constructor
+
+	SearchedWord(const SearchedWord& other);
+
+    // Copy assignment operator
+    SearchedWord& operator=(const SearchedWord& other) {
+        if (this != &other) {
+            Word::operator=(other);
+            st = other.st;
+            date = other.date;
+            time = other.time;
+        }
+        return *this;
+    }
+
 	void setDate();
 	void setTime();
 

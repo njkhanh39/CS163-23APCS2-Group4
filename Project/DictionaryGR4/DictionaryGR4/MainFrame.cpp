@@ -50,15 +50,18 @@ void MainFrame::OnViewWord(wxCommandEvent& evt) {
 	wordView->Clear();
 	defView->Clear();
 	int i = listBox->GetSelection();
-
 	string temp = string(listBox->GetString(i));
 	// save temp to history
-	SearchedWord w (temp);
 	wordView->AppendString(temp);
 	list<string> defs = dict.searchStringDefinitions(temp);
-
 	for (auto& st : defs) defView->AppendString(st);
-
+	SearchedWord w(temp);
+	w.setDate();
+	w.setTime();
+	for (auto x : defs) {
+		w.addDefinition(x);
+	}
+	his.addToHistory(w);
 }
 
 void MainFrame::OnMousePosition(wxMouseEvent& evt) {
@@ -90,6 +93,25 @@ void MainFrame::OnTextWritten(wxCommandEvent& evt) {
 	for (auto& w : listWord) listBox->AppendString(w.getWord());
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

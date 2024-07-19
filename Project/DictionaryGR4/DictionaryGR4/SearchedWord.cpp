@@ -1,5 +1,12 @@
 #include "SearchedWord.h"
 
+
+SearchedWord::SearchedWord(const SearchedWord& other) : Word(other) {
+	st = other.st;
+	date = other.date;
+	time = other.time;
+}
+
 string SearchedWord::getDate() {
 	return date;
 }

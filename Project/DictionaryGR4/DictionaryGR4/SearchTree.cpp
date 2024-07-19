@@ -1,3 +1,4 @@
+#pragma once 
 #include "SearchTree.h"
 
 //mapping a character to a child[i]
