@@ -12,6 +12,7 @@ private:
 	wxButton* button;
 	wxListBox* listBox, *defView, *wordView;
 	wxTextCtrl* textCtrl;
+	History his;
 
 	void OnMousePosition(wxMouseEvent& evt);	
 	void OnViewWord(wxCommandEvent& evt);

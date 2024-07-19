@@ -52,9 +52,9 @@ void MainFrame::OnViewWord(wxCommandEvent& evt) {
 	int i = listBox->GetSelection();
 
 	string temp = string(listBox->GetString(i));
-
+	// save temp to history
+	SearchedWord w (temp);
 	wordView->AppendString(temp);
-
 	list<string> defs = dict.searchStringDefinitions(temp);
 
 	for (auto& st : defs) defView->AppendString(st);

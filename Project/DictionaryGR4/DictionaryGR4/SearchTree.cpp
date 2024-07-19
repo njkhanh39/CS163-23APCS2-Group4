@@ -137,7 +137,6 @@ list<string> Trie::getStringDefinitions(string s) {
     if (p->exist != 0) {
         return p->emptyWord.getStringDefinitions();
     }
-
     return empty;
 }
 
