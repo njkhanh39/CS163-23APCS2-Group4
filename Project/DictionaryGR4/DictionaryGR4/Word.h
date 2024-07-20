@@ -11,7 +11,7 @@ class Definition;
 class Word {
 private:
 	string text;
-	list<Definition> defList;
+	vector<Definition> defList;
 public:
 	Word() {
 		text = "";
@@ -43,15 +43,18 @@ public:
 		return false;
 	}
 
-
+	bool empty() {
+		if (text == "") return true;
+		return false;
+	}
 	//getters
 
 	string getWord();
 
 	
-	list<Definition> getDefinitions();
+	vector<Definition> getDefinitions();
 
-	list<string> getStringDefinitions();
+	vector<string> getStringDefinitions();
 
 	//adders and setters
 

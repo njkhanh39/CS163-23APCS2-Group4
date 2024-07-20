@@ -10,81 +10,83 @@ using namespace std;
 MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) {
 
 	//font
-	wxFont font(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+	wxFont font(14, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+	wxFont fontTitle(18, wxFONTFAMILY_MODERN, wxFONTSTYLE_MAX, wxFONTWEIGHT_NORMAL);
+	fontTitle.MakeBold();
 
-	//controls
-	
-	panel = new wxPanel(this, 10001, wxDefaultPosition, wxSize(800, 300));
+	panel = new wxPanel(this, 10001, wxDefaultPosition, wxSize(800, 100));
 	panel->SetBackgroundColour(wxColor(100, 100, 200));
-
-	button = new wxButton(panel, 10001, "Enter", wxPoint(40, 150), wxSize(70, 40));
-	listBox = new wxListBox(panel, wxID_ANY, wxPoint(20, 200), wxSize(700, 300));	
-
-	//wordView = new wxListBox(panel, wxID_ANY, wxPoint(350, 150), wxSize(220, 40));
-	//defView = new wxListBox(panel, wxID_ANY, wxPoint(350, 200), wxSize(380, 300));
-
-	textCtrl = new wxTextCtrl(panel, wxID_ANY, "", wxPoint(120, 150), wxSize(220,40));
-
-
-
-	// Set font
-	//listBox->SetFont(font);
-	button->SetFont(font);
-	textCtrl->SetFont(font);
-	//wordView->SetFont(font);
+	panel2 = new wxPanel(this, 10002, wxDefaultPosition, wxSize(800, 500));
 	
+	wxBitmap bitmap(wxT("image.png"), wxBITMAP_TYPE_PNG);
 
-	//event handling
+	wxStaticText* titleBar = new wxStaticText(panel, wxID_ANY, "Dictionary", wxPoint(30, 30));
+	titleBar->SetFont(fontTitle);
 
+	// Create a wxBitmapButton
+	button = new wxBitmapButton(panel2 , wxID_ANY, bitmap, wxPoint(120, 40), wxDefaultSize);
+	searchBar = new wxTextCtrl(panel2, wxID_ANY, "", wxPoint(157, 40), wxSize(350, 40));
+	searchBar->SetFont(font);
+
+	//load
+	runTool = new wxButton(panel2, wxID_ANY, "run", wxPoint(60, 200), wxSize(40, 40));
+	
+	runTool->Bind(wxEVT_BUTTON, &MainFrame::OnLoadTool, this);
+
+	//init height = 0
+	suggestBar = new wxListBox(panel2, wxID_ANY, wxPoint(157, 85), wxSize(1200, 0));
+	suggestBar->SetFont(font);
+
+	//wordView = new wxListBox(panel2, wxID_ANY, wxPoint(520, 85), wxSize(250, 250));
+
+	//sizer
+
+	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+
+	sizer->Add(panel, 1, wxEXPAND | wxLEFT | wxUP | wxRIGHT, 2);
+	sizer->Add(panel2, 5, wxEXPAND | wxALL, 2);
+
+	this->SetSizerAndFit(sizer);
+
+	//events
 	button->Bind(wxEVT_BUTTON, &MainFrame::OnButtonDefToWord, this);
-
-
-
-	//textCtrl->Bind(wxEVT_TEXT, &MainFrame::OnTextWritten, this);
-
-	//listBox->Bind(wxEVT_LISTBOX, &MainFrame::OnViewWord, this);
 	
+
 	CreateStatusBar();
+
 }
 MainFrame::~MainFrame() {
 
 }
 
+
 void MainFrame::OnButtonDefToWord(wxCommandEvent& evt) {
-	wxString wstr = textCtrl->GetValue();
+	wxString wstr = searchBar->GetValue();
 
 
 	string word = string(wstr);
 
 	if (word == "" || word == " ") {
-		listBox->Clear();
+		suggestBar->Clear();
+		adjustSuggestBar(300, 14);
 		return;
 	}
 
-	listBox->Clear();
+	suggestBar->Clear();
 
-	list<Word> ans = dict.searchDefToWord(word);
+	vector<Word> ans = dict.searchDefToWord2(word, 20);
 
 	for (auto& w : ans) {
 		string def = w.getStringDefinitions().back();
 		string ww = w.getWord();
-		listBox->Append(ww + "-" + def);
+		suggestBar->Append(ww + "-" + def);
 	}
+	adjustSuggestBar(300, 14);
 }
 
 
 void MainFrame::OnViewWord(wxCommandEvent& evt) {
-	wordView->Clear();
-	defView->Clear();
-	int i = listBox->GetSelection();
 
-	string temp = string(listBox->GetString(i));
-
-	wordView->AppendString(temp);
-
-	list<string> defs = dict.searchStringDefinitions(temp);
-
-	for (auto& st : defs) defView->AppendString(st);
 
 }
 
@@ -102,20 +104,23 @@ void MainFrame::OnTextCtrlWordToDef(wxCommandEvent& evt) {
 
 	if (word.empty()) {
 		wordView->Clear();
-		defView->Clear();
 	}
 
 	dict.chooseLanguage("DataSetEngEng");
 	dict.runSearchEngine(word, true);
 
-	listBox->Clear();
+	suggestBar->Clear();
 
-	list<Word> listWord;
+	vector<Word> listWord;
 
-	listWord = dict.relatedWord(word, 20);
+	listWord = dict.searchRelatedWords(word, 20);
 	
-	for (auto& w : listWord) listBox->AppendString(w.getWord());
-	
+	for (auto& w : listWord) {
+		suggestBar->AppendString(w.getWord());
+	}
+
+	adjustSuggestBar(300, 14);
+
 }
 
 

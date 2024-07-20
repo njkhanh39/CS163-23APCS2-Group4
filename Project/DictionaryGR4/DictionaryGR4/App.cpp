@@ -8,6 +8,7 @@
 wxIMPLEMENT_APP(App);
 
 bool App::OnInit() {
+	wxImage::AddHandler(new wxPNGHandler);
 	m_frame1 = new MainFrame("Hello");
 	m_frame1->SetClientSize(800, 600);
 	m_frame1->Center();

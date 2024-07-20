@@ -50,15 +50,15 @@ public:
     void removeWord(string s);
 
     //get definitions of a string s
-    list<Definition> getDefinitions(string s);
+    vector<Definition> getDefinitions(string s);
 
     //get string definitions as strings 
-    list<string> getStringDefinitions(string s);
+    vector<string> getStringDefinitions(string s);
 
-    void helperGetWordsPrefix(string prefix, Node* cur, list<Word>& ans, bool& done, int& desired);
+    void helperGetWordsPrefix(string prefix, Node* cur, vector<Word>& ans, bool& done, int& desired);
 
     //Get words with prefix s, with desired limit (max ... words)
-    list<Word> getWordsWithPrefix(string s, int& desired);
+    vector<Word> getWordsWithPrefix(string s, int& desired);
 
     //return number of added words (even duplicates)
     int getSize();
@@ -111,6 +111,56 @@ public:
         return true;
     }
 };
+
+
+
+struct Bucket {
+	Word word;
+	vector<string> subdef; //partition definition paragraph into sorted words
+
+	Bucket() {
+		word.setWord("");
+	}
+
+	Bucket(string keyword) {
+		word.setWord(keyword);
+	}
+
+	void setWord(string keyword, string def) {
+		word.setWord(keyword);
+		word.addDefinition(def);
+	}
+
+	void addSubDef(string s) {
+		subdef.push_back(s);
+	}
+
+	void arrange() {
+		sort(subdef.begin(), subdef.end());
+	}
+};
+
+class WordFinder {
+private:
+	Bucket* slots;
+	int size = 0;
+public:
+	WordFinder() {
+		slots = new Bucket[185000];
+	}
+	~WordFinder() {
+		delete[] slots;
+	}
+
+
+	void addSubDef(string subdef, int order);
+
+    void load(string dataset);
+
+    vector<Word> find(string key, int limit);
+};
+
+
 
 
 
