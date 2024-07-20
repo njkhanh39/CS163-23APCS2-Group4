@@ -55,13 +55,14 @@ void MainFrame::OnViewWord(wxCommandEvent& evt) {
 	wordView->AppendString(temp);
 	list<string> defs = dict.searchStringDefinitions(temp);
 	for (auto& st : defs) defView->AppendString(st);
-	SearchedWord w(temp);
-	w.setDate();
-	w.setTime();
-	for (auto x : defs) {
-		w.addDefinition(x);
-	}
-	his.addToHistory(w);
+	SearchedWord currentWord(temp);
+	currentWord.setDate();
+	currentWord.setTime();
+	his.addToHistory(currentWord);
+
+	// save history to text file
+
+
 }
 
 void MainFrame::OnMousePosition(wxMouseEvent& evt) {

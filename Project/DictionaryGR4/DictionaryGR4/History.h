@@ -2,6 +2,7 @@
 
 #include "SearchedWord.h"
 #include <list>
+#include <fstream>
 
 
 
@@ -19,6 +20,9 @@ public:
 
 
 	void addToHistory(SearchedWord w);
+	void loadFromFile();
+	void saveToFile();
+	void clearHistory();
 
 };
 
