@@ -21,7 +21,7 @@ public:
 
 	void addToHistory(SearchedWord w);
 	void loadFromFile();
-	void saveToFile();
+	void saveToFile(SearchedWord w);
 	void clearHistory();
 
 };

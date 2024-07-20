@@ -62,6 +62,8 @@ void MainFrame::OnViewWord(wxCommandEvent& evt) {
 
 	// save history to text file
 
+	his.saveToFile(currentWord);
+
 
 }
 
