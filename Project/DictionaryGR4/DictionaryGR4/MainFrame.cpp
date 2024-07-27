@@ -107,7 +107,7 @@ void MainFrame::ShowHistory() {
 	wordView->Hide();
 	defView->Hide();
 	historyButton->Hide();
-	HistoryList = new wxListBox(panel, wxID_ANY, wxPoint(120, 200), wxSize(500, 300));
+	HistoryList = new wxListBox(panel, wxID_ANY, wxPoint(120, 200), wxSize(550, 300));
 	wxFont font(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	HistoryList->SetFont(font);
 	his.loadFromFile();
@@ -116,6 +116,11 @@ void MainFrame::ShowHistory() {
 	for (auto& sw : searchList) {
 		HistoryList->AppendString(sw.getWord() + " - " + sw.getDate() + " - " + sw.getTime());
 	}
+
+	//int index = HistoryList->GetSelection();
+	//string temp = string(HistoryList->GetString(index));
+
+
 }
 
 
