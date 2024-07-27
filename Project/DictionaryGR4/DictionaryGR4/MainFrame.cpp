@@ -19,7 +19,7 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 
 	button = new wxButton(panel, 10001, "Enter", wxPoint(40, 150), wxSize(70, 40));
 	listBox = new wxListBox(panel, wxID_ANY, wxPoint(120, 200), wxSize(220, 300));	
-
+	historyButton = new wxButton(panel, wxID_ANY, "History", wxPoint(40, 200), wxSize(70,40));
 	wordView = new wxListBox(panel, wxID_ANY, wxPoint(350, 150), wxSize(220, 40));
 	defView = new wxListBox(panel, wxID_ANY, wxPoint(350, 200), wxSize(380, 300));
 
@@ -30,6 +30,7 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 	// Set font
 	listBox->SetFont(font);
 	button->SetFont(font);
+	historyButton->SetFont(font);
 	textCtrl->SetFont(font);
 	wordView->SetFont(font);
 	
@@ -40,6 +41,8 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 
 	listBox->Bind(wxEVT_LISTBOX, &MainFrame::OnViewWord, this);
 	
+	historyButton->Bind(wxEVT_BUTTON, &MainFrame::OnHistoryButtonClicked, this);
+
 	CreateStatusBar();
 }
 MainFrame::~MainFrame() {
@@ -58,7 +61,7 @@ void MainFrame::OnViewWord(wxCommandEvent& evt) {
 	SearchedWord currentWord(temp);
 	currentWord.setDate();
 	currentWord.setTime();
-	his.addToHistory(currentWord);
+	//his.addToHistory(currentWord);
 
 	// save history to text file
 
@@ -97,9 +100,29 @@ void MainFrame::OnTextWritten(wxCommandEvent& evt) {
 	
 }
 
+void MainFrame::ShowHistory() {
+	textCtrl->Hide();
+	button->Hide();
+	listBox->Hide();
+	wordView->Hide();
+	defView->Hide();
+	historyButton->Hide();
+	HistoryList = new wxListBox(panel, wxID_ANY, wxPoint(120, 200), wxSize(500, 300));
+	wxFont font(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+	HistoryList->SetFont(font);
+	his.loadFromFile();
+	// display on the screen
+	list<SearchedWord> searchList = his.getsearchList();
+	for (auto& sw : searchList) {
+		HistoryList->AppendString(sw.getWord() + " - " + sw.getDate() + " - " + sw.getTime());
+	}
+}
 
 
+void MainFrame::OnHistoryButtonClicked(wxCommandEvent& evt) {
+	ShowHistory();
 
+}
 
 
 

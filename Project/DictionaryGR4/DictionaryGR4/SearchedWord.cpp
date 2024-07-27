@@ -26,3 +26,11 @@ void SearchedWord::setTime() {
 	timeStream << setw(2) << setfill('0') << st.wHour << ":" << setw(2) << setfill('0') << st.wMinute;
 	time = timeStream.str();
 }
+
+void SearchedWord::setDate(string date) {
+	this->date = date;
+}
+
+void SearchedWord::setTime(string time) {
+	this->time = time;
+}

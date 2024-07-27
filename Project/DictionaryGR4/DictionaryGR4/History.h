@@ -3,7 +3,7 @@
 #include "SearchedWord.h"
 #include <list>
 #include <fstream>
-
+#include <sstream>
 
 
 
@@ -23,6 +23,7 @@ public:
 	void loadFromFile();
 	void saveToFile(SearchedWord w);
 	void clearHistory();
+	void remove(string word);  // for removing a word
 
 };
 

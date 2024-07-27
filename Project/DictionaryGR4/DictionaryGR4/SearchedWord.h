@@ -40,7 +40,8 @@ public:
 
 	void setDate();
 	void setTime();
-
+	void setDate(string date);
+	void setTime(string time);
 	string getDate();
 	string getTime();
 };
