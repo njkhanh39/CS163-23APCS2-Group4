@@ -1,4 +1,4 @@
-#include "MainFrame.h"
+﻿#include "MainFrame.h"
 #include <wx/wx.h>
 #include <wx/spinctrl.h>
 #include <iostream>
@@ -54,14 +54,14 @@ void MainFrame::OnViewWord(wxCommandEvent& evt) {
 	defView->Clear();
 	int i = listBox->GetSelection();
 	string temp = string(listBox->GetString(i));
-	// save temp to history
+
 	wordView->AppendString(temp);
 	list<string> defs = dict.searchStringDefinitions(temp);
 	for (auto& st : defs) defView->AppendString(st);
+
 	SearchedWord currentWord(temp);
 	currentWord.setDate();
 	currentWord.setTime();
-	//his.addToHistory(currentWord);
 
 	// save history to text file
 
@@ -107,42 +107,64 @@ void MainFrame::ShowHistory() {
 	wordView->Hide();
 	defView->Hide();
 	historyButton->Hide();
+
 	HistoryList = new wxListBox(panel, wxID_ANY, wxPoint(120, 200), wxSize(550, 300));
 	wxFont font(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	HistoryList->SetFont(font);
-	his.loadFromFile();
-	// display on the screen
-	list<SearchedWord> searchList = his.getsearchList();
-	for (auto& sw : searchList) {
-		HistoryList->AppendString(sw.getWord() + " - " + sw.getDate() + " - " + sw.getTime());
-	}
 
-	//int index = HistoryList->GetSelection();
-	//string temp = string(HistoryList->GetString(index));
-
-
+	viewWordInHistory = new wxButton(panel, wxID_ANY,"View", wxPoint(40, 150), wxSize(70, 40));
+	viewWordInHistory->SetFont(font);
 }
 
 
 void MainFrame::OnHistoryButtonClicked(wxCommandEvent& evt) {
 	ShowHistory();
-
+	his.loadFromFile(); // history loaded into searchList
+	list<SearchedWord> searchList = his.getsearchList();
+	for (auto& sw : searchList) {
+		HistoryList->AppendString("[" + sw.getWord() + "][" + sw.getDate() + "][" + sw.getTime() + "]");
+	}
+	viewWordInHistory->Bind(wxEVT_BUTTON, &MainFrame::OnViewWordInHistory, this);
 }
 
+void MainFrame::OnViewWordInHistory(wxCommandEvent& evt) {
+	int index = HistoryList->GetSelection();
+	if (index == wxNOT_FOUND) {
+		wxLogError("No item selected!");
+		return;
+	}
+
+	string temp = string(HistoryList->GetString(index));
+	size_t firstBracket = temp.find('[');
+	size_t secondBracket = temp.find(']', firstBracket);
 
 
 
+	if (firstBracket == string::npos || secondBracket == string::npos || firstBracket >= secondBracket) {
+		wxLogError("Invalid format in selected item!");
+		return;
+	}
 
+	temp = temp.substr(firstBracket + 1, secondBracket - firstBracket - 1);
 
+	HistoryList->Hide();
+	viewWordInHistory->Hide();
 
+	wordView->Show();
+	defView->Show();
+	wordView->Clear();
+	defView->Clear();
 
+	wordView->AppendString(temp);
+	list<string> defs = dict.searchStringDefinitions(temp);
 
-
-
-
-
-
-
-
-
+	//if (defs.empty()) {
+		//wxLogError("No definitions found for the word: %s", temp);
+	//}
+	//else {
+		for (auto& st : defs) {
+			defView->AppendString(st);
+		}
+	//}
+}
 

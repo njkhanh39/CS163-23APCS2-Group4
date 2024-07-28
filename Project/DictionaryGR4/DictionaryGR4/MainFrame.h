@@ -15,10 +15,13 @@ private:
 	wxTextCtrl* textCtrl;
 	wxButton* historyButton;
 	wxListBox* HistoryList;
+	wxButton* viewWordInHistory;
+	wxButton* removeWordFromHistory;
 
 	void OnMousePosition(wxMouseEvent& evt);
 	void OnViewWord(wxCommandEvent& evt);
 	void OnTextWritten(wxCommandEvent& evt);
 	void OnHistoryButtonClicked(wxCommandEvent& evt);
 	void ShowHistory();
+	void OnViewWordInHistory(wxCommandEvent& evt);
 };
