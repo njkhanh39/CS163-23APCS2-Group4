@@ -13,7 +13,7 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 	wxFont font(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 
 	//controls
-	
+	 
 	panel = new wxPanel(this, 10001, wxDefaultPosition, wxSize(800, 300));
 	panel->SetBackgroundColour(wxColor(100, 100, 200));
 
