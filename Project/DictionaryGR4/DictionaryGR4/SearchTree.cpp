@@ -230,13 +230,13 @@ bool Trie::loadDataEngEng(char key) {
     if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
 
 
-    if (num == 1) s = "DataSet\\1.txt";
-    else if (num == 2) s = "DataSet\\2.txt";
+    if (num == 1) s = "DataSet\\Eng-Eng\\1.txt";
+    else if (num == 2) s = "DataSet\\Eng-Eng\\2.txt";
     else {
         num -= 10;
         string idx = to_string(num);
 
-        s = "DataSet\\" + idx + ".txt";
+        s = "DataSet\\Eng-Eng\\" + idx + ".txt";
     }
     //cout << "Loading file: " << s << '\n';
     ifstream fin;
