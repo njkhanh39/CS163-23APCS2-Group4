@@ -7,12 +7,12 @@ string Word::getWord() {
 	return text;
 }
 
-list<Definition> Word::getDefinitions() {
+vector<Definition> Word::getDefinitions() {
 	return defList;
 }
 
-list<string> Word::getStringDefinitions() {
-	list<string> ans;
+vector<string> Word::getStringDefinitions() {
+	vector<string> ans;
 	for (auto& p : defList) {
 		ans.push_back(p.getStringDefinition());
 	}

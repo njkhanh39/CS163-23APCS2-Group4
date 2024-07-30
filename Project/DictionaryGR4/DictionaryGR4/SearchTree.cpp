@@ -109,8 +109,8 @@ void Trie::removeWord(string s) {
 }
 
 //get definitions of a string s
-list<Definition> Trie::getDefinitions(string s) {
-    list<Definition> empty;
+vector<Definition> Trie::getDefinitions(string s) {
+    vector<Definition> empty;
     Node* p = root;
     for (auto f : s) {
         int c = charToIndex(f);
@@ -125,9 +125,29 @@ list<Definition> Trie::getDefinitions(string s) {
     return empty;
 }
 
+//get word that matches string s
+Word Trie::getWordMatching(string s) {
+    Word ans; //empty word
+    Node* p = root;
+    for (auto f : s) {
+        int c = charToIndex(f);
+        if (c == -1) return ans; //invalid
+        if (p->child[c] == NULL) return ans;
+        p = p->child[c];
+    }
+    if (p->exist != 0) {
+        ans = p->emptyWord;
+        ans.setWord(s);
 
-list<string> Trie::getStringDefinitions(string s) {
-    list<string> empty;
+        return ans;
+    }
+
+    return ans;
+}
+
+
+vector<string> Trie::getStringDefinitions(string s) {
+    vector<string> empty;
     Node* p = root;
     for (auto f : s) {
         int c = charToIndex(f);
@@ -141,12 +161,12 @@ list<string> Trie::getStringDefinitions(string s) {
     return empty;
 }
 
-void Trie::helperGetWordsPrefix(string prefix, Node* cur, list<Word>& ans, bool& done, int& desired) {
+void Trie::helperGetWordsPrefix(string prefix, Node* cur, vector<Word>& ans, bool& done, int& limit) {
     if (!cur || done) return;
     
     string temp = prefix;
     for (int i = 0; i < 40; ++i) {
-        if ((int)ans.size() == desired) {
+        if ((int)ans.size() == limit) {
             done = true;
             return;
         }
@@ -165,15 +185,15 @@ void Trie::helperGetWordsPrefix(string prefix, Node* cur, list<Word>& ans, bool&
         }
 
 
-        helperGetWordsPrefix(temp, cur->child[i], ans, done, desired);
+        helperGetWordsPrefix(temp, cur->child[i], ans, done, limit);
         if (yes && !temp.empty()) temp.pop_back();
     }
 
 
 }
 
-list<Word> Trie::getWordsWithPrefix(string s, int& desired) {
-    list<Word> empty;
+vector<Word> Trie::getWordsWithPrefix(string s, int& limit) {
+    vector<Word> empty;
     Node* p = root;
     for (auto f : s) {
         int c = charToIndex(f);
@@ -190,11 +210,159 @@ list<Word> Trie::getWordsWithPrefix(string s, int& desired) {
 
     bool done = false;
 
-    helperGetWordsPrefix(s, p, empty, done, desired);
+    helperGetWordsPrefix(s, p, empty, done, limit);
 
     return empty;
 }
 
 int Trie::getSize() {
     return cur;
+}
+
+bool Trie::loadDataEngEng(char key) {
+    string s;
+
+    key = tolower(key);
+    int num = charToIndex(key);
+
+
+    //no character begins with numbers, spaces or special chars
+    if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
+
+
+    if (num == 1) s = "DataSet\\Eng-Eng\\1.txt";
+    else if (num == 2) s = "DataSet\\Eng-Eng\\2.txt";
+    else {
+        num -= 10;
+        string idx = to_string(num);
+
+        s = "DataSet\\Eng-Eng\\" + idx + ".txt";
+    }
+    //cout << "Loading file: " << s << '\n';
+    ifstream fin;
+    fin.open(s);
+    if (fin.is_open()) {
+        string line;
+        while (getline(fin, line)) {
+
+            string s, t;
+            int i = 0;
+            while (line[i] != '\t') {
+                s.push_back(line[i]);
+                ++i;
+            }
+
+            ++i;
+
+            for (int j = i; j < (int)line.length(); ++j) t.push_back(line[j]);
+
+            addWord(s, t);
+            //cout << s << '\n';
+        }
+    }
+    else return false;
+
+    return true;
+}
+
+
+void WordFinder::addSubDef(string subdef, int order) {
+    slots[order].addSubDef(subdef);
+}
+
+void WordFinder::load(string dataset) {
+    int curbucket = 0;
+    for (int file = 1; file <= 28; ++file) {
+        fstream fin;
+        fin.open("DataSet\\" + dataset +"\\" + to_string(file) + ".txt");
+
+        if (!fin.is_open()) {
+            fin.close();
+            continue;
+        }
+
+
+        string line; //1 line = 1 bucket
+        while (getline(fin, line)) {
+
+            string s, t;
+            int i = 0;
+            while (line[i] != '\t') {
+                s.push_back(line[i]);
+                ++i;
+            }
+
+            ++i;
+
+            string cur = "";
+            for (int j = i; j < (int)line.length(); ++j) {
+                if (line[j] == ' ') {
+                    if (cur != "") addSubDef(cur, curbucket);
+                    cur = "";
+                }
+                else if (line[j] != '.' && line[j] != ',' && line[j] != ';') cur.push_back(tolower(line[j]));
+                t.push_back(line[j]);
+            }
+
+            if (cur != "") addSubDef(cur, curbucket);
+
+            //set word to the current bucket, only once tho
+            if (slots[curbucket].word.empty()) slots[curbucket].setWord(s, t);
+
+
+            slots[curbucket].arrange();
+
+            ++curbucket;
+        }
+
+        fin.close();
+        size = curbucket;
+    }
+
+}
+
+vector<Word> WordFinder::searchDefinitionsToWord(string key, int limit) {
+    vector<Word> ans;
+
+    vector<int> pos;
+    for (int i = 0; i < (int)key.length(); ++i) {
+        key[i] = tolower(key[i]);
+        if (i == 0 || (key[i] != ' ' && key[i - 1] == ' ')) pos.push_back(i);
+    }
+
+    vector<string> subKey;
+
+    for (int i = 0; i < (int)pos.size(); ++i) {
+        int len;
+        if (i + 1 == (int)pos.size()) len = (int)key.length() - pos[i];
+        else len = pos[i + 1] - pos[i] - 1;
+
+        char t = key[pos[i] + len - 1];
+        while (len >= 0 && t == ',' || t == ';' || t == '.' || t == ' ') --len;
+
+        subKey.push_back(key.substr(pos[i], len));
+    }
+
+    //loop through "size" slots
+    for (int i = 0; i < size; ++i) {
+
+        bool checkAns = true;
+
+        for (auto& sub : subKey) {
+            //BS on slots[i].subdef
+
+
+            bool yes = binary_search(slots[i].subdef.begin(), slots[i].subdef.end(), sub);
+
+            if (!yes) {
+                checkAns = false;
+                break;
+            }
+        }
+
+        if (checkAns) ans.push_back(slots[i].word);
+        if (ans.size() == limit) return ans;
+    }
+
+    return ans;
 }

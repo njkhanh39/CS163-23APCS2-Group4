@@ -2,8 +2,10 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <vector>
 #include <list>
 #include "Definition.h"
+
 using namespace std;
 
 class Definition;
@@ -11,7 +13,7 @@ class Definition;
 class Word {
 private:
 	string text;
-	list<Definition> defList;
+	vector<Definition> defList;
 public:
 	Word() {
 		text = "";
@@ -21,15 +23,49 @@ public:
 		text = word;
 	}
 
+	// Equality operator
+	bool operator==(const Word& other) const {
+		return text == other.text;
+	}
 
+	// Inequality operator
+	bool operator!=(const Word& other) const {
+		return !(*this == other);
+	}
+
+	// Less than operator
+	bool operator<(const Word& other) const {
+		if (text < other.text) return true;
+		return false;
+	}
+
+	// Greater than operator
+	bool operator>(const Word& other) const {
+		if (text > other.text) return true;
+		return false;
+	}
+
+	bool empty() {
+		if (text == "") return true;
+		return false;
+	}
 	//getters
 
 	string getWord();
 
-	
-	list<Definition> getDefinitions();
+	int getNumberOfDefinitions() {
+		return (int)defList.size();
+	}
 
-	list<string> getStringDefinitions();
+	Definition getDefinitionAt(int i) {
+		if(i<(int)defList.size() && i>=0) return defList[i];
+		Definition trash;
+		return trash;
+	}
+	
+	vector<Definition> getDefinitions();
+
+	vector<string> getStringDefinitions();
 
 	//adders and setters
 
@@ -40,4 +76,10 @@ public:
 	void setWord(string word) {
 		text = word;
 	}
+
+	void clear() {
+		text = "";
+		defList.clear();
+	}
+
 };

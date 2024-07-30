@@ -33,17 +33,11 @@
     <ClCompile Include="SearchTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="History.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SearchedWord.cpp">
+    <ClCompile Include="Dictionary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Word.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Definition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -59,10 +53,10 @@
     <ClInclude Include="Dictionary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SearchedWord.h">
+    <ClInclude Include="GUI_WordView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="History.h">
+    <ClInclude Include="Word.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
