@@ -138,8 +138,10 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Definition.cpp" />
     <ClCompile Include="Dictionary.cpp" />
+    <ClCompile Include="History.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
+    <ClCompile Include="SearchedWord.cpp" />
     <ClCompile Include="SearchTree.cpp" />
     <ClCompile Include="Word.cpp" />
   </ItemGroup>
@@ -148,7 +150,9 @@
     <ClInclude Include="Definition.h" />
     <ClInclude Include="Dictionary.h" />
     <ClInclude Include="GUI_WordView.h" />
+    <ClInclude Include="History.h" />
     <ClInclude Include="MainFrame.h" />
+    <ClInclude Include="SearchedWord.h" />
     <ClInclude Include="SearchTree.h" />
     <ClInclude Include="Word.h" />
   </ItemGroup>
