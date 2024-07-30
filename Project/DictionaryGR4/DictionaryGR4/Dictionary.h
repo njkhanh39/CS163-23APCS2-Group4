@@ -18,7 +18,7 @@ public:
 	}
 
 	void runSearchDefinitionEngine() {
-		tool.load(EngEng);
+		tool.load("Eng-Eng");
 		isSearchingDefinition = true;
 	}
 

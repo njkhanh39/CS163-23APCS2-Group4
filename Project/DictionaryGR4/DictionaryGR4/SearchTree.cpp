@@ -274,7 +274,7 @@ void WordFinder::load(string dataset) {
     int curbucket = 0;
     for (int file = 1; file <= 28; ++file) {
         fstream fin;
-        fin.open("DataSet\\" + to_string(file) + ".txt");
+        fin.open("DataSet\\" + dataset +"\\" + to_string(file) + ".txt");
 
         if (!fin.is_open()) {
             fin.close();
