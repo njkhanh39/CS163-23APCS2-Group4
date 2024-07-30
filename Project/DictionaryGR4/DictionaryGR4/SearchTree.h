@@ -33,7 +33,7 @@ public:
     //add a word with definition
     void addWord(string word, string& def);
 
-    //check if a word is empty
+    //check if Trie is empty
     bool empty();
 
     //check if a word exists in search tree
@@ -42,80 +42,69 @@ public:
     //clearing search tree
     void clear();
 
-    void deleteHelperAll(Node*& pRoot);
-
-    bool deleteWordRecursive(Node* p, string& s, int i);
-
     //remove a word from Trie
     void removeWord(string s);
 
     //get definitions of a string s
     vector<Definition> getDefinitions(string s);
 
+    //get word that matches string s
+    Word getWordMatching(string s);
+
     //get string definitions as strings 
     vector<string> getStringDefinitions(string s);
 
-    void helperGetWordsPrefix(string prefix, Node* cur, vector<Word>& ans, bool& done, int& desired);
-
+    
     //Get words with prefix s, with desired limit (max ... words)
     vector<Word> getWordsWithPrefix(string s, int& desired);
+
+    //in case word typed does not match, we suggest words (customable limit)
+    vector<Word> getClosestMatchWords(string s, int& desired) {
+        
+        //suggested words will differ our word by at most one position
+
+        vector<Word> ans;
+
+        vector<string> possible;
+
+        for (int i = 0; i < (int)s.length(); ++i) {
+            char old = s[i];
+            for (int idx = 0; idx < 39; ++idx) {
+                char l = indexToChar(idx);
+                s[i] = l;
+                possible.push_back(s);
+            }
+            s[i] = old;
+        }
+
+        for (auto& str : possible) {
+            Word temp = getWordMatching(str);
+            if (!temp.empty()) ans.push_back(temp);
+            if ((int)ans.size() == desired) return ans;
+        }
+
+        return ans;
+    }
 
     //return number of added words (even duplicates)
     int getSize();
 
     //load
 
-    bool loadDataEngEng(char key) {
-        string s;
+    bool loadDataEngEng(char key);
 
-        key = tolower(key);
-        int num = charToIndex(key);
+private:
+    //helpers
 
-
-        //no character begins with numbers, spaces or special chars
-        if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
-
-        
-        if (num == 1) s = "DataSet\\1.txt";
-        else if (num == 2) s = "DataSet\\2.txt";
-        else {
-            num -= 10;
-            string idx = to_string(num);
-
-            s = "DataSet\\"+  idx + ".txt";
-        }
-        //cout << "Loading file: " << s << '\n';
-        ifstream fin;
-        fin.open(s);
-        if (fin.is_open()) {
-            string line;
-            while (getline(fin, line)) {
-
-                string s, t;
-                int i = 0;
-                while (line[i] != '\t') {
-                    s.push_back(line[i]);
-                    ++i;
-                }
-
-                ++i;
-
-                for (int j = i; j < (int)line.length(); ++j) t.push_back(line[j]);
-
-                addWord(s, t);
-                //cout << s << '\n';
-            }
-        }
-        else return false;
-
-        return true;
-    }
+    void deleteHelperAll(Node*& pRoot);
+    bool deleteWordRecursive(Node* p, string& s, int i);
+    void helperGetWordsPrefix(string prefix, Node* cur, vector<Word>& ans, bool& done, int& limit);
 };
 
 
 
 struct Bucket {
-	Word word;
+	Word word; 
 	vector<string> subdef; //partition definition paragraph into sorted words
 
 	Bucket() {
@@ -138,6 +127,11 @@ struct Bucket {
 	void arrange() {
 		sort(subdef.begin(), subdef.end());
 	}
+
+    void clear() {
+        word.clear();
+        subdef.clear();
+    }
 };
 
 class WordFinder {
@@ -157,7 +151,49 @@ public:
 
     void load(string dataset);
 
-    vector<Word> find(string key, int limit);
+    void unload() {
+        for (int i = 0; i < size; ++i) {
+            slots[i].clear();
+        }
+    }
+
+    Word searchWord(string text) {
+        int left = 0, right = size - 1;
+
+        bool yes = false;
+        Word ans;
+
+        int j = -1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (slots[mid].word.getWord() < text) {
+                left= mid + 1;
+            }
+            else {
+                if (slots[mid].word.getWord() == text) j = mid;
+                right = mid - 1;
+            }
+        }
+
+        if (j == -1) return ans;
+        
+        for (int i = j; i < size; ++i) {
+            if (slots[i].word.getWord() != text) break;
+
+            if (!yes) {
+                ans.setWord(text);
+                yes = true;
+            }
+
+            ans.addDefinition(slots[i].word.getDefinitions().back());
+        }
+
+        return ans;
+    }
+
+    vector<Word> searchDefinitionsToWord(string key, int limit);
 };
 
 

@@ -11,17 +11,20 @@ private:
 	string activeDataSet = EngEng; //can be changeable
 	
 public:
-	bool isToolLoaded = false;
+	bool isSearchingDefinition = false;
 	Dictionary() {
 		//tool.load(EngEng);
 	}
 
-	void load() {
+	void runSearchDefinitionEngine() {
 		tool.load(EngEng);
-		isToolLoaded = true;
+		isSearchingDefinition = true;
 	}
 
-
+	void turnOffSearchDefinitionEngine() {
+		tool.unload();
+		isSearchingDefinition = false;
+	}
 
 	//string = DataSetEngEng, DataSetEngVie, DataSetVieEng
 	bool chooseLanguage(string t) {
@@ -35,9 +38,28 @@ public:
 		if (activeDataSet == EngEng) EngineHelperENG_ENG(word, yesLogMessage);
 	}
 
+	void turnOffSearchEngine() {
+		if (activeDataSet == EngEng) EngineHelperENG_ENG("", false);
+	}
+
+	//get a "Word" object that matches a string
+	Word searchWordMatching(string word) {
+		Word w;
+		//format word
+		for (auto& x : word) x = tolower(x);
+		
+		if (activeDataSet == EngEng) {
+			if (w.empty() && isSearchingDefinition) return tool.searchWord(word);
+			else w = myTrie.getWordMatching(word);
+		}
+		return w;
+	}
+
 	//return definitions of keyword
 	vector<Definition> searchDefinitions(string word) {
 		vector<Definition> ans;
+		//format word
+		for (auto& x : word) x = tolower(x);
 		if (activeDataSet == EngEng) return myTrie.getDefinitions(word);
 		return ans;
 	}
@@ -45,6 +67,8 @@ public:
 	//return definitions of keyword as strings
 	vector<string> searchStringDefinitions(string word) {
 		vector<string> ans;
+		//format word
+		for (auto& x : word) x = tolower(x);
 		if (activeDataSet == EngEng) return myTrie.getStringDefinitions(word);
 		return ans;
 	}
@@ -60,7 +84,7 @@ public:
 	}
 
 	//search def -> word + limit number of words
-	vector<Word> searchDefToWord(string keyword, int limit) {
+	vector<Word> seachDefToWordOnFile(string keyword, int limit) {
 		//formatting is done in helper
 
 		vector<Word> ans;
@@ -70,9 +94,10 @@ public:
 		return ans;
 	}
 
-	vector<Word> searchDefToWord2(string keyword, int limit) {
-		return tool.find(keyword, limit);
+	vector<Word> searchDefToWord(string keyword, int limit) {
+		return tool.searchDefinitionsToWord(keyword, limit);
 	}
+	
 	
 
 private:

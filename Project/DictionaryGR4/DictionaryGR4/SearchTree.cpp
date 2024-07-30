@@ -124,6 +124,26 @@ vector<Definition> Trie::getDefinitions(string s) {
     return empty;
 }
 
+//get word that matches string s
+Word Trie::getWordMatching(string s) {
+    Word ans; //empty word
+    Node* p = root;
+    for (auto f : s) {
+        int c = charToIndex(f);
+        if (c == -1) return ans; //invalid
+        if (p->child[c] == NULL) return ans;
+        p = p->child[c];
+    }
+    if (p->exist != 0) {
+        ans = p->emptyWord;
+        ans.setWord(s);
+
+        return ans;
+    }
+
+    return ans;
+}
+
 
 vector<string> Trie::getStringDefinitions(string s) {
     vector<string> empty;
@@ -199,6 +219,51 @@ int Trie::getSize() {
     return cur;
 }
 
+bool Trie::loadDataEngEng(char key) {
+    string s;
+
+    key = tolower(key);
+    int num = charToIndex(key);
+
+
+    //no character begins with numbers, spaces or special chars
+    if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
+
+
+    if (num == 1) s = "DataSet\\1.txt";
+    else if (num == 2) s = "DataSet\\2.txt";
+    else {
+        num -= 10;
+        string idx = to_string(num);
+
+        s = "DataSet\\" + idx + ".txt";
+    }
+    //cout << "Loading file: " << s << '\n';
+    ifstream fin;
+    fin.open(s);
+    if (fin.is_open()) {
+        string line;
+        while (getline(fin, line)) {
+
+            string s, t;
+            int i = 0;
+            while (line[i] != '\t') {
+                s.push_back(line[i]);
+                ++i;
+            }
+
+            ++i;
+
+            for (int j = i; j < (int)line.length(); ++j) t.push_back(line[j]);
+
+            addWord(s, t);
+            //cout << s << '\n';
+        }
+    }
+    else return false;
+
+    return true;
+}
 
 
 void WordFinder::addSubDef(string subdef, int order) {
@@ -256,7 +321,7 @@ void WordFinder::load(string dataset) {
 
 }
 
-vector<Word> WordFinder::find(string key, int limit) {
+vector<Word> WordFinder::searchDefinitionsToWord(string key, int limit) {
     vector<Word> ans;
 
     vector<int> pos;
