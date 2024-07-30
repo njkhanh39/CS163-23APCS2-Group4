@@ -1,3 +1,4 @@
+#pragma once 
 #include "SearchTree.h"
 
 //mapping a character to a child[i]
@@ -157,7 +158,6 @@ vector<string> Trie::getStringDefinitions(string s) {
     if (p->exist != 0) {
         return p->emptyWord.getStringDefinitions();
     }
-
     return empty;
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "SearchTree.h"
+#include "History.h"
 #include <wx/wx.h>
 
 class Dictionary {
