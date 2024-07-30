@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 #include "Definition.h"
+
 using namespace std;
 
 class Definition;
@@ -51,6 +52,15 @@ public:
 
 	string getWord();
 
+	int getNumberOfDefinitions() {
+		return (int)defList.size();
+	}
+
+	Definition getDefinitionAt(int i) {
+		if(i<(int)defList.size() && i>=0) return defList[i];
+		Definition trash;
+		return trash;
+	}
 	
 	vector<Definition> getDefinitions();
 
@@ -65,4 +75,10 @@ public:
 	void setWord(string word) {
 		text = word;
 	}
+
+	void clear() {
+		text = "";
+		defList.clear();
+	}
+
 };

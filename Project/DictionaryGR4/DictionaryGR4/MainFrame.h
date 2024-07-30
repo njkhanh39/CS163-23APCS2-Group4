@@ -1,6 +1,7 @@
 #pragma once
 #include <wx/wx.h>
 #include "Dictionary.h"
+#include "GUI_WordView.h"
 
 class MainFrame : public wxFrame {
 public:
@@ -9,39 +10,33 @@ public:
 private:
 	Dictionary dict;
 	wxPanel* panel, *panel2;
-	wxButton* button, *runTool;
-	wxListBox* suggestBar, *wordView;
+	wxButton* button, *runTool, *unrunTool;
+	wxListBox* suggestBar;
 	wxTextCtrl* searchBar;
+	WordView* wordView;
+	
 
 	void OnMousePosition(wxMouseEvent& evt);	
 
-	void adjustSuggestBar(int maxHeight, int maxItem) {
-		// Calculate the new size for the list box based on the number of items
-		
-		int itemCount = suggestBar->GetCount();        // Get the number of items
-		
-		int newHeight;
+	//suggest bars
+	void adjustSuggestBar(int maxHeight, int maxItem);
 
-		if (itemCount == 0) newHeight = 0;
-		else newHeight = maxHeight * itemCount / maxItem;
-
-		if (newHeight > maxHeight) newHeight = maxHeight;
-
-		// Set the new size for the list box
-		wxSize currentSize = suggestBar->GetSize();
-		suggestBar->SetSize(wxSize(currentSize.GetWidth(), newHeight));
-
-		// Update the layout to reflect the new size
-		Layout();
-	}
-
+	//word view
 	void OnViewWord(wxCommandEvent& evt);
 
-	void OnTextCtrlWordToDef(wxCommandEvent& evt);
+	//searchBar
+	void OnSearchAndSuggestHandler(wxCommandEvent& evt);
 	
-	void OnButtonDefToWord(wxCommandEvent& evt);
+	//microscope button
+
+	void OnSearchButton(wxCommandEvent& evt);
 
 	void OnLoadTool(wxCommandEvent& evt) {
-		if (!dict.isToolLoaded) dict.load();
+		if (!dict.isSearchingDefinition) dict.runSearchDefinitionEngine();
 	}
+
+	void OnUnLoadTool(wxCommandEvent& evt) {
+		dict.turnOffSearchDefinitionEngine();
+	}
+
 };
