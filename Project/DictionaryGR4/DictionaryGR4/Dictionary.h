@@ -96,13 +96,37 @@ public:
 	//}
 
 	vector<Word> searchDefToWord(string keyword, int limit) {
-		return tool.searchDefinitionsToWord(keyword, limit);
+		vector<string> subkeys = transformSentence(keyword);
+		return tool.searchDefinitionsToWord(subkeys, limit);
 	}
 	
 	
 
 private:
 	//helpers
+
+	vector<string> transformSentence(string& input) {
+		string intermediate;
+		intermediate.reserve(input.size());
+
+		// Transform to lowercase and remove dots, commas, and semicolons
+		for (char ch : input) {
+			if (ch != '.' && ch != ',' && ch != ';') {
+				intermediate += tolower(ch);
+			}
+		}
+
+		// Remove redundant spaces and split into words
+		istringstream iss(intermediate);
+		vector<string> words;
+		string word;
+
+		while (iss >> word) {
+			words.push_back(word);
+		}
+
+		return words;
+	}
 	
 	void EngineHelperENG_ENG(string keyword, bool yesLogMessage) {
 		//format the word

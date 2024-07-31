@@ -4,9 +4,12 @@
 #include <algorithm>
 #include <vector>
 #include <list>
+#include <cctype>
+#include <sstream>
 #include "Definition.h"
 
 using namespace std;
+
 
 class Definition;
 

@@ -344,34 +344,16 @@ void WordFinder::load(string dataset) {
     }
 }
 
-vector<Word> WordFinder::searchDefinitionsToWord(string key, int limit) {
+vector<Word> WordFinder::searchDefinitionsToWord(vector<string>& subkey, int limit) {
     vector<Word> ans;
 
-    vector<int> pos;
-    for (int i = 0; i < (int)key.length(); ++i) {
-        key[i] = tolower(key[i]);
-        if (i == 0 || (key[i] != ' ' && key[i - 1] == ' ')) pos.push_back(i);
-    }
-
-    vector<string> subKey;
-
-    for (int i = 0; i < (int)pos.size(); ++i) {
-        int len;
-        if (i + 1 == (int)pos.size()) len = (int)key.length() - pos[i];
-        else len = pos[i + 1] - pos[i] - 1;
-
-        char t = key[pos[i] + len - 1];
-        while (len >= 0 && t == ',' || t == ';' || t == '.' || t == ' ') --len;
-
-        subKey.push_back(key.substr(pos[i], len));
-    }
 
     //loop through "size" slots
     for (int i = 0; i < size; ++i) {
 
         bool checkAns = true;
 
-        for (auto& sub : subKey) {
+        for (auto& sub : subkey) {
             //BS on slots[i].subdef
 
 

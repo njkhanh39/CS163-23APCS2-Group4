@@ -193,7 +193,7 @@ public:
         return ans;
     }
 
-    vector<Word> searchDefinitionsToWord(string key, int limit);
+    vector<Word> searchDefinitionsToWord(vector<string>& subkey, int limit);
 
     /*void writeToFile(string filename) {
         ofstream fout;
