@@ -153,7 +153,7 @@ void MainFrame::OnViewWord(wxCommandEvent& evt) {
 		wordView->processWord(word);
 
 		//avoiding overlapping panels
-		wordView->Enable();
+		//wordView->Enable();
 		return;
 	}
 
@@ -195,12 +195,12 @@ void MainFrame::OnViewWord(wxCommandEvent& evt) {
 	wordView->goToDefinition(def);
 
 	//avoiding overlapping panels
-	wordView->Enable();
+	//wordView->Enable();
 }
 
 void MainFrame::OnSearchAndSuggestHandler(wxCommandEvent& evt) {
 	//avoiding overlapping panels
-	wordView->Disable();
+	//wordView->Disable();
 	//only for #case2, search by word
 	if (!dict.isSearchingDefinition) {
 		wxString s = evt.GetString();
@@ -209,7 +209,7 @@ void MainFrame::OnSearchAndSuggestHandler(wxCommandEvent& evt) {
 
 		
 
-		dict.chooseLanguage("DataSetEngEng");
+		dict.chooseLanguage("Eng-Eng");
 		dict.runSearchEngine(word, true);
 
 		suggestBar->Clear();
@@ -226,7 +226,7 @@ void MainFrame::OnSearchAndSuggestHandler(wxCommandEvent& evt) {
 		adjustSuggestBar(300, 14);
 	}
 	
-	if (suggestBar->IsEmpty()) wordView->Enable();
+	//if (suggestBar->IsEmpty()) wordView->Enable();
 }
 
 void MainFrame::adjustSuggestBar(int maxHeight, int maxItem) {
