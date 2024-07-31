@@ -7,7 +7,7 @@ class Dictionary {
 private:
 	WordFinder tool;
 	Trie myTrie; //for word -> def in Eng-Eng
-	const string EngEng = "DataSetEngEng", EngVie = "DataSetEngVie", VieEng = "DataSetVieEng"; //datasets
+	const string EngEng = "Eng-Eng", EngVie = "Eng-Vie", VieEng = "Vie-Eng"; //datasets
 
 	string activeDataSet = EngEng; //can be changeable
 	
@@ -18,7 +18,7 @@ public:
 	}
 
 	void runSearchDefinitionEngine() {
-		tool.load(EngEng);
+		tool.load("Eng-Eng");
 		isSearchingDefinition = true;
 	}
 
@@ -85,15 +85,15 @@ public:
 	}
 
 	//search def -> word + limit number of words
-	vector<Word> seachDefToWordOnFile(string keyword, int limit) {
-		//formatting is done in helper
+	//vector<Word> seachDefToWordOnFile(string keyword, int limit) {
+	//	//formatting is done in helper
 
-		vector<Word> ans;
+	//	vector<Word> ans;
 
-		if (activeDataSet == EngEng) return helperDefToWordENGENG(keyword, limit);
+	//	if (activeDataSet == EngEng) return helperDefToWordENGENG(keyword, limit);
 
-		return ans;
-	}
+	//	return ans;
+	//}
 
 	vector<Word> searchDefToWord(string keyword, int limit) {
 		return tool.searchDefinitionsToWord(keyword, limit);
@@ -132,107 +132,105 @@ private:
 			wxLogStatus("Doing nothing...");
 		}
 	}
-	vector<Word> helperDefToWordENGENG(string keyword, int limit){
-		//format word
-		string word;
+	//vector<Word> helperDefToWordENGENG(string keyword, int limit){
+	//	//format word
+	//	string word;
 
-		vector<Word> ans;
+	//	vector<Word> ans;
 
-		if (keyword.empty()) return ans;
+	//	if (keyword.empty()) return ans;
 
-		int i = 0, n = (int)keyword.length();
-		while (i<n && keyword[i] == ' ') ++i;
+	//	int i = 0, n = (int)keyword.length();
+	//	while (i<n && keyword[i] == ' ') ++i;
 
-		if (i == n) return ans;
+	//	if (i == n) return ans;
 
-		for (int j = i; j < n; ++j) {
-			if (j < n - 1 && (keyword[j] == ' ' && keyword[j + 1] == ' ')) continue;
-			if (j == n - 1 && keyword[j] == ' ') continue;
-			word.push_back(tolower(keyword[j]));
-		}
+	//	for (int j = i; j < n; ++j) {
+	//		if (j < n - 1 && (keyword[j] == ' ' && keyword[j + 1] == ' ')) continue;
+	//		if (j == n - 1 && keyword[j] == ' ') continue;
+	//		word.push_back(tolower(keyword[j]));
+	//	}
 
 
-		//loop through all files
+	//	//loop through all files
 
-		for (int file = 1; file <= 28; ++file) {
-			fstream fin;
-			fin.open("DataSet\\" + to_string(file) + ".txt");
+	//	for (int file = 1; file <= 28; ++file) {
+	//		fstream fin;
+	//		fin.open("DataSet\\" + to_string(file) + ".txt");
 
-			if (!fin.is_open()) {
-				fin.close();
-				continue;
-			}
+	//		if (!fin.is_open()) {
+	//			fin.close();
+	//			continue;
+	//		}
 
-			string line;
-			while (getline(fin, line)) {
+	//		string line;
+	//		while (getline(fin, line)) {
 
-				string s, t, u;
-				int i = 0;
-				while (line[i] != '\t') {
-					s.push_back(line[i]);
-					++i;
-				}
+	//			string s, t, u;
+	//			int i = 0;
+	//			while (line[i] != '\t') {
+	//				s.push_back(line[i]);
+	//				++i;
+	//			}
 
-				++i;
+	//			++i;
 
-				//format to lowercase, remove commas and dots
-				for (int j = i; j < (int)line.length(); ++j) {
-					if(line[j]!=',' && line[j]!=';' && line[j]!='.') t.push_back(tolower(line[j]));
-					u.push_back(line[j]);
-				}
+	//			//format to lowercase, remove commas and dots
+	//			for (int j = i; j < (int)line.length(); ++j) {
+	//				if(line[j]!=',' && line[j]!=';' && line[j]!='.') t.push_back(tolower(line[j]));
+	//				u.push_back(line[j]);
+	//			}
 
-				
-				if (better_wordcheck(t, word)) {
-					Word w; w.setWord(s); w.addDefinition(u);
-					
-					ans.push_back(w);
-					if (ans.size() == limit) {
-						fin.close();
-						return ans;
-					}
-				}
-			}
+	//			
+	//			if (better_wordcheck(t, word)) {
+	//				Word w; w.setWord(s); w.addDefinition(u);
+	//				
+	//				ans.push_back(w);
+	//				if (ans.size() == limit) {
+	//					fin.close();
+	//					return ans;
+	//				}
+	//			}
+	//		}
 
-			fin.close();
-		}
+	//		fin.close();
+	//	}
 
-		return ans;
-	}
+	//	return ans;
+	//}
 
-	
-
-	bool wordcheck(string& a, string& b, int position) {
-		for (int i = 0; i < (int)a.length(); ++i) {
-			if (i == 0 || (a[i] != ' ' && a[i - 1] == ' ')) {
-				bool S = true;
-				int j = i, k = position;
-				for (j, k; k != (int)b.length() && b[k] != ' '; ++j, ++k) {
-					if (j == (int)a.length() || a[j] == ' ') {
-						S = false;
-						break;
-					}
-					if (a[j] != b[k]) {
-						S = false;
-						break;
-					}
-				}
-				if (a[j] != ' ' && j < (int)a.length()) S = false;
-				if (S) return true;
-			}
-		}
-		return false;
-	}
-	bool better_wordcheck(string& a, string& b) {
-		vector<int> pos;
-		int spacecount = 0;
-		for (int i = 0; i < (int)b.length(); ++i) {
-			if (b[i] == ' ') ++spacecount;
-			if (i == 0 || (b[i - 1] == ' ')) pos.push_back(i);
-		}
-		int i = 0;
-		for (int i = 0; i <= spacecount; ++i) {
-			if (!wordcheck(a, b, pos[i])) return false;
-		}
-		return true;
-	}
+	//bool wordcheck(string& a, string& b, int position) {
+	//	for (int i = 0; i < (int)a.length(); ++i) {
+	//		if (i == 0 || (a[i] != ' ' && a[i - 1] == ' ')) {
+	//			bool S = true;
+	//			int j = i, k = position;
+	//			for (j, k; k != (int)b.length() && b[k] != ' '; ++j, ++k) {
+	//				if (j == (int)a.length() || a[j] == ' ') {
+	//					S = false;
+	//					break;
+	//				}
+	//				if (a[j] != b[k]) {
+	//					S = false;
+	//					break;
+	//				}
+	//			}
+	//			if (a[j] != ' ' && j < (int)a.length()) S = false;
+	//			if (S) return true;
+	//		}
+	//	}
+	//	return false;
+	//}
+	//bool better_wordcheck(string& a, string& b) {
+	//	vector<int> pos;
+	//	int spacecount = 0;
+	//	for (int i = 0; i < (int)b.length(); ++i) {
+	//		if (b[i] == ' ') ++spacecount;
+	//		if (i == 0 || (b[i - 1] == ' ')) pos.push_back(i);
+	//	}
+	//	int i = 0;
+	//	for (int i = 0; i <= spacecount; ++i) {
+	//		if (!wordcheck(a, b, pos[i])) return false;
+	//	}
+	//	return true;
+	//}
 };

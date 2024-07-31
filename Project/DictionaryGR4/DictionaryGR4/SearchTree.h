@@ -194,6 +194,22 @@ public:
     }
 
     vector<Word> searchDefinitionsToWord(string key, int limit);
+
+    /*void writeToFile(string filename) {
+        ofstream fout;
+        fout.open(filename);
+        if (fout.is_open()) {
+            for (int i = 0; i < size; ++i) {
+                fout << slots[i].word.getWord() << '\t';
+                for (int j = 0; j < (int)slots[i].subdef.size(); ++j) {
+                    fout << slots[i].subdef[j];
+                    if (j + 1 != (int)slots[i].subdef.size()) fout << ' ';
+                    else fout << '\n';
+                }
+            }
+        }
+        fout.close();
+    }*/
 };
 
 

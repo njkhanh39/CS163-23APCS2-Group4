@@ -230,13 +230,13 @@ bool Trie::loadDataEngEng(char key) {
     if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
 
 
-    if (num == 1) s = "DataSet\\1.txt";
-    else if (num == 2) s = "DataSet\\2.txt";
+    if (num == 1) s = "DataSet\\Eng-Eng\\1.txt";
+    else if (num == 2) s = "DataSet\\Eng-Eng\\2.txt";
     else {
         num -= 10;
         string idx = to_string(num);
 
-        s = "DataSet\\" + idx + ".txt";
+        s = "DataSet\\Eng-Eng\\" + idx + ".txt";
     }
     //cout << "Loading file: " << s << '\n';
     ifstream fin;
@@ -271,54 +271,77 @@ void WordFinder::addSubDef(string subdef, int order) {
 }
 
 void WordFinder::load(string dataset) {
+    //load from processed data
     int curbucket = 0;
+
+    ifstream fin;
+    fin.open("DataSet\\" + dataset +"\\sortedData.txt");
+
+    if (!fin.is_open()) {
+        fin.close();
+        return;
+    }
+
+    string line; //1 line = 1 bucket
+    while (getline(fin, line)) {
+        string s;
+        int i = 0;
+        while (line[i] != '\t') {
+            s.push_back(line[i]);
+            ++i;
+        }
+
+        ++i;
+
+        string cur = "";
+        for (int j = i; j < (int)line.length(); ++j) {
+            if (line[j] == ' ') {
+                if (cur != "") addSubDef(cur, curbucket);
+                cur = "";
+            }
+            else cur.push_back(line[j]);
+        }
+
+        if (cur != "") addSubDef(cur, curbucket);
+
+
+        //no need sorting
+        //slots[curbucket].arrange();
+
+        ++curbucket;
+    }
+
+    fin.close();
+    size = curbucket;
+
+    int cur = 0;
     for (int file = 1; file <= 28; ++file) {
-        fstream fin;
-        fin.open("DataSet\\" + to_string(file) + ".txt");
+        ifstream fin;
+        fin.open("DataSet\\" + dataset + "\\" + to_string(file) + ".txt");
 
         if (!fin.is_open()) {
             fin.close();
             continue;
         }
 
-
-        string line; //1 line = 1 bucket
+        string line;
         while (getline(fin, line)) {
-
-            string s, t;
-            int i = 0;
-            while (line[i] != '\t') {
-                s.push_back(line[i]);
-                ++i;
+            string word = "";
+            int j = 0;
+            while (line[j] != '\t') {
+                word.push_back(line[j]);
+                ++j;
             }
 
-            ++i;
+            ++j;
+            string def = line.substr(j, (int)line.length());
 
-            string cur = "";
-            for (int j = i; j < (int)line.length(); ++j) {
-                if (line[j] == ' ') {
-                    if (cur != "") addSubDef(cur, curbucket);
-                    cur = "";
-                }
-                else if (line[j] != '.' && line[j] != ',' && line[j] != ';') cur.push_back(tolower(line[j]));
-                t.push_back(line[j]);
-            }
-
-            if (cur != "") addSubDef(cur, curbucket);
-
-            //set word to the current bucket, only once tho
-            if (slots[curbucket].word.empty()) slots[curbucket].setWord(s, t);
-
-
-            slots[curbucket].arrange();
-
-            ++curbucket;
+            slots[cur].setWord(word, def);
+            ++cur;
         }
 
         fin.close();
-        size = curbucket;
     }
-
 }
 
 vector<Word> WordFinder::searchDefinitionsToWord(string key, int limit) {
