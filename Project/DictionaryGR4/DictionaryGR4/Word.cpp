@@ -1,10 +1,26 @@
 #include "Word.h"
 
 
+//check for emptiness
+bool Word::empty() {
+	if (text == "") return true;
+	return false;
+}
+
 //getters
 
 string Word::getWord() {
 	return text;
+}
+
+int Word::getNumberOfDefinitions() {
+	return (int)defList.size();
+}
+
+Definition Word::getDefinitionAt(int i) {
+	if (i < (int)defList.size() && i >= 0) return defList[i];
+	Definition trash;
+	return trash;
 }
 
 vector<Definition> Word::getDefinitions() {
@@ -29,4 +45,13 @@ void Word::addDefinition(string& def) {
 
 void Word::addDefinition(Definition& def) {
 	defList.push_back(def);
+}
+
+void Word::setWord(string word) {
+	text = word;
+}
+
+void Word::clear() {
+	text = "";
+	defList.clear();
 }

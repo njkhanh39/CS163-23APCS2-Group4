@@ -59,39 +59,14 @@ public:
     vector<Word> getWordsWithPrefix(string s, int& desired);
 
     //in case word typed does not match, we suggest words (customable limit)
-    vector<Word> getClosestMatchWords(string s, int& desired) {
-        
-        //suggested words will differ our word by at most one position
-
-        vector<Word> ans;
-
-        vector<string> possible;
-
-        for (int i = 0; i < (int)s.length(); ++i) {
-            char old = s[i];
-            for (int idx = 0; idx < 39; ++idx) {
-                char l = indexToChar(idx);
-                s[i] = l;
-                possible.push_back(s);
-            }
-            s[i] = old;
-        }
-
-        for (auto& str : possible) {
-            Word temp = getWordMatching(str);
-            if (!temp.empty()) ans.push_back(temp);
-            if ((int)ans.size() == desired) return ans;
-        }
-
-        return ans;
-    }
+    vector<Word> getClosestMatchWords(string s, int& desired);
 
     //return number of added words (even duplicates)
     int getSize();
 
     //load
 
-    bool loadDataEngEng(char key);
+    bool loadData(char key, string dataset);
 
 private:
     //helpers
@@ -115,6 +90,7 @@ struct Bucket {
 		word.setWord(keyword);
 	}
 
+
 	void setWord(string keyword, string def) {
 		word.setWord(keyword);
 		word.addDefinition(def);
@@ -125,7 +101,7 @@ struct Bucket {
 	}
 
 	void arrange() {
-		sort(subdef.begin(), subdef.end());
+        sort(subdef.begin(), subdef.end());
 	}
 
     void clear() {
@@ -151,47 +127,9 @@ public:
 
     void load(string dataset);
 
-    void unload() {
-        for (int i = 0; i < size; ++i) {
-            slots[i].clear();
-        }
-    }
+    void unload();
 
-    Word searchWord(string text) {
-        int left = 0, right = size - 1;
-
-        bool yes = false;
-        Word ans;
-
-        int j = -1;
-
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-
-            if (slots[mid].word.getWord() < text) {
-                left= mid + 1;
-            }
-            else {
-                if (slots[mid].word.getWord() == text) j = mid;
-                right = mid - 1;
-            }
-        }
-
-        if (j == -1) return ans;
-        
-        for (int i = j; i < size; ++i) {
-            if (slots[i].word.getWord() != text) break;
-
-            if (!yes) {
-                ans.setWord(text);
-                yes = true;
-            }
-
-            ans.addDefinition(slots[i].word.getDefinitions().back());
-        }
-
-        return ans;
-    }
+    Word searchWord(string text);
 
     vector<Word> searchDefinitionsToWord(vector<string>& subkey, int limit);
 
@@ -213,7 +151,140 @@ public:
 };
 
 
+//bool isUnwantedPunctuation(char c) {
+    //    return c == '.' || c == ',' || c == ';' || c == '(' || c == ')';
+    //}
 
+    //// Helper function to transform a single character
+    //char transformChar(char c) {
+    //    if (isUnwantedPunctuation(c)) {
+    //        return ' '; // Replace unwanted punctuation with space
+    //    }
+    //    else {
+    //        return std::tolower(c);
+    //    }
+    //}
+
+    //// Function to transform the sentence
+    //std::string transformSentence(std::string& sentence) {
+    //    std::string result;
+    //    result.reserve(sentence.size());
+
+    //    // Convert to lowercase and remove unwanted punctuation
+    //    for (char c : sentence) {
+    //        result.push_back(transformChar(c));
+    //    }
+
+    //    // Remove redundant spaces
+    //    std::istringstream iss(result);
+    //    std::string word;
+    //    result.clear();
+    //    bool firstWord = true;
+    //    while (iss >> word) {
+    //        if (!firstWord) {
+    //            result += " ";
+    //        }
+    //        result += word;
+    //        firstWord = false;
+    //    }
+
+    //    return result;
+    //}
+
+    //void loadThenWriteEngVie() {
+    //    int curbucket = 0;
+    //    for (int file = 1; file <= 28; ++file) {
+    //        ifstream fin;
+    //        fin.open("DataSet\\Eng-Vie\\" + to_string(file) + ".txt");
+
+    //        if (!fin.is_open()) {
+    //            fin.close();
+    //            continue;
+    //        }
+
+    //        string line;
+    //        while (getline(fin, line)) {
+    //            string s;
+    //            int i = 0;
+    //            while (line[i] != '\t') {
+    //                s.push_back(line[i]);
+    //                ++i;
+    //            }
+
+    //            ++i;
+
+    //            string tmp = line.substr(i, (int)line.length());
+    //            string so = transformSentence(tmp);
+
+    //            string cur = "";
+    //            for (int j = 0; j < (int)so.length(); ++j) {
+    //                if (so[j] == ' ') {
+    //                    slots[curbucket].addSubDef(cur);
+    //                    cur = "";
+    //                }
+    //                else cur.push_back(so[j]);
+    //            }
+
+    //            slots[curbucket].arrange();
+
+    //            ++curbucket;
+    //        }
+
+    //        fin.close();
+    //    }
+
+    //    size = curbucket;
+    //    
+    //    int cur = 0;
+    //    for (int file = 1; file <= 28; ++file) {
+    //        ifstream fin;
+    //        fin.open("DataSet\\Eng-Vie\\" + to_string(file) + ".txt");
+
+    //        if (!fin.is_open()) {
+    //            fin.close();
+    //            continue;
+    //        }
+
+    //        string line;
+    //        while (getline(fin, line)) {
+    //            string word = "";
+    //            int j = 0;
+    //            while (line[j] != '\t') {
+    //                word.push_back(line[j]);
+    //                ++j;
+    //            }
+
+    //            ++j;
+    //            string def = line.substr(j, (int)line.length());
+
+    //            slots[cur].setWord(word, def);
+    //            ++cur;
+    //        }
+
+    //        fin.close();
+    //    }
+
+    //    ofstream fout;
+    //    fout.open("dataSortedEngVie.txt");
+
+    //    if (!fout.is_open()) {
+    //        fout.close();
+    //        return;
+    //    }
+
+    //    string line;
+    //    for (int i = 0; i < size; ++i) {
+    //        fout << slots[i].word.getWord() << '\t';
+    //        for (int j = 0; j < (int)slots[i].subdef.size(); ++j) {
+    //            fout << slots[i].subdef[j];
+    //            if (j + 1 == (int)slots[i].subdef.size()) fout << '\n';
+    //            else fout << ' ';
+    //        }
+    //    }
+
+    //    fout.close();
+    //}
+    //---------------------------------
 
 
 

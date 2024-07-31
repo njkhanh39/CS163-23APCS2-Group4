@@ -74,13 +74,11 @@ MainFrame::~MainFrame() {
 
 
 void MainFrame::OnSearchButton(wxCommandEvent& evt) {
-
 	//#case 1: search by definition, press the button will list out
 	if (dict.isSearchingDefinition) {
-		wxString wstr = searchBar->GetValue();
+		wxString wunicode = searchBar->GetValue();
 
-
-		string word = string(wstr);
+		string word = string(wunicode.mb_str(wxConvUTF8));
 
 		if (word == "" || word == " ") {
 			suggestBar->Clear();
@@ -90,13 +88,14 @@ void MainFrame::OnSearchButton(wxCommandEvent& evt) {
 
 		suggestBar->Clear();
 
+
 		//recommend 20 words with defs
 		vector<Word> ans = dict.searchDefToWord(word, 20);
 
 		for (auto& w : ans) {
 			string def = w.getStringDefinitions().back();
 			string ww = w.getWord();
-			suggestBar->Append(ww + "\t" + def);
+			suggestBar->Append(wxString::FromUTF8(ww + "\t" + def));
 		}
 		adjustSuggestBar(300, 14);
 
@@ -129,17 +128,15 @@ void MainFrame::OnSearchButton(wxCommandEvent& evt) {
 
 }
 
-
 void MainFrame::OnViewWord(wxCommandEvent& evt) {
-	
-
-	if (!dict.isSearchingDefinition) {
+	if (!dict.isSearchingDefinition) { //word->def
 		int selected = suggestBar->GetSelection();
-		string key = (string)suggestBar->GetString(selected);
+		wxString keyuni = suggestBar->GetString(selected);
+		string key = (string)keyuni.mb_str(wxConvUTF8);
 
 		//add the word to our search bar
 
-		searchBar->SetValue(key);
+		searchBar->SetValue(keyuni);
 
 		//clear the suggest bar
 
@@ -157,13 +154,14 @@ void MainFrame::OnViewWord(wxCommandEvent& evt) {
 		return;
 	}
 
+	//word->def
+
 	int selected = suggestBar->GetSelection();
-	string key = (string)suggestBar->GetString(selected);
+	wxString keyuni = suggestBar->GetString(selected);
+	string key = (string)keyuni.mb_str(wxConvUTF8);
 
 	//wordView->Enable();
 	if (key.empty()) return;
-
-	
 
 	//extract word
 
@@ -182,8 +180,6 @@ void MainFrame::OnViewWord(wxCommandEvent& evt) {
 
 	suggestBar->Clear();
 	adjustSuggestBar(300, 14);
-
-
 
 	//look for the specific # of the definition wrt to that "text" word
 
@@ -207,9 +203,8 @@ void MainFrame::OnSearchAndSuggestHandler(wxCommandEvent& evt) {
 
 		string word = string(s);
 
-		
 
-		dict.chooseLanguage("Eng-Eng");
+		dict.chooseLanguage("Eng-Vie");
 		dict.runSearchEngine(word, true);
 
 		suggestBar->Clear();
@@ -220,7 +215,7 @@ void MainFrame::OnSearchAndSuggestHandler(wxCommandEvent& evt) {
 		listWord = dict.searchRelatedWords(word, 20);
 
 		for (auto& w : listWord) {
-			suggestBar->AppendString(w.getWord());
+			suggestBar->AppendString(wxString::FromUTF8(w.getWord()));
 		}
 
 		adjustSuggestBar(300, 14);
@@ -254,5 +249,14 @@ void MainFrame::OnMousePosition(wxMouseEvent& evt) {
 
 	wxString message = wxString::Format("Mouse position within panel: (x=%d y=%d)", m.x, m.y);
 	wxLogStatus(message);
+}
+
+void MainFrame::OnLoadTool(wxCommandEvent& evt) {
+	dict.chooseLanguage("Eng-Vie");
+	if (!dict.isSearchingDefinition) dict.runSearchDefinitionEngine();
+}
+
+void MainFrame::OnUnLoadTool(wxCommandEvent& evt) {
+	dict.turnOffSearchDefinitionEngine();
 }
 

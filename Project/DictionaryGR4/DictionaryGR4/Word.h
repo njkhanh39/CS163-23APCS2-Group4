@@ -6,9 +6,11 @@
 #include <list>
 #include <cctype>
 #include <sstream>
+#include "Unicode/utf8.h"
 #include "Definition.h"
 
 using namespace std;
+
 
 
 class Definition;
@@ -48,23 +50,16 @@ public:
 		return false;
 	}
 
-	bool empty() {
-		if (text == "") return true;
-		return false;
-	}
+	//check for emptiness
+	bool empty();
+
 	//getters
 
 	string getWord();
 
-	int getNumberOfDefinitions() {
-		return (int)defList.size();
-	}
+	int getNumberOfDefinitions();
 
-	Definition getDefinitionAt(int i) {
-		if(i<(int)defList.size() && i>=0) return defList[i];
-		Definition trash;
-		return trash;
-	}
+	Definition getDefinitionAt(int i);
 	
 	vector<Definition> getDefinitions();
 
@@ -76,13 +71,8 @@ public:
 
 	void addDefinition(Definition& def);
 
-	void setWord(string word) {
-		text = word;
-	}
+	void setWord(string word);
 
-	void clear() {
-		text = "";
-		defList.clear();
-	}
+	void clear();
 
 };

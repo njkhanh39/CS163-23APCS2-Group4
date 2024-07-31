@@ -18,7 +18,8 @@ public:
 	}
 
 	void runSearchDefinitionEngine() {
-		tool.load("Eng-Eng");
+		if(activeDataSet == EngEng) tool.load("Eng-Eng");
+		if (activeDataSet == EngVie) tool.load("Eng-Vie");
 		isSearchingDefinition = true;
 	}
 
@@ -37,10 +38,12 @@ public:
 	//Pass in search bar's current word, true/false for LogMessaging on Status Bar.
 	void runSearchEngine(string word, bool yesLogMessage) {
 		if (activeDataSet == EngEng) EngineHelperENG_ENG(word, yesLogMessage);
+		else if (activeDataSet == EngVie) EngineHelperENG_VIE(word, yesLogMessage);
 	}
 
 	void turnOffSearchEngine() {
 		if (activeDataSet == EngEng) EngineHelperENG_ENG("", false);
+		if (activeDataSet == EngVie) EngineHelperENG_VIE("", false);
 	}
 
 	//get a "Word" object that matches a string
@@ -53,24 +56,28 @@ public:
 			if (w.empty() && isSearchingDefinition) return tool.searchWord(word);
 			else w = myTrie.getWordMatching(word);
 		}
+		if (activeDataSet == EngVie) {
+			if (w.empty() && isSearchingDefinition) return tool.searchWord(word);
+			w = myTrie.getWordMatching(word);
+		}
 		return w;
 	}
 
 	//return definitions of keyword
 	vector<Definition> searchDefinitions(string word) {
-		vector<Definition> ans;
 		//format word
 		for (auto& x : word) x = tolower(x);
-		if (activeDataSet == EngEng) return myTrie.getDefinitions(word);
+	    if(activeDataSet == EngEng || activeDataSet == EngVie) return myTrie.getDefinitions(word);
+		vector<Definition> ans;
 		return ans;
 	}
 
 	//return definitions of keyword as strings
 	vector<string> searchStringDefinitions(string word) {
-		vector<string> ans;
 		//format word
 		for (auto& x : word) x = tolower(x);
-		if (activeDataSet == EngEng) return myTrie.getStringDefinitions(word);
+		if (activeDataSet == EngEng || activeDataSet == EngVie) return myTrie.getStringDefinitions(word);
+		vector<string> ans;
 		return ans;
 	}
 
@@ -80,26 +87,15 @@ public:
 		//format word
 		for (auto& x : word) x = tolower(x);
 
-		if (activeDataSet == EngEng) return myTrie.getWordsWithPrefix(word, limit);
+		if (activeDataSet == EngEng || activeDataSet == EngVie) return myTrie.getWordsWithPrefix(word, limit);
 		return ans;
 	}
 
-	//search def -> word + limit number of words
-	//vector<Word> seachDefToWordOnFile(string keyword, int limit) {
-	//	//formatting is done in helper
-
-	//	vector<Word> ans;
-
-	//	if (activeDataSet == EngEng) return helperDefToWordENGENG(keyword, limit);
-
-	//	return ans;
-	//}
-
-	vector<Word> searchDefToWord(string keyword, int limit) {
+	vector<Word> searchDefToWord(string& keyword, int limit) {
 		vector<string> subkeys = transformSentence(keyword);
 		return tool.searchDefinitionsToWord(subkeys, limit);
 	}
-	
+
 	
 
 private:
@@ -145,7 +141,36 @@ private:
 
 		if ((int)word.length() == 1 && myTrie.empty()) {
 			char key = word[0];
-			myTrie.loadDataEngEng(key);
+			myTrie.loadData(key, EngEng);
+			wxLogStatus("Loading data...");
+		}
+		else if ((int)word.length() == 0) {
+			if (!myTrie.empty()) myTrie.clear();
+			wxLogStatus("Clearing Search Tree...");
+		}
+		else {
+			wxLogStatus("Doing nothing...");
+		}
+	}
+
+	void EngineHelperENG_VIE(string keyword, bool yesLogMessage) {
+		//format the word
+		string word;
+		int i = 0, n = keyword.length();
+		while (i < n && keyword[i] == ' ') ++i;
+
+
+		for (int j = 0; j < n; ++j) {
+			word.push_back(tolower(keyword[j]));
+		}
+
+		int m = word.length(); --m;
+
+		while (m >= 0 && word[m] == ' ') word.pop_back();
+
+		if ((int)word.length() == 1 && myTrie.empty()) {
+			char key = word[0];
+			myTrie.loadData(key, EngVie);
 			wxLogStatus("Loading data...");
 		}
 		else if ((int)word.length() == 0) {

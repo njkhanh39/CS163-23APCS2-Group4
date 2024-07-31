@@ -100,10 +100,10 @@ public:
 				}
 			}
 		}
-
-		if (text) text->SetLabel(word.getWord());
-		if (wordTypeText) wordTypeText->SetLabel(wordtype[cur]);
-		if (defText) defText->SetLabel(displayDef[cur]);
+		wxString unicodestr = wxString::FromUTF8(word.getWord());
+		if (text) text->SetLabel(unicodestr);
+		if (wordTypeText) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
+		if (defText) defText->SetLabel(wxString::FromUTF8(displayDef[cur]));
 		if (pageText) {
 			string show = to_string(cur + 1) + "/" + to_string(pages);
 			pageText->SetLabel(show);
@@ -124,8 +124,8 @@ public:
 
 		if (!(cur >= 0 && cur < pages)) return;
 		
-		if(wordTypeText) wordTypeText->SetLabel(wordtype[cur]);
-		if(defText) defText->SetLabel(displayDef[cur]);
+		if (wordTypeText) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
+		if (defText) defText->SetLabel(wxString::FromUTF8(displayDef[cur]));
 		if (pageText) {
 			string show = to_string(cur + 1) + "/" + to_string(pages);
 			pageText->SetLabel(show);
@@ -137,8 +137,8 @@ public:
 		for (int i = 0; i < pages; ++i) {
 			if ((wordtype[i] +" " + actualDef[i]) == key) {
 				cur = i;
-				if (wordTypeText) wordTypeText->SetLabel(wordtype[cur]);
-				if (defText) defText->SetLabel(displayDef[cur]);
+				if (wordTypeText) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
+				if (defText) defText->SetLabel(wxString::FromUTF8(displayDef[cur]));
 				if (pageText) {
 					string show = to_string(cur + 1) + "/" + to_string(pages);
 					pageText->SetLabel(show);

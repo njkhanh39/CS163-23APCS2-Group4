@@ -31,12 +31,8 @@ private:
 
 	void OnSearchButton(wxCommandEvent& evt);
 
-	void OnLoadTool(wxCommandEvent& evt) {
-		if (!dict.isSearchingDefinition) dict.runSearchDefinitionEngine();
-	}
+	void OnLoadTool(wxCommandEvent& evt);
 
-	void OnUnLoadTool(wxCommandEvent& evt) {
-		dict.turnOffSearchDefinitionEngine();
-	}
+	void OnUnLoadTool(wxCommandEvent& evt);
 
 };

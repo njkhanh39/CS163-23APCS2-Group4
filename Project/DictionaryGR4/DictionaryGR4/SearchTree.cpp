@@ -215,11 +215,38 @@ vector<Word> Trie::getWordsWithPrefix(string s, int& limit) {
     return empty;
 }
 
+vector<Word> Trie::getClosestMatchWords(string s, int& desired) {
+
+    //suggested words will differ our word by at most one position
+
+    vector<Word> ans;
+
+    vector<string> possible;
+
+    for (int i = 0; i < (int)s.length(); ++i) {
+        char old = s[i];
+        for (int idx = 0; idx < 39; ++idx) {
+            char l = indexToChar(idx);
+            s[i] = l;
+            possible.push_back(s);
+        }
+        s[i] = old;
+    }
+
+    for (auto& str : possible) {
+        Word temp = getWordMatching(str);
+        if (!temp.empty()) ans.push_back(temp);
+        if ((int)ans.size() == desired) return ans;
+    }
+
+    return ans;
+}
+
 int Trie::getSize() {
     return cur;
 }
 
-bool Trie::loadDataEngEng(char key) {
+bool Trie::loadData(char key, string dataset) {
     string s;
 
     key = tolower(key);
@@ -230,13 +257,13 @@ bool Trie::loadDataEngEng(char key) {
     if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
 
 
-    if (num == 1) s = "DataSet\\Eng-Eng\\1.txt";
-    else if (num == 2) s = "DataSet\\Eng-Eng\\2.txt";
+    if (num == 1) s = "DataSet\\" + dataset + "\\1.txt";
+    else if (num == 2) s = "DataSet\\" + dataset + "\\1.txt";
     else {
         num -= 10;
         string idx = to_string(num);
 
-        s = "DataSet\\Eng-Eng\\" + idx + ".txt";
+        s = "DataSet\\" + dataset + "\\" + idx + ".txt";
     }
     //cout << "Loading file: " << s << '\n';
     ifstream fin;
@@ -342,6 +369,48 @@ void WordFinder::load(string dataset) {
 
         fin.close();
     }
+}
+
+void WordFinder::unload() {
+    for (int i = 0; i < size; ++i) {
+        slots[i].clear();
+    }
+}
+
+Word WordFinder::searchWord(string text) {
+    int left = 0, right = size - 1;
+
+    bool yes = false;
+    Word ans;
+
+    int j = -1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (slots[mid].word.getWord() < text) {
+            left = mid + 1;
+        }
+        else {
+            if (slots[mid].word.getWord() == text) j = mid;
+            right = mid - 1;
+        }
+    }
+
+    if (j == -1) return ans;
+
+    for (int i = j; i < size; ++i) {
+        if (slots[i].word.getWord() != text) break;
+
+        if (!yes) {
+            ans.setWord(text);
+            yes = true;
+        }
+
+        ans.addDefinition(slots[i].word.getDefinitions().back());
+    }
+
+    return ans;
 }
 
 vector<Word> WordFinder::searchDefinitionsToWord(vector<string>& subkey, int limit) {
