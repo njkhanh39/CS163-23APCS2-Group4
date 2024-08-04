@@ -29,6 +29,12 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 	searchBar = new wxTextCtrl(panel2, wxID_ANY, "", wxPoint(357, 40), wxSize(450, 40));
 	searchBar->SetFont(font);
 
+	// Create combo box to choose dataset
+	wxArrayString languages = { "Eng-Eng", "Eng-Vie", "Vie-Eng" };
+	datasetCbb = new wxComboBox(panel2, wxID_ANY, "", wxPoint(200, 40), wxSize(120, 40), languages, wxCB_DROPDOWN | wxCB_READONLY);
+	datasetCbb->SetFont(font);
+	datasetCbb->Select(0);
+
 	//load
 	runTool = new wxButton(panel2, wxID_ANY, "Def->Word", wxPoint(60, 200), wxSize(120, 40));
 	runTool->Bind(wxEVT_BUTTON, &MainFrame::OnLoadTool, this);
@@ -63,15 +69,14 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 	button->Bind(wxEVT_BUTTON, &MainFrame::OnSearchButton, this);
 	searchBar->Bind(wxEVT_TEXT, &MainFrame::OnSearchAndSuggestHandler, this);
 	suggestBar->Bind(wxEVT_LISTBOX, &MainFrame::OnViewWord, this);
-	
+
 
 	CreateStatusBar();
-
 }
+
 MainFrame::~MainFrame() {
 
 }
-
 
 void MainFrame::OnSearchButton(wxCommandEvent& evt) {
 	//#case 1: search by definition, press the button will list out
@@ -203,8 +208,8 @@ void MainFrame::OnSearchAndSuggestHandler(wxCommandEvent& evt) {
 
 		string word = string(s);
 
+		dict.chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
 
-		dict.chooseLanguage("Eng-Vie");
 		dict.runSearchEngine(word, true);
 
 		suggestBar->Clear();
@@ -252,11 +257,10 @@ void MainFrame::OnMousePosition(wxMouseEvent& evt) {
 }
 
 void MainFrame::OnLoadTool(wxCommandEvent& evt) {
-	dict.chooseLanguage("Eng-Vie");
+	dict.chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
 	if (!dict.isSearchingDefinition) dict.runSearchDefinitionEngine();
 }
 
 void MainFrame::OnUnLoadTool(wxCommandEvent& evt) {
 	dict.turnOffSearchDefinitionEngine();
 }
-

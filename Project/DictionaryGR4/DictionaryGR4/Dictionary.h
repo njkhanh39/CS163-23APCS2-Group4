@@ -20,6 +20,7 @@ public:
 	void runSearchDefinitionEngine() {
 		if(activeDataSet == EngEng) tool.load("Eng-Eng");
 		if (activeDataSet == EngVie) tool.load("Eng-Vie");
+		if (activeDataSet == VieEng) tool.load("Vie-Eng");
 		isSearchingDefinition = true;
 	}
 

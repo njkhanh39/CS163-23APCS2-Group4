@@ -13,6 +13,7 @@ private:
 	wxButton* button, *runTool, *unrunTool;
 	wxListBox* suggestBar;
 	wxTextCtrl* searchBar;
+	wxComboBox* datasetCbb;
 	WordView* wordView;
 	
 
