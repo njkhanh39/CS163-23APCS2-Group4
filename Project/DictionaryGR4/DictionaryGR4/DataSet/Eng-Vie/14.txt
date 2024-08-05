@@ -429,10 +429,6 @@ lamb	(danh từ) cáo (chó sói) đội lốt cừu, kẻ giả nhân giả ngh
 lamb	(danh từ) chúa giê-xu.
 lamb	(danh từ) hiền lành ngoan ngoãn.
 lamb	(động từ) đẻ con (cừu).
-lambs-wood	(danh từ) len cừu non.
-lambs-wood	(danh từ) hàng len cừu non.
-lambs-wool	(danh từ) len cừu non.
-lambs-wool	(danh từ) hàng len cừu non.
 lambaste	(ngoại động từ) (tiếng địa phương) đánh quật, vật.
 lambda	(danh từ) lambda (chữ cái Hy Lạp).
 lambdacism	(danh từ) sự l hoá (âm r).
@@ -442,6 +438,10 @@ lambent	(tính từ) lướt nhẹ, liếm nhẹ, nhuốm nhẹ, sáng óng anh,
 lambert	(danh từ) o (vật lý) lambe (đơn vị độ sáng).
 lambkin	(danh từ) cừu con; cừu non.
 lambrequin	(danh từ) diềm (màn, trướng).
+lambs-wood	(danh từ) len cừu non.
+lambs-wood	(danh từ) hàng len cừu non.
+lambs-wool	(danh từ) len cừu non.
+lambs-wool	(danh từ) hàng len cừu non.
 lambskin	(danh từ) da cừu non.
 lame	(tính từ) què, khập khiễng.
 lame	(tính từ) không chỉnh, không thoả đáng; què quặt không ra đâu vào đâu.

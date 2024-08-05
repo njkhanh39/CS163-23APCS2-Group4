@@ -3522,9 +3522,6 @@ bird of paradise	(danh từ) chim seo cờ.
 bird of passage	(danh từ) người sống rày đây mai đó.
 bird of prey	(danh từ) chim săn mồi.
 bird sanctuary	(danh từ) khu bảo tồn chim.
-birds-eye	(danh từ) (thực vật học) cây anh thảo mắt chim.
-birds-eye-view	(danh từ) toàn cảnh nhìn từ trên xuống.
-birds-eye-view	(danh từ) bản tóm tắt.
 bird-bath	(danh từ) bể nước cho chim tắm.
 bird-cage	(danh từ) lông chim.
 bird-catcher	(danh từ) người đánh bẫy chim, người bắc chim.
@@ -3545,6 +3542,9 @@ birding	(danh từ) xem bird.
 birdman	(danh từ) người nuôi chim.
 birdman	(danh từ) người nghiên cứu về chim.
 birdman	(danh từ) (thông tục) phi công, người lái máy bay.
+birds-eye	(danh từ) (thực vật học) cây anh thảo mắt chim.
+birds-eye-view	(danh từ) toàn cảnh nhìn từ trên xuống.
+birds-eye-view	(danh từ) bản tóm tắt.
 birdseed	(danh từ) hạt dùng cho chim ăn.
 birdsong	(danh từ) tiếng hót của chim.
 birdwoman	(danh từ) (từ mỹ, nghĩa mỹ), (thông tục) nữ phi công, chị lái máy bay.
@@ -4147,7 +4147,6 @@ blindfolded	(tính từ) xem blindfold.
 blinding	(danh từ) đá dăm (cát...) (để) lấp khe nứt ở đường mới làm.
 blinding	(danh từ) sự lấp khe nứt ở đường mới làm.
 blindingly	(trạng từ) xem blind.
-blindl-mans-buff	(danh từ) trò chơi bịt mắt bắt dê.
 blindly	(phó từ) mù, mù quáng.
 blindly	(phó từ) mò mẫm.
 blindness	(danh từ) sự đui mù.

@@ -2186,11 +2186,6 @@ cat	(nội động từ) (thông tục) nôn mửa.
 cat o-mountain	(danh từ) (động vật học) mèo rừng âu.
 cat o-mountain	(danh từ) (động vật học) con báo.
 cat o-mountain	(danh từ) người hay gây gỗ, người thích đánh nhau.
-cats cradle	(danh từ) trò chơi buộc dây thành vòng tròn giữa các ngón tay.
-cats eye	(danh từ) hàng đinh phản chiếu ánh sáng trên đường lộ khi trời tối.
-cats-ear	(danh từ) (thực vật) cây cúc tai mèo.
-cats-paw	(danh từ) gió hiu hiu (làm cho mặt nước gợn lăn tăn).
-cats-paw	(danh từ) tay sai, người bị lợi dụng.
 cat-and-dog	(tính từ) (từ mỹ, nghĩa mỹ) gay gắt, quyết liệt, ác liệt (cuộc cạnh tranh...).
 cat-burglar	(danh từ) tên kẻ trộm trèo tường.
 cat-house	(danh từ) (từ mỹ, tục tĩu) nhà thổ.
@@ -2452,6 +2447,11 @@ catnap	(nội động từ) chợp mắt đi một tí.
 catnip	(danh từ) (từ mỹ, nghĩa mỹ) (như) cat-mint.
 catoptric	(tính từ) (vật lý) phản xạ.
 catoptrics	(danh từ) (vật lý) môn phản xạ, phản xạ học.
+cats cradle	(danh từ) trò chơi buộc dây thành vòng tròn giữa các ngón tay.
+cats eye	(danh từ) hàng đinh phản chiếu ánh sáng trên đường lộ khi trời tối.
+cats-ear	(danh từ) (thực vật) cây cúc tai mèo.
+cats-paw	(danh từ) gió hiu hiu (làm cho mặt nước gợn lăn tăn).
+cats-paw	(danh từ) tay sai, người bị lợi dụng.
 catsuit	(danh từ) áo khoác dài từ cổ tới chân.
 catsup	(danh từ) (như) ketchup.
 cattery	(danh từ) trại nuôi mèo.
@@ -13579,10 +13579,6 @@ crow	(nội động từ) gáy (gà).
 crow	(nội động từ) nói bi bô (trẻ con).
 crow	(nội động từ) reo mừng (khi chiến thắng).
 crow	(nội động từ) chiến thắng (quân thù...).
-crows-feet	(danh từ) vết nhăn chân chim (ở đuôi mắt).
-crows-foot	(danh từ) vết nhăn chân chim (ở đuôi mắt).
-crows-nest	(danh từ) (hàng hải) chòi trên cột buồm.
-crows-nest	(danh từ) (thực vật học) cây cà rốt dại.
 crow-bar	(danh từ) cái xà beng, cái nạy nắp thùng, cái đòn bẫy.
 crow-berry	(danh từ) (thực vật) cây dâu quạ.
 crow-bill	(danh từ) (y học) cái gắp đạn (ở vết thương).
@@ -13649,6 +13645,10 @@ crown-quilt	(danh từ) ngòi bút nhỏ nét.
 crowning	(tính từ) hoàn thiện, chu toàn.
 crownless	(danh từ) không có ngôi (vua); không có vua (nước).
 crownling	(danh từ) ấu chúa.
+crows-feet	(danh từ) vết nhăn chân chim (ở đuôi mắt).
+crows-foot	(danh từ) vết nhăn chân chim (ở đuôi mắt).
+crows-nest	(danh từ) (hàng hải) chòi trên cột buồm.
+crows-nest	(danh từ) (thực vật học) cây cà rốt dại.
 crozier	(danh từ) gậy phép (của giám mục).
 crt (cathode ray tube)	(danh từ) (kỹ thuật) ống tia âm cực, đèn hiển thị.
 crt display	(danh từ) (kỹ thuật) ống hiển thị.

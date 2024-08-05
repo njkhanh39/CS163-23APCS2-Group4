@@ -5195,7 +5195,6 @@ serow	(danh từ) (động vật học) sơn dương.
 serpent	(danh từ) con rắn.
 serpent	(danh từ) (âm nhạc) trompet cổ.
 serpent lizard	(đại từ) (động vật học) thằn lằn bóng chân ngắn.
-serpents-tongue	(danh từ) (thực vật học) cây lưỡi rắn (dương xỉ).
 serpent-charmer	(danh từ) người dụ rắn, người bắt rắn.
 serpent-eater	(danh từ) (động vật học) diều ăn rắn.
 serpent-grass	(danh từ) (thực vật học) cây quyền sâm núi.
@@ -5208,6 +5207,7 @@ serpentine	(danh từ) (khoáng chất) xecpentin.
 serpentine	(danh từ) (kỹ thuật) ống ruột gà, ống xoắn.
 serpentine	(nội động từ) bò ngoằn ngoèo, đi quanh co, lượn khúc.
 serpentlike	(tính từ) như rắn.
+serpents-tongue	(danh từ) (thực vật học) cây lưỡi rắn (dương xỉ).
 serpiginous	(tính từ) bị bệnh ecpet.
 serpigo	(danh từ) (y học) bệnh ecpet.
 serra	(danh từ) (số nhiều) bộ phận có răng cưa; cấu tạo có hình răng cưa.
@@ -6230,7 +6230,6 @@ sheep	(danh từ) đi theo một cách mù quáng.
 sheep	(danh từ) quân vô tướng, hổ vô đấu.
 sheep	(danh từ) (xem) lamb.
 sheep	(danh từ) (xem) wolf.
-sheeps-head	(danh từ) người khờ dại, người đần độn.
 sheep-cot	(danh từ) bãi rào nhốt cừu.
 sheep-cote	(danh từ) bãi rào nhốt cừu.
 sheep-dip	(danh từ) thuốc nước tắm cho cừu (đề trừ bọ và bảo vệ lông).
@@ -6253,6 +6252,7 @@ sheepishly	(phó từ) bẽn lẽn, e lệ, ngượng ngùng.
 sheepishness	(danh từ) sự ngượng ngập, sự lúng túng, sự rụt rè, sự bẽn lẽn.
 sheepman	(danh từ) người nuôi cừu.
 sheepman	(danh từ) người chăn cừu.
+sheeps-head	(danh từ) người khờ dại, người đần độn.
 sheepshank	(danh từ) cẳng cừu.
 sheepshank	(danh từ) vật gầy gò khẳng khiu.
 sheepshank	(danh từ) (hàng hải) nút cẳng cừu (một kiểu nút để thu ngắn dây thừng).
@@ -20476,7 +20476,6 @@ swan	(danh từ) sếch-xpia.
 swan maiden	(danh từ) (thần thoại, thần học) nàng tiên thiên nga.
 swan song	(danh từ) tiếng hót vĩnh biệt (của chim thiên nga sắp chết).
 swan song	(danh từ) tác phẩm cuối cùng (của một nhà văn...).
-swans-down	(danh từ) lông tơ thiên nga.
 swan-dive	(danh từ) sự nhào kiểu chim nhạn (nhào) xuống nước, hai tay duỗi thẳng cho lúc đến gần mặt nước).
 swan-flower	(danh từ) (thực vật học) hoa lan thiên nga.
 swan-goose	(danh từ) (động vật học) ngỗng cao cổ (trung quốc).
@@ -20489,6 +20488,7 @@ swank	(nội động từ) (từ lóng) trưng diện, phô trương.
 swankiness	(danh từ) tính trưng diện; sự phô trương, sự khoe khoang.
 swanky	(tính từ) (từ lóng) trưng diện, phô trương, khoe khoang.
 swannery	(danh từ) chỗ nuôi thiên nga.
+swans-down	(danh từ) lông tơ thiên nga.
 swansdown	(danh từ) lông tơ thiên nga (để nhồi áo).
 swanskin	(danh từ) (từ mỹ, nghĩa mỹ) hàng flanen.
 swap	(danh từ) (từ lóng) sự trao đổi, sự đổi chác.
@@ -20864,13 +20864,13 @@ swindling	(danh từ) sự (mánh khoé) lừa bịp.
 swindlingly	(phó từ) lừa đảo, bịp bợm.
 swine	(danh từ) con lợn.
 swine	(danh từ) người tham ăn tục uống; người bẩn tưởi; người tồi tàn.
-swines-heard	(danh từ) người ngu xuẩn; đần độn.
-swines-snout	(danh từ) (thực vật học) cây bồ công anh trung quốc.
 swine-bread	(danh từ) (thực vật học) nấm cục, nấm truýp.
 swine-fever	(danh từ) bệnh của lợn do virut gây ra.
 swine-pox	(danh từ) bệnh đậu lợn.
 swineherd	(danh từ) người chăn lợn.
 swinery	(danh từ) chuồng lợn.
+swines-heard	(danh từ) người ngu xuẩn; đần độn.
+swines-snout	(danh từ) (thực vật học) cây bồ công anh trung quốc.
 swing	(danh từ) sự đua đưa, sự lúc lắc; độ đu đưa, độ lắc.
 swing	(danh từ) cái đu.
 swing	(danh từ) chầu đu.

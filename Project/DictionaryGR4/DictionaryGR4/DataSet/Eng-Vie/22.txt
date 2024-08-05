@@ -3358,7 +3358,6 @@ tige	(danh từ) (thực vật) thân (cây).
 tiger	(danh từ) hổ, cọp.
 tiger	(danh từ) (nghĩa bóng) người hay nạt nộ, kẻ hùng hổ.
 tiger	(danh từ) người tàn bạo hung ác.
-tigers-eye	(danh từ) ngọc mắt mèo.
 tiger-cat	(danh từ) (động vật học) mèo rừng.
 tiger-eye	(danh từ) ngọc mắt mèo.
 tiger-lily	(danh từ) cây hoa loa kèn lớn trồng ở vườn, có hoa màu da cam lốm đốm đen hoặc đỏ tía.
@@ -3368,6 +3367,7 @@ tigerish	(tính từ) (thuộc) hổ, (thuộc) cọp; như hổ, như cọp.
 tigerish	(tính từ) tàn bạo, hung ác.
 tigerism	(danh từ) tính hay nạt nộ, tính hùng hổ.
 tigerism	(danh từ) tính tàn bạo hung ác.
+tigers-eye	(danh từ) ngọc mắt mèo.
 tight	(tính từ) kín, không thấm, không rỉ.
 tight	(tính từ) chặt, khít.
 tight	(tính từ) chật, bó sát.
