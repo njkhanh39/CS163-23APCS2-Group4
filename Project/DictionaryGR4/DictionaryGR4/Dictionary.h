@@ -5,8 +5,8 @@
 
 class Dictionary {
 private:
-	WordFinder tool;
-	Trie myTrie; //for word -> def in Eng-Eng
+	WordFinder tool; //for def -> word in all datasets
+	Trie myTrie; //for word -> def in Eng-Eng & Eng-Vie
 	const string EngEng = "Eng-Eng", EngVie = "Eng-Vie", VieEng = "Vie-Eng"; //datasets
 
 	string activeDataSet = EngEng; //can be changeable
@@ -17,6 +17,21 @@ public:
 		//tool.load(EngEng);
 	}
 
+	//"Eng-Eng", "Eng-Vie", "Vie-Eng"
+	bool chooseLanguage(string t) {
+		if (t != EngEng && t != EngVie && t != VieEng) return false;
+		activeDataSet = t;
+		return true;
+	}
+
+
+	//Pass in search bar's current word, true/false for LogMessaging on Status Bar.
+	void runSearchEngine(string word, bool yesLogMessage) {
+		if (activeDataSet == EngEng) EngineHelperENG_ENG(word, yesLogMessage);
+		else if (activeDataSet == EngVie) EngineHelperENG_VIE(word, yesLogMessage);
+	}
+
+	//after calling, searchDefinitions function is ready.Turning off will disable that function.
 	void runSearchDefinitionEngine() {
 		if(activeDataSet == EngEng) tool.load("Eng-Eng");
 		if (activeDataSet == EngVie) tool.load("Eng-Vie");
@@ -28,25 +43,6 @@ public:
 		tool.unload();
 		isSearchingDefinition = false;
 	}
-
-	//string = DataSetEngEng, DataSetEngVie, DataSetVieEng
-	bool chooseLanguage(string t) {
-		if (t != EngEng && t != EngVie && t != VieEng) return false;
-		activeDataSet = t;
-		return true;
-	}
-
-	//Pass in search bar's current word, true/false for LogMessaging on Status Bar.
-	void runSearchEngine(string word, bool yesLogMessage) {
-		if (activeDataSet == EngEng) EngineHelperENG_ENG(word, yesLogMessage);
-		else if (activeDataSet == EngVie) EngineHelperENG_VIE(word, yesLogMessage);
-	}
-
-	void turnOffSearchEngine() {
-		if (activeDataSet == EngEng) EngineHelperENG_ENG("", false);
-		if (activeDataSet == EngVie) EngineHelperENG_VIE("", false);
-	}
-
 	//get a "Word" object that matches a string
 	Word searchWordMatching(string word) {
 		Word w;
@@ -92,6 +88,8 @@ public:
 		return ans;
 	}
 
+
+	//this one needs runSearchDefinitionsEngine
 	vector<Word> searchDefToWord(string& keyword, int limit) {
 		vector<string> subkeys = transformSentence(keyword);
 		return tool.searchDefinitionsToWord(subkeys, limit);

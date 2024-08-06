@@ -9,10 +9,6 @@ public:
 	~App() {
 
 	}
-private:
-	MainFrame* m_frame1 = nullptr;
-
-public:
 	//entry point
 	virtual bool OnInit();
 };

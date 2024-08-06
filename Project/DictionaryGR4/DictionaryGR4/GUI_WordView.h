@@ -3,8 +3,10 @@
 
 class WordView {
 private:
-	wxBoxSizer* frame;
+
 	wxPanel* panel;
+	wxBoxSizer* frame;
+	
 	wxStaticText* text, *wordTypeText, *defText, *pageText;
 	wxButton* fav, *next, *back;
 
@@ -51,10 +53,16 @@ public:
 		next->SetFont(font);
 		back->SetFont(font);
 
+		//panel->Bind(wxEVT_LEFT_DOWN, &WordView::skip, this);
 		next->Bind(wxEVT_BUTTON, &WordView::showWord, this);
 		back->Bind(wxEVT_BUTTON, &WordView::showWord, this);
+
 	}
 
+
+	void skip(wxMouseEvent& evt){
+		evt.Skip();
+	}
 	void Disable() {
 		panel->Disable();
 	}
@@ -95,7 +103,7 @@ public:
 			int cnt = 0;
 			for (int k = 0; k < (int)displayDef[i].length(); ++k) {
 				++cnt;
-				if (cnt >= 50 && displayDef[i][k] == ' ') {
+				if (cnt >= 55 && displayDef[i][k] == ' ') {
 					displayDef[i][k] = '\n';
 					cnt = 0;
 				}

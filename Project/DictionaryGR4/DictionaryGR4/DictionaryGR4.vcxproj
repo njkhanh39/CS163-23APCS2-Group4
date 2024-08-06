@@ -141,7 +141,9 @@
     <ClCompile Include="History.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="SearchedWord.cpp" />
+    <ClCompile Include="SearchMenu.cpp" />
     <ClCompile Include="SearchTree.cpp" />
     <ClCompile Include="Word.cpp" />
   </ItemGroup>
@@ -152,7 +154,9 @@
     <ClInclude Include="GUI_WordView.h" />
     <ClInclude Include="History.h" />
     <ClInclude Include="MainFrame.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="SearchedWord.h" />
+    <ClInclude Include="SearchMenu.h" />
     <ClInclude Include="SearchTree.h" />
     <ClInclude Include="Word.h" />
   </ItemGroup>

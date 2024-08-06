@@ -15,11 +15,11 @@ private:
         }
     };
 
-    int cur;
+    int size;
     Node* root;
 
 public:
-    Trie() : cur(0) { root = new Node(); };
+    Trie() : size(0) { root = new Node(); };
 
     ~Trie() { deleteHelperAll(root); }
 
@@ -90,7 +90,6 @@ struct Bucket {
 		word.setWord(keyword);
 	}
 
-
 	void setWord(string keyword, string def) {
 		word.setWord(keyword);
 		word.addDefinition(def);
@@ -122,6 +121,7 @@ public:
 		delete[] slots;
 	}
 
+    
 
 	void addSubDef(string subdef, int order);
 
@@ -133,158 +133,164 @@ public:
 
     vector<Word> searchDefinitionsToWord(vector<string>& subkey, int limit);
 
-    /*void writeToFile(string filename) {
-        ofstream fout;
-        fout.open(filename);
-        if (fout.is_open()) {
-            for (int i = 0; i < size; ++i) {
-                fout << slots[i].word.getWord() << '\t';
-                for (int j = 0; j < (int)slots[i].subdef.size(); ++j) {
-                    fout << slots[i].subdef[j];
-                    if (j + 1 != (int)slots[i].subdef.size()) fout << ' ';
-                    else fout << '\n';
-                }
-            }
-        }
-        fout.close();
-    }*/
+
+   
 };
 
 
-//bool isUnwantedPunctuation(char c) {
-    //    return c == '.' || c == ',' || c == ';' || c == '(' || c == ')';
-    //}
+// bool isUnwantedPunctuation(char c) {
+//     return c == '.' || c == ',' || c == ';' || c == '(' || c == ')';
+// }
 
-    //// Helper function to transform a single character
-    //char transformChar(char c) {
-    //    if (isUnwantedPunctuation(c)) {
-    //        return ' '; // Replace unwanted punctuation with space
-    //    }
-    //    else {
-    //        return std::tolower(c);
-    //    }
-    //}
+// // Helper function to transform a single character
+// char transformChar(char c) {
+//     if (isUnwantedPunctuation(c)) {
+//         return ' '; // Replace unwanted punctuation with space
+//     }
+//     else {
+//         return std::tolower(c);
+//     }
+// }
 
-    //// Function to transform the sentence
-    //std::string transformSentence(std::string& sentence) {
-    //    std::string result;
-    //    result.reserve(sentence.size());
+// std::string transformSentence(std::string& sentence) {
+//    std::string result;
+//    result.reserve(sentence.size());
 
-    //    // Convert to lowercase and remove unwanted punctuation
-    //    for (char c : sentence) {
-    //        result.push_back(transformChar(c));
-    //    }
+//    // Convert to lowercase and remove unwanted punctuation
+//    for (char c : sentence) {
+//        result.push_back(transformChar(c));
+//    }
 
-    //    // Remove redundant spaces
-    //    std::istringstream iss(result);
-    //    std::string word;
-    //    result.clear();
-    //    bool firstWord = true;
-    //    while (iss >> word) {
-    //        if (!firstWord) {
-    //            result += " ";
-    //        }
-    //        result += word;
-    //        firstWord = false;
-    //    }
+//    // Remove redundant spaces
+//    std::istringstream iss(result);
+//    std::string word;
+//    result.clear();
+//    bool firstWord = true;
+//    while (iss >> word) {
+//        if (!firstWord) {
+//            result += " ";
+//        }
+//        result += word;
+//        firstWord = false;
+//    }
 
-    //    return result;
-    //}
+//    return result;
+//}
 
-    //void loadThenWriteEngVie() {
-    //    int curbucket = 0;
-    //    for (int file = 1; file <= 28; ++file) {
-    //        ifstream fin;
-    //        fin.open("DataSet\\Eng-Vie\\" + to_string(file) + ".txt");
+// void loadThenWriteEngVie() {
+//     int curbucket = 0;
+//     for (int file = 1; file <= 28; ++file) {
+//         ifstream fin;
+//         fin.open("DataSet\\Eng-Vie\\" + to_string(file) + ".txt");
 
-    //        if (!fin.is_open()) {
-    //            fin.close();
-    //            continue;
-    //        }
+//         if (!fin.is_open()) {
+//             fin.close();
+//             continue;
+//         }
 
-    //        string line;
-    //        while (getline(fin, line)) {
-    //            string s;
-    //            int i = 0;
-    //            while (line[i] != '\t') {
-    //                s.push_back(line[i]);
-    //                ++i;
-    //            }
+//         string line;
+//         while (getline(fin, line)) {
+//             string s;
+//             int i = 0;
+//             while (line[i] != '\t') {
+//                 s.push_back(line[i]);
+//                 ++i;
+//             }
 
-    //            ++i;
+//             ++i;
 
-    //            string tmp = line.substr(i, (int)line.length());
-    //            string so = transformSentence(tmp);
+//             string tmp = line.substr(i, (int)line.length());
+//             string so = transformSentence(tmp);
 
-    //            string cur = "";
-    //            for (int j = 0; j < (int)so.length(); ++j) {
-    //                if (so[j] == ' ') {
-    //                    slots[curbucket].addSubDef(cur);
-    //                    cur = "";
-    //                }
-    //                else cur.push_back(so[j]);
-    //            }
+//             string cur = "";
+//             for (int j = 0; j < (int)so.length(); ++j) {
+//                 if (so[j] == ' ') {
+//                     slots[curbucket].addSubDef(cur);
+//                     cur = "";
+//                 }
+//                 else cur.push_back(so[j]);
+//             }
+//             slots[curbucket].addSubDef(cur);
 
-    //            slots[curbucket].arrange();
+//             slots[curbucket].arrange();
 
-    //            ++curbucket;
-    //        }
+//             ++curbucket;
+//         }
 
-    //        fin.close();
-    //    }
+//         fin.close();
+//     }
 
-    //    size = curbucket;
-    //    
-    //    int cur = 0;
-    //    for (int file = 1; file <= 28; ++file) {
-    //        ifstream fin;
-    //        fin.open("DataSet\\Eng-Vie\\" + to_string(file) + ".txt");
+//     size = curbucket;
 
-    //        if (!fin.is_open()) {
-    //            fin.close();
-    //            continue;
-    //        }
+//     int cur = 0;
+//     for (int file = 1; file <= 28; ++file) {
+//         ifstream fin;
+//         fin.open("DataSet\\Eng-Vie\\" + to_string(file) + ".txt");
 
-    //        string line;
-    //        while (getline(fin, line)) {
-    //            string word = "";
-    //            int j = 0;
-    //            while (line[j] != '\t') {
-    //                word.push_back(line[j]);
-    //                ++j;
-    //            }
+//         if (!fin.is_open()) {
+//             fin.close();
+//             continue;
+//         }
 
-    //            ++j;
-    //            string def = line.substr(j, (int)line.length());
+//         string line;
+//         while (getline(fin, line)) {
+//             string word = "";
+//             int j = 0;
+//             while (line[j] != '\t') {
+//                 word.push_back(line[j]);
+//                 ++j;
+//             }
 
-    //            slots[cur].setWord(word, def);
-    //            ++cur;
-    //        }
+//             ++j;
+//             string def = line.substr(j, (int)line.length());
 
-    //        fin.close();
-    //    }
+//             slots[cur].setWord(word, def);
+//             ++cur;
+//         }
 
-    //    ofstream fout;
-    //    fout.open("dataSortedEngVie.txt");
+//         fin.close();
+//     }
 
-    //    if (!fout.is_open()) {
-    //        fout.close();
-    //        return;
-    //    }
+//     ofstream fout;
+//     fout.open("dataSortedEngVie.txt");
 
-    //    string line;
-    //    for (int i = 0; i < size; ++i) {
-    //        fout << slots[i].word.getWord() << '\t';
-    //        for (int j = 0; j < (int)slots[i].subdef.size(); ++j) {
-    //            fout << slots[i].subdef[j];
-    //            if (j + 1 == (int)slots[i].subdef.size()) fout << '\n';
-    //            else fout << ' ';
-    //        }
-    //    }
+//     if (!fout.is_open()) {
+//         fout.close();
+//         return;
+//     }
 
-    //    fout.close();
-    //}
-    //---------------------------------
+//     string line;
+//     for (int i = 0; i < size; ++i) {
+//         fout << slots[i].word.getWord() << '\t';
+//         for (int j = 0; j < (int)slots[i].subdef.size(); ++j) {
+//             fout << slots[i].subdef[j];
+//             if (j + 1 == (int)slots[i].subdef.size()) fout << '\n';
+//             else fout << ' ';
+//         }
+//     }
+
+//     fout.close();
+// }
+
+ /*void writeToFile(string filename) {
+     ofstream fout;
+     fout.open(filename);
+     if (fout.is_open()) {
+         for (int i = 0; i < size; ++i) {
+             fout << slots[i].word.getWord() << '\t';
+             for (int j = 0; j < (int)slots[i].subdef.size(); ++j) {
+                 fout << slots[i].subdef[j];
+                 if (j + 1 != (int)slots[i].subdef.size()) fout << ' ';
+                 else fout << '\n';
+             }
+         }
+     }
+     fout.close();
+ }*/
+   
+
+    
+    
 
 
 
