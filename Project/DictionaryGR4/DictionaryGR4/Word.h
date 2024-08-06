@@ -24,8 +24,13 @@ public:
 		text = "";
 	}
 
-	Word(const string word) {
+	Word(string word) {
 		text = word;
+	}
+
+	Word(string word, string def) {
+		text = word;
+		addDefinition(def);
 	}
 
 	// Equality operator

@@ -41,7 +41,7 @@ void Trie::addWord(string word, string& def) {
     p->exist++;
     p->emptyWord.addDefinition(def);
 
-    ++cur;
+    ++size;
 }
 
 bool Trie::empty() {
@@ -74,7 +74,7 @@ void Trie::deleteHelperAll(Node*& pRoot) {
     for (int i = 0; i < 40; ++i) {
         deleteHelperAll(pRoot->child[i]);
     }
-    cur = 0;
+    size = 0;
     delete pRoot;
 }
 
@@ -95,7 +95,7 @@ bool Trie::deleteWordRecursive(Node* p, string& s, int i) {
         p->cnt--;
         if (p->cnt == 0) {
             delete(p);
-            --cur;
+            --size;
             return true;
         }
     }
@@ -243,7 +243,7 @@ vector<Word> Trie::getClosestMatchWords(string s, int& desired) {
 }
 
 int Trie::getSize() {
-    return cur;
+    return size;
 }
 
 bool Trie::loadData(char key, string dataset) {

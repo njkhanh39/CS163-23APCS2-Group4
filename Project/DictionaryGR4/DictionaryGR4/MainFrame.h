@@ -1,38 +1,15 @@
 #pragma once
-#include <wx/wx.h>
-#include "Dictionary.h"
-#include "GUI_WordView.h"
 
-class MainFrame : public wxFrame {
-public:
-	MainFrame(const wxString& title);
-	~MainFrame();
+#include "MainMenu.h"
+#include "SearchMenu.h"
+
+class MainFrame: public wxFrame {
 private:
-	Dictionary dict;
-	wxPanel* panel, *panel2;
-	wxButton* button, *runTool, *unrunTool;
-	wxListBox* suggestBar;
-	wxTextCtrl* searchBar;
-	WordView* wordView;
-	
+	wxSimplebook* simpleBook;
+public: 
+	MainFrame(const wxString& Title, wxSize FrameSize);
 
-	void OnMousePosition(wxMouseEvent& evt);	
+    void OnPreviousPage(wxCommandEvent& event);
 
-	//suggest bars
-	void adjustSuggestBar(int maxHeight, int maxItem);
-
-	//word view
-	void OnViewWord(wxCommandEvent& evt);
-
-	//searchBar
-	void OnSearchAndSuggestHandler(wxCommandEvent& evt);
-	
-	//microscope button
-
-	void OnSearchButton(wxCommandEvent& evt);
-
-	void OnLoadTool(wxCommandEvent& evt);
-
-	void OnUnLoadTool(wxCommandEvent& evt);
-
+	void OnNextPage(wxCommandEvent& event);
 };

@@ -9,9 +9,9 @@ wxIMPLEMENT_APP(App);
 
 bool App::OnInit() {
 	wxImage::AddHandler(new wxPNGHandler);
-	MainFrame* frame = new MainFrame("wxNotebook Example");
-	frame->Show(true);
-	return true;
+	MainFrame* frame = new MainFrame("Dictionary", wxSize(1280,720));
+	frame->Show(true);	
+	
 
 	return true;
 }
