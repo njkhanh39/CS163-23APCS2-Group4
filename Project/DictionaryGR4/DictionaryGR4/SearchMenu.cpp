@@ -154,6 +154,14 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt) {
 
 		//avoiding overlapping panels
 		//wordView->Enable();
+
+		SearchedWord SW(key);
+		SW.setTime();
+		SW.setDate();
+		hist.saveToFile(SW);
+
+
+
 		return;
 	}
 

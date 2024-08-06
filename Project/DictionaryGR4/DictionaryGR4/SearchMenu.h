@@ -17,7 +17,7 @@ public:
 	~SearchMenu();
 private:
 	Dictionary dict;
-
+	History hist;
 	wxPanel* titleBar, * mainPanel;
 	wxButton* button, * searchByDef, * searchByWord;
 	wxListBox* suggestBar;
