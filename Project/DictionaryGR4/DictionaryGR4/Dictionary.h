@@ -1,6 +1,9 @@
 #pragma once
+
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+
 #include <wx/wx.h>
-#include <filesystem>
+#include <experimental/filesystem>
 
 #include "SearchTree.h"
 #include "History.h"

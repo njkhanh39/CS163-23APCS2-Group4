@@ -23,6 +23,7 @@ private:
 	wxButton* button, * searchByDef, * searchByWord;
 	wxListBox* suggestBar;
 	wxTextCtrl* searchBar;
+	wxComboBox* datasetCbb;
 	WordView* wordView;
 
 

@@ -2,6 +2,8 @@
 
 using namespace std;
 
+namespace fs = std::experimental::filesystem;
+
 //"Eng-Eng", "Eng-Vie", "Vie-Eng"
 bool Dictionary::chooseLanguage(string t) {
 	if (t != EngEng && t != EngVie && t != VieEng) return false;
@@ -80,14 +82,14 @@ vector<Word> Dictionary::searchDefToWord(string& keyword, int limit) {
 }
 
 void Dictionary::duplicateDataset() {
-	if (!filesystem::exists("Customized DataSet"))
-		filesystem::copy("DataSet", "Customized DataSet");
+	if (!fs::exists("Customized DataSet"))
+		fs::copy("DataSet", "Customized DataSet");
 	activeData = "Customized DataSet";
 }
 
 void Dictionary::deleteDataset() {
-	if (filesystem::exists("Customized DataSet"))
-		filesystem::remove_all("Customized DataSet");
+	if (fs::exists("Customized DataSet"))
+		fs::remove_all("Customized DataSet");
 	activeData = "DataSet";
 }
 
