@@ -15,6 +15,7 @@ public:
 	wxButton* back_to_home;
 	SearchMenu(wxWindow* parent);
 	~SearchMenu();
+
 private:
 	Dictionary dict;
 	History hist;
@@ -26,7 +27,6 @@ private:
 
 
 	void skip(wxMouseEvent& evt);
-
 
 	//suggest bars
 	void adjustSuggestBar(int maxHeight, int maxItem);

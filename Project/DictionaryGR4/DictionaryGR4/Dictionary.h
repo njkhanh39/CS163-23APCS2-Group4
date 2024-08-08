@@ -1,15 +1,17 @@
 #pragma once
+#include <wx/wx.h>
+#include <filesystem>
+
 #include "SearchTree.h"
 #include "History.h"
-#include <wx/wx.h>
 
 class Dictionary {
 private:
 	WordFinder tool; //for def -> word in all datasets
 	Trie myTrie; //for word -> def in Eng-Eng & Eng-Vie
 	const string EngEng = "Eng-Eng", EngVie = "Eng-Vie", VieEng = "Vie-Eng"; //datasets
-
-	string activeDataSet = EngEng; //can be changeable
+	string activeDataSet = EngEng; //changeable
+	string activeData = "DataSet"; //changeable
 	
 public:
 	bool isSearchingDefinition = false;
@@ -24,7 +26,6 @@ public:
 		return true;
 	}
 
-
 	//Pass in search bar's current word, true/false for LogMessaging on Status Bar.
 	void runSearchEngine(string word, bool yesLogMessage) {
 		if (activeDataSet == EngEng) EngineHelperENG_ENG(word, yesLogMessage);
@@ -33,9 +34,9 @@ public:
 
 	//after calling, searchDefinitions function is ready.Turning off will disable that function.
 	void runSearchDefinitionEngine() {
-		if(activeDataSet == EngEng) tool.load("Eng-Eng");
-		if (activeDataSet == EngVie) tool.load("Eng-Vie");
-		if (activeDataSet == VieEng) tool.load("Vie-Eng");
+		if(activeDataSet == EngEng) tool.load("Eng-Eng", activeData);
+		if (activeDataSet == EngVie) tool.load("Eng-Vie", activeData);
+		if (activeDataSet == VieEng) tool.load("Vie-Eng", activeData);
 		isSearchingDefinition = true;
 	}
 
@@ -43,6 +44,7 @@ public:
 		tool.unload();
 		isSearchingDefinition = false;
 	}
+
 	//get a "Word" object that matches a string
 	Word searchWordMatching(string word) {
 		Word w;
@@ -88,14 +90,23 @@ public:
 		return ans;
 	}
 
-
 	//this one needs runSearchDefinitionsEngine
 	vector<Word> searchDefToWord(string& keyword, int limit) {
 		vector<string> subkeys = transformSentence(keyword);
 		return tool.searchDefinitionsToWord(subkeys, limit);
 	}
 
-	
+	void duplicateDataset() {
+		if (!filesystem::exists("Customized DataSet"))
+			filesystem::copy("DataSet", "Customized DataSet");
+		activeData = "Customized DataSet";
+	}
+
+	void deleteDataset() {
+		if (filesystem::exists("Customized DataSet"))
+			filesystem::remove_all("Customized DataSet");
+		activeData = "DataSet";
+	}
 
 private:
 	//helpers
@@ -140,7 +151,7 @@ private:
 
 		if ((int)word.length() == 1 && myTrie.empty()) {
 			char key = word[0];
-			myTrie.loadData(key, EngEng);
+			myTrie.loadData(key, EngEng, activeData);
 			wxLogStatus("Loading data...");
 		}
 		else if ((int)word.length() == 0) {
@@ -169,7 +180,7 @@ private:
 
 		if ((int)word.length() == 1 && myTrie.empty()) {
 			char key = word[0];
-			myTrie.loadData(key, EngVie);
+			myTrie.loadData(key, EngVie, activeData);
 			wxLogStatus("Loading data...");
 		}
 		else if ((int)word.length() == 0) {

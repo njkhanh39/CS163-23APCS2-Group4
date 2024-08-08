@@ -1,6 +1,7 @@
 #pragma once
+#include <fstream>
+
 #include "Word.h"
-#include "fstream"
 
 class Trie {
 private:
@@ -66,7 +67,7 @@ public:
 
     //load
 
-    bool loadData(char key, string dataset);
+    bool loadData(char key, string dataset, string data);
 
 private:
     //helpers
@@ -113,6 +114,7 @@ class WordFinder {
 private:
 	Bucket* slots;
 	int size = 0;
+
 public:
 	WordFinder() {
 		slots = new Bucket[185000];
@@ -122,19 +124,16 @@ public:
 	}
 
     
-
 	void addSubDef(string subdef, int order);
 
-    void load(string dataset);
+    void load(string dataset, string data);
 
     void unload();
 
     Word searchWord(string text);
 
     vector<Word> searchDefinitionsToWord(vector<string>& subkey, int limit);
-
-
-   
+       
 };
 
 
