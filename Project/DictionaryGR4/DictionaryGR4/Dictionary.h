@@ -57,9 +57,9 @@ private:
 
 	vector<string> transformSentence(string& input);
 	
-	void EngineHelperENG_ENG(string keyword, bool yesLogMessage);
+	void EngineHelper(string keyword, bool yesLogMessage);
 
-	void EngineHelperENG_VIE(string keyword, bool yesLogMessage);
+
 	//vector<Word> helperDefToWordENGENG(string keyword, int limit){
 	//	//format word
 	//	string word;
