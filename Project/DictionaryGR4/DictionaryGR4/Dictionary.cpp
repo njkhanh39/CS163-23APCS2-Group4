@@ -11,8 +11,7 @@ bool Dictionary::chooseLanguage(string t) {
 
 //Pass in search bar's current word, true/false for LogMessaging on Status Bar.
 void Dictionary::runSearchEngine(string word, bool yesLogMessage) {
-	if (activeDataSet == EngEng) EngineHelperENG_ENG(word, yesLogMessage);
-	else if (activeDataSet == EngVie) EngineHelperENG_VIE(word, yesLogMessage);
+	EngineHelper(word, yesLogMessage);
 }
 
 //after calling, searchDefinitions function is ready.Turning off will disable that function.
@@ -104,7 +103,7 @@ vector<string> Dictionary::transformSentence(string& input) {
 	return words;
 }
 
-void Dictionary::EngineHelperENG_ENG(string keyword, bool yesLogMessage) {
+void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 	//format the word
 	string word;
 	int i = 0, n = keyword.length();
@@ -121,36 +120,7 @@ void Dictionary::EngineHelperENG_ENG(string keyword, bool yesLogMessage) {
 
 	if ((int)word.length() == 1 && myTrie.empty()) {
 		char key = word[0];
-		myTrie.loadData(key, EngEng);
-		wxLogStatus("Loading data...");
-	}
-	else if ((int)word.length() == 0) {
-		if (!myTrie.empty()) myTrie.clear();
-		wxLogStatus("Clearing Search Tree...");
-	}
-	else {
-		wxLogStatus("Doing nothing...");
-	}
-}
-
-void Dictionary::EngineHelperENG_VIE(string keyword, bool yesLogMessage) {
-	//format the word
-	string word;
-	int i = 0, n = keyword.length();
-	while (i < n && keyword[i] == ' ') ++i;
-
-
-	for (int j = 0; j < n; ++j) {
-		word.push_back(tolower(keyword[j]));
-	}
-
-	int m = word.length(); --m;
-
-	while (m >= 0 && word[m] == ' ') word.pop_back();
-
-	if ((int)word.length() == 1 && myTrie.empty()) {
-		char key = word[0];
-		myTrie.loadData(key, EngVie);
+		myTrie.loadData(key,activeDataSet , activeData);
 		wxLogStatus("Loading data...");
 	}
 	else if ((int)word.length() == 0) {
