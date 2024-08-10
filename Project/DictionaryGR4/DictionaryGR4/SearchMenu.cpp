@@ -24,6 +24,13 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	button = new wxBitmapButton(mainPanel, wxID_ANY, bitmap, wxPoint(320, 40), wxDefaultSize);
 	searchBar = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(357, 40), wxSize(450, 40));
 	searchBar->SetFont(font);
+
+	// Create combo box to choose dataset
+	wxArrayString languages = { "Eng-Eng", "Eng-Vie", "Vie-Eng" };
+	datasetCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(200,40), wxSize(120, 40), languages, wxCB_DROPDOWN | wxCB_READONLY);
+	datasetCbb->SetFont(font);
+	datasetCbb->Select(0);
+
 	//load
 	searchByDef = new wxButton(mainPanel, wxID_ANY, "Def->Word", wxPoint(60, 200), wxSize(120, 40));
 	searchByDef->Bind(wxEVT_BUTTON, &SearchMenu::OnLoadTool, this);
@@ -36,6 +43,7 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 
 	//word view appears first
 	wordView = new WordView(mainPanel, wxPoint(320, 200), wxSize(750, 350));
+
 	//init height = 0
 	suggestBar = new wxListBox(mainPanel, wxID_ANY, wxPoint(357, 83), wxSize(450, 0));
 	suggestBar->SetFont(font);
@@ -154,6 +162,14 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt) {
 
 		//avoiding overlapping panels
 		//wordView->Enable();
+
+		SearchedWord SW(key);
+		SW.setTime();
+		SW.setDate();
+		hist.saveToFile(SW);
+
+
+
 		return;
 	}
 
@@ -203,8 +219,8 @@ void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt) {
 
 		string word = string(s);
 
+		dict.chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
 
-		dict.chooseLanguage("Eng-Eng");
 		dict.runSearchEngine(word, false);
 
 		suggestBar->Clear();
@@ -246,7 +262,7 @@ void SearchMenu::adjustSuggestBar(int maxHeight, int maxItem) {
 
 
 void SearchMenu::OnLoadTool(wxCommandEvent& evt) {
-	dict.chooseLanguage("Eng-Eng");
+	dict.chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
 	if (!dict.isSearchingDefinition) dict.runSearchDefinitionEngine();
 }
 

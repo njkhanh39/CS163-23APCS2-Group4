@@ -6091,9 +6091,6 @@ fool	(ngoại động từ) (+ away) lãng phí (một cách ngu dại) (tiền,
 fool	(nội động từ, ((thường) + about, (từ mỹ, nghĩa mỹ) + around)) làm những chuyện ngớ ngẩn ngu dại; vớ vẩn, lãng phí thời gian.
 fool	(nội động từ, ((thường) + about, (từ mỹ, nghĩa mỹ) + around)) làm trò hề, làm trò ngố.
 fool	(nội động từ, ((thường) + about, (từ mỹ, nghĩa mỹ) + around)) (từ mỹ, nghĩa mỹ) đùa cợt.
-fools errand	(danh từ) việc vô ích.
-fools-cap	(danh từ) mũ anh hề.
-fools-cap	(danh từ) giấy viết khổ 13 x 17 insơ.
 fool-born	(tính từ) ngốc sẵn.
 foolery	(danh từ) sự dại dột, sự khờ dại, sự ngu xuẩn, sự xuẩn ngốc.
 foolery	(danh từ) trò hề, trò khôi hài.
@@ -6106,6 +6103,9 @@ foolishly	(phó từ) điên rồ, rồ dại.
 foolishness	(danh từ) tính dại dột, tính ngu xuẩn, tính xuẩn ngốc.
 foolocracy	(danh từ) chính quyền của người ngu xuẩn.
 foolproof	(tính từ) hết sức rõ ràng, ngu ngốc đến đâu cũng hiểu được; hết sức dễ dùng, ngu ngốc đến đâu cũng dùng được.
+fools errand	(danh từ) việc vô ích.
+fools-cap	(danh từ) mũ anh hề.
+fools-cap	(danh từ) giấy viết khổ 13 x 17 insơ.
 foolscap	(danh từ) mũ anh hề.
 foolscap	(danh từ) giấy viết khổ 13 x 17 insơ.
 foot	(danh từ, số nhiều feet) chân, bàn chân (người, thú...).
@@ -8081,7 +8081,6 @@ frog	(danh từ) (động vật học) đế guốc (chân ngựa).
 frog	(danh từ) quai đeo kiếm, quai đeo lưỡi lê.
 frog	(danh từ) khuy khuyết thùa (áo nhà binh).
 frog	(danh từ) (ngành đường sắt) đường ghi.
-frogs-march	(danh từ) cách khiêng ếch (khiêng người tù nằm úp, bốn người cầm bốn chân tay).
 frog-fish	(danh từ) (động vật học) cá vây chân.
 frog-in-the-throat	(danh từ) sự khản tiếng, sự khản cổ.
 frog-march	(danh từ) cách khiêng ếch (khiêng người tù nằm úp, bốn người cầm bốn chân tay).
@@ -8096,6 +8095,7 @@ froggy	(tính từ) có nhiều ếch nhái.
 froghopper	(danh từ) (động vật) sâu bọ thuộc họ ve sầu nhảy (ấu trùng sản sinh bọt).
 frogling	(danh từ) (động vật học) ếch con; ngoé con.
 frogman	(danh từ) người nhái.
+frogs-march	(danh từ) cách khiêng ếch (khiêng người tù nằm úp, bốn người cầm bốn chân tay).
 frogskin	(danh từ) (từ mỹ, nghĩa mỹ) (từ lóng) tờ đô-la giấy.
 frogsuit	(danh từ) (kỹ thuật) quần áo chống nhiễm xạ.
 frolic	(tính từ) (từ cổ, nghĩa cổ) vui vẻ, vui nhộn, hay nô đùa.

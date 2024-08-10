@@ -1659,7 +1659,7 @@ welcome	(hiên) (từ mỹ, nghĩa mỹ), (thông tục) không dám, có gì đ
 welcome	(thán từ) hoan nghênh!.
 welcome	(danh từ) sự được tiếp đ i ân cần, sự đón tiếp ân cần; sự hoan nghênh.
 welcome	(ngoại động từ) đón tiếp ân cần; hoan nghênh.
-welcome	(ngoại động từ) �� nước.
+welcome	(ngoại động từ)    nước.
 welcomer	(danh từ) người đón tiếp.
 weld	(danh từ) (kỹ thuật) mối hàn.
 weld	(ngoại động từ) (kỹ thuật) hàn.
@@ -2165,8 +2165,8 @@ which	(tính từ) ấy, đó.
 which	(háng, trong thời gian đó anh ta giúp đỡ tôi rất nhiều trong việc học tập) ực.
 which	(đại từ nghi vấn) gì, cái nào, người nào, ai (ngụ ý chọn lựa).
 which	(đại từ quan hệ) cái mà, mà.
-which	(�ang nói tới là một quyển rất lý thú) điều mà, cái mà; cái đó, điều đó, sự việc đó.
-which	(àm cho nó thành tàn tật suốt đời) � ngay.
+which	( ang nói tới là một quyển rất lý thú) điều mà, cái mà; cái đó, điều đó, sự việc đó.
+which	(àm cho nó thành tàn tật suốt đời)   ngay.
 which	(àm cho nó thành tàn tật suốt đời) ược tiếng anh, và làm tất c những cái đó rất dễ dàng.
 whichever	(tính từ) nào, bất cứ... nào.
 whichever	(đại từ) bất cứ cái nào.
@@ -2745,7 +2745,7 @@ win	(ngoại động từ) thu phục, tranh thủ, lôi kéo.
 win	(ngoại động từ) đạt đến, đến.
 win	(nội động từ) thắng cuộc, thắng trận.
 win	(nội động từ) (+ upon) càng ngày càng lôi kéo; thuyết phục được.
-win	(nội động từ) �ng triệu người.
+win	(nội động từ)  ng triệu người.
 wince	(danh từ) sự co rúm lại, sự rụt lại (vì đau đớn, sợ hãi...).
 wince	(nội động từ) co rúm lại, rụt lại (vì đau đớn, sợ h i...).
 wincey	(danh từ) vi pha len (để may s mi...).
@@ -3320,9 +3320,6 @@ wolf	(danh từ) (động vật học) chó sói.
 wolf	(danh từ) người tham tàn, người độc ác, người hung tàn.
 wolf	(danh từ) (từ mỹ, nghĩa mỹ), (từ lóng) người hay chim gái.
 wolf	(ngoại động từ) ngốn, nuốt ngấu nghiến.
-wolfs-bane	(danh từ) (thực vật học) cây phụ tử.
-wolfs-claw	(danh từ) (thực vật học) cây thạch tùng.
-wolfs-claws	(danh từ) (thực vật học) cây thạch tùng.
 wolf-call	(danh từ) (từ mỹ, nghĩa mỹ), (thông tục) tiếng huýt sáo (của anh chàng theo gái).
 wolf-cub	(danh từ) chó sói con.
 wolf-cub	(danh từ) sói con (hướng đạo).
@@ -3337,6 +3334,9 @@ wolfish	(tính từ) (từ mỹ, nghĩa mỹ), (thông tục) rất đói.
 wolfram	(danh từ) (hoá học) vonfam.
 wolfram	(danh từ) (như) wolframite.
 wolframite	(danh từ) (khoáng chất) vonfamit.
+wolfs-bane	(danh từ) (thực vật học) cây phụ tử.
+wolfs-claw	(danh từ) (thực vật học) cây thạch tùng.
+wolfs-claws	(danh từ) (thực vật học) cây thạch tùng.
 wolfskin	(danh từ) da chó sói.
 wolfskin	(danh từ) đồ làm bằng da chó sói.
 wolverene	(danh từ) (động vật học) chồn gulo.
@@ -3727,7 +3727,6 @@ worm	(ngoại động từ) bắt sâu, trừ sâu (ở luống rau...).
 worm	(ngoại động từ) bò vào; lần vào, chui vào, luồn qua (nghĩa đen & nghĩa bóng).
 worm	(ngoại động từ) (kỹ thuật) ren (một vít).
 worm	(ngoại động từ) (nghĩa bóng) moi.
-worms-eye view	(danh từ) đùa cợt) quay cảnh nhìn ở dưới lên.
 worm-cast	(danh từ) đống đất nhỏ hình ống do giun đùn lên mặt đất.
 worm-eaten	(tính từ) bị sâu đục, bị mọt ăn.
 worm-eaten	(tính từ) (nghĩa bóng) cũ kỹ.
@@ -3738,6 +3737,7 @@ worm-like	(tính từ) giống con sâu; dạng giun.
 worm-like	(tính từ) khúm núm; bợ đỡ; xu nịnh.
 worm-powder	(danh từ) (y học) bột tẩy giun.
 worm-wheel	(danh từ) (kỹ thuật) bánh vít.
+worms-eye view	(danh từ) đùa cợt) quay cảnh nhìn ở dưới lên.
 wormwood	(danh từ) (thực vật học) cây ngải apxin, cây ngải tây.
 wormwood	(danh từ) (nghĩa bóng) nỗi đắng cay, nỗi khổ nhục.
 wormy	(tính từ) có giun, có sán.

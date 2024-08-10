@@ -7,11 +7,10 @@
 #include <cctype>
 #include <sstream>
 #include "Unicode/utf8.h"
+
 #include "Definition.h"
 
 using namespace std;
-
-
 
 class Definition;
 
@@ -19,6 +18,7 @@ class Word {
 private:
 	string text;
 	vector<Definition> defList;
+
 public:
 	Word() {
 		text = "";
@@ -32,6 +32,7 @@ public:
 		text = word;
 		addDefinition(def);
 	}
+
 
 	// Equality operator
 	bool operator==(const Word& other) const {

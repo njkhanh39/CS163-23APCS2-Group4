@@ -547,9 +547,6 @@ neat	(tính từ) giản dị và trang nhã (quần áo).
 neat	(tính từ) nguyên chất, không pha (ượu).
 neat	(danh từ) bò.
 neat	(danh từ) trâu bò, thú nuôi.
-neats-foot	(danh từ) chân bò (để ăn).
-neats-leather	(danh từ) da bò.
-neats-tongue	(danh từ) lưỡi bò (để ăn).
 neat-handed	(tính từ) khéo tay, khéo léo.
 neat-herd	(danh từ) người chăn bò.
 neat-therd	(danh từ) người chăn bò.
@@ -560,6 +557,9 @@ neatness	(danh từ) sự sạch gọn, sự gọn gàng, sự ngăn nắp.
 neatness	(danh từ) sự rõ ràng rành mạch; sự ngắn gọn.
 neatness	(danh từ) sự khéo léo, sự tinh xảo.
 neatness	(danh từ) sự giản dị trang nhã.
+neats-foot	(danh từ) chân bò (để ăn).
+neats-leather	(danh từ) da bò.
+neats-tongue	(danh từ) lưỡi bò (để ăn).
 neb	(danh từ) (ê-cốt) mũi; mỏ; mõm.
 neb	(danh từ) đầu ngòi bút, đầu bút chì; vòi, đầu nhọn (của vật gì).
 nebula	(danh từ) (thiên văn học) tinh vân.

@@ -15,18 +15,19 @@ public:
 	wxButton* back_to_home;
 	SearchMenu(wxWindow* parent);
 	~SearchMenu();
+
 private:
 	Dictionary dict;
-
+	History hist;
 	wxPanel* titleBar, * mainPanel;
 	wxButton* button, * searchByDef, * searchByWord;
 	wxListBox* suggestBar;
 	wxTextCtrl* searchBar;
+	wxComboBox* datasetCbb;
 	WordView* wordView;
 
 
 	void skip(wxMouseEvent& evt);
-
 
 	//suggest bars
 	void adjustSuggestBar(int maxHeight, int maxItem);

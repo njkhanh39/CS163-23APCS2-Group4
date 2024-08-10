@@ -1101,11 +1101,6 @@ rat	(nội động từ) (chính trị) bỏ đảng, bỏ hàng ngũ trong lúc
 rat	(nội động từ) (nghĩa bóng) phản bội, bỏ rơi.
 rat	(nội động từ) không tham gia đình công.
 rat	(ngoại động từ) (như) drat.
-rats-tail	(danh từ) đuôi chuột.
-rats-tail	(danh từ) vật giống đuôi chuột.
-rats-tall	(danh từ) đuôi chuột.
-rats-tall	(danh từ) vật giống đuôi chuột.
-rats-tall	(danh từ) (kỹ thuật) giũa tròn nh.
 rat-a-tat	(danh từ) xem rat-tat.
 rat-a-tat-tat	(danh từ) cuộc ganh đua quyết liệt.
 rat-a-tat-tat	(danh từ) công việc đầu tắt mặt tối mà không đi đến đâu.
@@ -1230,6 +1225,11 @@ ratlin	(danh từ) (hàng hải) thang dây.
 ratline	(danh từ) (hàng hải) thang dây.
 ratling	(danh từ) (hàng hải) thang dây.
 ratoon	(nội động từ) mọc chồi (mía sau khi đốn).
+rats-tail	(danh từ) đuôi chuột.
+rats-tail	(danh từ) vật giống đuôi chuột.
+rats-tall	(danh từ) đuôi chuột.
+rats-tall	(danh từ) vật giống đuôi chuột.
+rats-tall	(danh từ) (kỹ thuật) giũa tròn nh.
 ratsbane	(danh từ) bả chuột; thuốc diệt chuột.
 ratsnake	(danh từ) rắn săn chuột.
 rattan	(danh từ) (thực vật học) cây mây, cây song.
@@ -7458,7 +7458,6 @@ rope	(ngoại động từ) buộc (những người leo núi) vào với nhau (
 rope	(ngoại động từ) kìm (ngựa lại không cho thắng trong cuộc đua ngựa).
 rope	(nội động từ) đặc quánh lại thành những sợi dây lầy nhầy (bia, rượu vang).
 rope	(nội động từ) (thể dục, thể thao) kìm lại không chạy hết tốc lực (vận động viên chạy đua).
-ropes-end	(danh từ) (hàng hải) sải dây ngắn (để đánh thuỷ thủ).
 rope-dancer	(danh từ) người biểu diễn trên dây, người đi trên dây (xiếc).
 rope-dancing	(danh từ) trò biểu diễn trên dây, trò đi trên dây (xiếc).
 rope-drive	(danh từ) (kỹ thuật) sự truyền động dây cáp.
@@ -7474,6 +7473,7 @@ rope-yarn	(danh từ) vật không đáng kể.
 ropemanship	(danh từ) nghệ thuật leo dây, nghệ thuật đi trên dây; tài leo dây, tài đi trên dây.
 roper	(danh từ) thợ bện dây thừng.
 roper	(danh từ) (từ mỹ, nghĩa mỹ), (tiếng địa phương) người chăn bò.
+ropes-end	(danh từ) (hàng hải) sải dây ngắn (để đánh thuỷ thủ).
 ropeway	(danh từ) đường dây.
 ropey	(tính từso sánh) (thông tục) kém về chất lượng, sức khoẻ.
 ropiness	(danh từ) tính chất đặc quánh lại thành dây.
@@ -8546,7 +8546,7 @@ rune	(danh từ) chữ run (chữ viết xưa của các dân tộc bắc âu v�
 rune	(danh từ) dấu bí hiểm, dấu thần bí.
 rung	(danh từ) thanh thang (thanh ngang của cái thang).
 rung	(danh từ) thang ngang chân ghế.
-rung	(danh từ) �ộng tính từ quá khứ của ring.
+rung	(danh từ)  ộng tính từ quá khứ của ring.
 runic	(tính từ) (thuộc) chữ run.
 runlet	(danh từ) dòng suối nhỏ.
 runlet	(danh từ) (từ cổ, nghĩa cổ) thùng nhỏ đựng rượu.

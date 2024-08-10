@@ -6,7 +6,7 @@ Definition::Definition(string& defText, Word* owningWord) {
 	owner = owningWord;
 }
 
-//getters
+//getters2
 
 	
 string Definition::getStringDefinition() {

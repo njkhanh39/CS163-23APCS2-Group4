@@ -3900,8 +3900,6 @@ hog	(nội động từ) (thông tục) lái ẩu, đi ẩu (lái ô tô, đi xe
 hog cholera	(danh từ) (thú y học) dịch tả lợn.
 hog mane	(danh từ) bờm ngựa xén ngắn.
 hog wild	(tính từ) cuống lên.
-hogs pudding	(danh từ) món dồi lợn.
-hogs-back	(danh từ) dây núi đồi sống trâu (có sống nhọn).
 hog-wash	(danh từ) nước rửa bát vo gạo (cho lợn ăn).
 hog-weed	(danh từ) rong bèo (cho lợn ăn).
 hogan	(danh từ) nhà làm bằng cành cây, trát bùn người da đỏ navaho ở.
@@ -3918,6 +3916,8 @@ hoggish	(tính từ) (nghĩa bóng) tham ăn; thô tục; bẩn thỉu (như l�
 hoggishness	(danh từ) tính tham ăn; tính thô tục; tính bẩn thỉu (như lợn).
 hogmanay	(danh từ) (ự cốt) ngày tất niên.
 hogpen	(danh từ) chuồng lợn.
+hogs pudding	(danh từ) món dồi lợn.
+hogs-back	(danh từ) dây núi đồi sống trâu (có sống nhọn).
 hogsback	(danh từ) cũng hogs back.
 hogsback	(danh từ) dãy núi đồi sống trâu.
 hogshead	(danh từ) thùng lớn (đựng rượu).

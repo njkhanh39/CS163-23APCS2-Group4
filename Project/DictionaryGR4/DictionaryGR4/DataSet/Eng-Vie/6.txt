@@ -1154,7 +1154,6 @@ death	(death quits all scores) cái chết bất thình lình.
 death	(death quits all scores) (từ mỹ, nghĩa mỹ), (từ lóng) rượu rất nặng; uýtky rẻ tiền.
 death	(death quits all scores) làm chết cười.
 death	(death quits all scores) cho đến chết, cho đến hơi thở cuối cùng.
-deaths-head	(danh từ) đầu lâu; hình đầu lâu (tượng trưng sự chết chóc).
 death-agony	(danh từ) lúc hấp hối.
 death-bell	(danh từ) chuông báo tử.
 death-blow	(danh từ) đòn chí tử, đòn trí mạng.
@@ -1185,6 +1184,7 @@ deathlike	(tính từ) như chết.
 deathly	(tính từ) làm chết người.
 deathly	(tính từ) như chết.
 deathly	(phó từ) như chết.
+deaths-head	(danh từ) đầu lâu; hình đầu lâu (tượng trưng sự chết chóc).
 deathsman	(danh từ) đao phủ.
 deave	(ngoại động từ) làm inh tai.
 deave	(ngoại động từ) quấy nhiễu bằng cách làm inh tai.
@@ -7478,16 +7478,6 @@ dog	(ngoại động từ) (kỹ thuật) kẹp bằng kìm, cặp bằng móc n
 dog biscuit	(danh từ) bánh quy cho chó.
 dog collar	(danh từ) vòng cổ xích chó.
 dog days	(danh từ) tiết nóng nhất trong năm (tháng 7 và 8).
-dogs ear	(danh từ) nếp quăn, nếp gấp (ở góc trang sách, trang vở).
-dogs ear	(ngoại động từ) làm quăn (góc trang sách, trang vở).
-dogs eared	(tính từ) có nếp quăn ở góc (trang sách, trang vở).
-dogs letter	(danh từ) chữ r.
-dogs nose	(danh từ) bia hoà với rượu gin.
-dogs-grass	(danh từ) (thực vật học) cỏ gà.
-dogs-meat	(danh từ) thịt cho chó ăn (thường là thịt ngựa, hoặc những cái bỏ đi; lòng, ruột, đuôi, đầu chân...).
-dogs-tail	(danh từ) (thực vật học) cỏ mần trầu.
-dogs-tongue	(danh từ) (thực vật học) cây lưỡi chó (thuộc họ vòi voi).
-dogs-tooth	(danh từ) (thực vật học) cây bách hợp.
 dog-biscuit	(danh từ) bánh quy cho chó ăn.
 dog-box	(danh từ) (ngành đường sắt) toa chở chó.
 dog-cheap	(tính từ) rẻ mạt, rẻ như bèo, rẻ thối ra.
@@ -7589,6 +7579,16 @@ dogmatist	(danh từ) người giáo điều.
 dogmatize	(ngoại động từ) làm thành giáo lý, biến thành giáo điều.
 dogmatize	(nội động từ) nói giáo điều, nói võ đoán.
 dogrose	(danh từ) hoa tầm xuân.
+dogs ear	(danh từ) nếp quăn, nếp gấp (ở góc trang sách, trang vở).
+dogs ear	(ngoại động từ) làm quăn (góc trang sách, trang vở).
+dogs eared	(tính từ) có nếp quăn ở góc (trang sách, trang vở).
+dogs letter	(danh từ) chữ r.
+dogs nose	(danh từ) bia hoà với rượu gin.
+dogs-grass	(danh từ) (thực vật học) cỏ gà.
+dogs-meat	(danh từ) thịt cho chó ăn (thường là thịt ngựa, hoặc những cái bỏ đi; lòng, ruột, đuôi, đầu chân...).
+dogs-tail	(danh từ) (thực vật học) cỏ mần trầu.
+dogs-tongue	(danh từ) (thực vật học) cây lưỡi chó (thuộc họ vòi voi).
+dogs-tooth	(danh từ) (thực vật học) cây bách hợp.
 dogsbody	(danh từ) kẻ gây sự bực dọc cho người khác.
 dogshore	(danh từ) (hàng hải) giá đỡ (thân tàu lúc đóng tàu, được dỡ ra khi cho tàu xuống nước).
 dogskin	(danh từ) da chó, da giả da chó (để làm găng tay).
@@ -7633,7 +7633,6 @@ dolichocranial	(tính từ) có sọ dài.
 dolichofacial	(tính từ) có mặt dài.
 doll	(danh từ) con búp bê (nghĩa đen & nghĩa bóng).
 doll	(động từ) diện, mặc quần áo đẹp.
-dolls house	(danh từ) nhà búp bê.
 dollar	(danh từ) đồng đô la (mỹ).
 dollar	(danh từ) (từ lóng) đồng 5 silinh, đồng curon.
 dollar	(danh từ) thần đô la, thần tiền.
@@ -7643,6 +7642,7 @@ dollar certificate of deposite	(danh từ) (kinh tế học) giấy chứng nh�
 dollar standard	(danh từ) (kinh tế học) bản vị đôla.
 dollish	(tính từ) như búp bê.
 dollop	(danh từ) (thông tục) khúc to, cục to, miếng to (thức ăn...).
+dolls house	(danh từ) nhà búp bê.
 dolly	(danh từ) bé búp bê (tiếng gọi nựng búp bê).
 dolly	(danh từ) gậy khuấy (quần áo trong chậu giặt, quặng trong thùng rửa...).
 dolly	(danh từ) giùi khoan sắt.

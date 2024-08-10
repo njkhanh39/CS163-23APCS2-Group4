@@ -6,6 +6,7 @@
 class MainFrame: public wxFrame {
 private:
 	wxSimplebook* simpleBook;
+
 public: 
 	MainFrame(const wxString& Title, wxSize FrameSize);
 

@@ -15,6 +15,7 @@ private:
 
 	int cur = 0;
 	int pages = 0;
+
 public:
 	
 	
