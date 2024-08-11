@@ -220,15 +220,9 @@ vector<string> Trie::getStringDefinitions(string s) {
     return empty;
 }
 
-void Trie::helperGetWordsPrefix(string prefix, Node* cur, vector<Word>& ans, bool& done, int& limit) {
+void Trie::helperGetWordsPrefix(vector<int>& cp, Node* cur, vector<Word>& ans, bool& done, int& limit) {
     if (!cur || done) return;
     
-    u16string tempUTF16;  
-    //convert prefix -> utf16 string
-    utf8::utf8to16(prefix.begin(), prefix.end(), back_inserter(tempUTF16));
-
-    string temp = prefix;
-
     for (int i = 0; i < 107; ++i) {
         if ((int)ans.size() == limit) {
             done = true;
@@ -236,14 +230,17 @@ void Trie::helperGetWordsPrefix(string prefix, Node* cur, vector<Word>& ans, boo
         }
         bool yes = false;
         if (cur->child[i]) {
-            tempUTF16+=(char16_t)indexToCodePoint(i);
+           cp.push_back(indexToCodePoint(i));
            // temp.push_back(char(indexToCodePoint(i)));
             if (cur->child[i]->exist != 0) {
 
-                string temp; //now convert tempUTF16 -> regular string temp
-                utf8::utf16to8(tempUTF16.begin(), tempUTF16.end(), back_inserter(temp));
+                u16string tmp16; for (int& x : cp) tmp16 += (char16_t)x;
+                
+                string str;
 
-                cur->child[i]->emptyWord.setWord(temp);
+                utf8::utf16to8(tmp16.begin(), tmp16.end(), back_inserter(str));
+
+                cur->child[i]->emptyWord.setWord(str);
 
                 ans.push_back(cur->child[i]->emptyWord); //add to ans
 
@@ -252,11 +249,9 @@ void Trie::helperGetWordsPrefix(string prefix, Node* cur, vector<Word>& ans, boo
             yes = true;
         }
 
-        string temp; //now convert tempUTF16 -> regular string temp to call recursion
-        utf8::utf16to8(tempUTF16.begin(), tempUTF16.end(), back_inserter(temp));
-
-        helperGetWordsPrefix(temp, cur->child[i], ans, done, limit);
-        if (yes && !temp.empty()) temp.pop_back();
+        
+        helperGetWordsPrefix(cp, cur->child[i], ans, done, limit);
+        if (yes && !cp.empty()) cp.pop_back();
     }
 }
 
@@ -279,7 +274,15 @@ vector<Word> Trie::getWordsWithPrefix(string s, int& limit) {
 
     bool done = false;
 
-    helperGetWordsPrefix(s, p, empty, done, limit);
+    vector<int> cp;
+    it = s.begin();
+
+    while (it != s.end()) {
+        uint32_t q = utf8::next(it, s.end());
+        cp.push_back(q);
+    }
+
+    helperGetWordsPrefix(cp, p, empty, done, limit);
 
     return empty;
 }

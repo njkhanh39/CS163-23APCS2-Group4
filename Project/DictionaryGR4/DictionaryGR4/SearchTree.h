@@ -86,7 +86,7 @@ private:
 
     void deleteHelperAll(Node*& pRoot);
     bool deleteWordRecursive(Node* p, string& s, int i);
-    void helperGetWordsPrefix(string prefix, Node* cur, vector<Word>& ans, bool& done, int& limit);
+    void helperGetWordsPrefix(vector<int>& cp, Node* cur, vector<Word>& ans, bool& done, int& limit);
 };
 
 
