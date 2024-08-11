@@ -1,8 +1,9 @@
 #include "History.h"
 
 
-
-
+void History::setMode(string dataset) {
+	mode = dataset;
+}
 
 void History::addToHistory(SearchedWord w) {
 	searchList.push_back(w);
@@ -10,7 +11,7 @@ void History::addToHistory(SearchedWord w) {
 
 void History::saveToFile(SearchedWord w) {
 	ofstream out;
-	out.open("History/history.csv", ios::app);
+	out.open("History\\Eng-Eng\\history.csv", ios::app);
 	if (!out.is_open()) return;
 	out << w.getWord() << "," << w.getTime() << "," << w.getDate() << endl;
 	out.close();
@@ -18,7 +19,7 @@ void History::saveToFile(SearchedWord w) {
 
 void History::loadFromFile() {
 	ifstream in;
-	in.open("History/history.csv");
+	in.open("History\\Eng-Eng\\history.csv");
 	string line;
 	getline(in, line);   // ignore the first line
 
