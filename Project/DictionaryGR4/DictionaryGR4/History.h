@@ -10,6 +10,7 @@
 class History {
 private:
 	list<SearchedWord> searchList;
+	string mode;
 public:
 	History() {}
 
@@ -18,7 +19,7 @@ public:
 		return searchList;
 	};
 
-
+	void setMode(string dataset);
 	void addToHistory(SearchedWord w);
 	void loadFromFile();
 	void saveToFile(SearchedWord w);

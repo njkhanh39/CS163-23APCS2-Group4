@@ -171,7 +171,7 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt) {
 
 
 		return;
-	}
+	}    
 
 	//word->def
 
