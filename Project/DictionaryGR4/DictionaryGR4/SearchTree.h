@@ -1,22 +1,28 @@
 #pragma once
 #include <fstream>
-
 #include "Word.h"
+
 
 class Trie {
 private:
     struct Node {
-        Node* child[40];
+        Node** child;
         int exist, cnt;
         Word emptyWord; //only stores definitions
 
         Node() {
-            for (int i = 0; i < 40; i++) child[i] = NULL;
+            child = new Node * [107];
+            for (int i = 0; i < 107; i++) child[i] = NULL;
             exist = cnt = 0;
+        }
+
+        ~Node() {
+            delete child;
         }
     };
 
     int size;
+    int codepoints[67] = { 224,225,226,227,232,233,234,236,237,242,243,244,245,249,250,253,259,273,297,361,417,432,7841,7843,7845,7847,7849,7851,7853,7855,7857,7859,7861,7863,7865,7867,7869,7871,7873,7875,7877,7879,7881,7883,7885,7887,7889,7891,7893,7895,7897,7899,7901,7903,7905,7907,7909,7911,7913,7915,7917,7919,7921,7923,7925,7927,7929 };
     Node* root;
 
 public:
@@ -26,9 +32,15 @@ public:
 
     //mapping a character to a child[i]
 
-    char indexToChar(int i);
+   /* char indexToChar(int i);
 
-    int charToIndex(char s);
+    int charToIndex(char s);*/
+
+    //mapping code point to a child[i]
+
+    int indexToCodePoint(int i);
+
+    int codePointToIndex(int code);
 
 
     //add a word with definition
@@ -59,8 +71,8 @@ public:
     //Get words with prefix s, with desired limit (max ... words)
     vector<Word> getWordsWithPrefix(string s, int& desired);
 
-    //in case word typed does not match, we suggest words (customable limit)
-    vector<Word> getClosestMatchWords(string s, int& desired);
+    ////in case word typed does not match, we suggest words (customable limit)
+    //vector<Word> getClosestMatchWords(string s, int& desired);
 
     //return number of added words (even duplicates)
     int getSize();
