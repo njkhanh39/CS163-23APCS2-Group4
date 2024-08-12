@@ -2,8 +2,6 @@
 
 using namespace std;
 
-namespace fs = std::experimental::filesystem;
-
 //"Eng-Eng", "Eng-Vie", "Vie-Eng"
 bool Dictionary::chooseLanguage(string t) {
 	if (t != EngEng && t != EngVie && t != VieEng) return false;
@@ -19,9 +17,9 @@ void Dictionary::runSearchEngine(string word, bool yesLogMessage) {
 
 //after calling, searchDefinitions function is ready.Turning off will disable that function.
 void Dictionary::runSearchDefinitionEngine() {
-	if (activeDataSet == EngEng) tool.load("Eng-Eng", activeData);
-	if (activeDataSet == EngVie) tool.load("Eng-Vie", activeData);
-	if (activeDataSet == VieEng) tool.load("Vie-Eng", activeData);
+	if (activeDataSet == EngEng) tool.load("Eng-Eng");
+	if (activeDataSet == EngVie) tool.load("Eng-Vie");
+	if (activeDataSet == VieEng) tool.load("Vie-Eng");
 	isSearchingDefinition = true;
 }
 
@@ -81,18 +79,6 @@ vector<Word> Dictionary::searchDefToWord(string& keyword, int limit) {
 	return tool.searchDefinitionsToWord(subkeys, limit);
 }
 
-void Dictionary::duplicateDataset() {
-	if (!fs::exists("Customized DataSet"))
-		fs::copy("DataSet", "Customized DataSet");
-	activeData = "Customized DataSet";
-}
-
-void Dictionary::deleteDataset() {
-	if (fs::exists("Customized DataSet"))
-		fs::remove_all("Customized DataSet");
-	activeData = "DataSet";
-}
-
 //helpers
 
 vector<string> Dictionary::transformSentence(string& input) {
@@ -135,7 +121,7 @@ void Dictionary::EngineHelperENG_ENG(string keyword, bool yesLogMessage) {
 
 	if ((int)word.length() == 1 && myTrie.empty()) {
 		char key = word[0];
-		myTrie.loadData(key, EngEng, activeData);
+		myTrie.loadData(key, EngEng);
 		wxLogStatus("Loading data...");
 	}
 	else if ((int)word.length() == 0) {
@@ -164,7 +150,7 @@ void Dictionary::EngineHelperENG_VIE(string keyword, bool yesLogMessage) {
 
 	if ((int)word.length() == 1 && myTrie.empty()) {
 		char key = word[0];
-		myTrie.loadData(key, EngVie, activeData);
+		myTrie.loadData(key, EngVie);
 		wxLogStatus("Loading data...");
 	}
 	else if ((int)word.length() == 0) {

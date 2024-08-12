@@ -1,6 +1,8 @@
 #pragma once 
 #include "SearchTree.h"
 
+namespace fs = std::experimental::filesystem;
+
 //mapping a character to a child[i]
 
 char Trie::indexToChar(int i) {
@@ -245,7 +247,7 @@ int Trie::getSize() {
     return size;
 }
 
-bool Trie::loadData(char key, string dataset, string data) {
+bool Trie::loadData(char key, string dataset) {
     string s;
 
     key = tolower(key);
@@ -256,13 +258,13 @@ bool Trie::loadData(char key, string dataset, string data) {
     if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
 
 
-    if (num == 1) s = data + "\\" + dataset + "\\1.txt";
-    else if (num == 2) s = data + "\\" + dataset + "\\1.txt";
+    if (num == 1) s = "DataSet\\" + dataset + "\\1.txt";
+    else if (num == 2) s = "DataSet\\" + dataset + "\\1.txt";
     else {
         num -= 10;
         string idx = to_string(num);
 
-        s = data + "\\" + dataset + "\\" + idx + ".txt";
+        s = "DataSet\\" + dataset + "\\" + idx + ".txt";
     }
     //cout << "Loading file: " << s << '\n';
     ifstream fin;
@@ -291,17 +293,21 @@ bool Trie::loadData(char key, string dataset, string data) {
     return true;
 }
 
+void Trie::resetDataset(string dataset) {
+    fs::copy("DataSet - Backup\\" + dataset, "DataSet\\" + dataset);
+}
+
 
 void WordFinder::addSubDef(string subdef, int order) {
     slots[order].addSubDef(subdef);
 }
 
-void WordFinder::load(string dataset, string data) {
+void WordFinder::load(string dataset) {
     //load from processed data
     int curbucket = 0;
 
     ifstream fin;
-    fin.open(data + "\\" + dataset + "\\sortedData.txt");
+    fin.open("DataSet\\" + dataset + "\\sortedData.txt");
 
     if (!fin.is_open()) {
         fin.close();
@@ -343,7 +349,7 @@ void WordFinder::load(string dataset, string data) {
     int cur = 0;
     for (int file = 1; file <= 28; ++file) {
         ifstream fin;
-        fin.open(data + "\\" + dataset + "\\" + to_string(file) + ".txt");
+        fin.open("DataSet\\" + dataset + "\\" + to_string(file) + ".txt");
 
         if (!fin.is_open()) {
             fin.close();

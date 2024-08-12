@@ -7,8 +7,9 @@ private:
 	wxPanel* panel;
 	wxBoxSizer* frame;
 	
-	wxStaticText* text, *wordTypeText, *defText, *pageText;
-	wxButton* fav, *next, *back;
+	wxStaticText* text, *wordTypeText, /**defText, */*pageText;
+	wxTextCtrl* defText;
+	wxButton* fav, *next, *back, *editDef, *confirmEdit, *cancelEdit;
 
 	vector<string> displayDef, actualDef;
 	vector<string> wordtype;
@@ -41,7 +42,8 @@ public:
 		wordTypeText = new wxStaticText(panel, wxID_ANY, "wordtype", wxPoint(size.x / 20, 3*size.y / 20), wxDefaultSize);
 		wordTypeText->SetFont(font);
 
-		defText = new wxStaticText(panel, wxID_ANY, "def", wxPoint(size.x / 20, size.y/3), wxDefaultSize);
+		defText = new wxTextCtrl(panel, wxID_ANY, "def", wxPoint(size.x / 20, size.y/3), wxSize(500, 200), wxTE_MULTILINE);
+		defText->SetEditable(0);
 		defText->SetFont(font);
 
 		next = new wxButton(panel, 10017, "Next", wxPoint(5 * size.x / 6, 0), size / 6);
@@ -53,10 +55,18 @@ public:
 		next->SetFont(font);
 		back->SetFont(font);
 
+		editDef = new wxButton(panel, wxID_ANY, "Edit", wxPoint(size.x * 5 / 6, size.y * 3 / 6));
+		confirmEdit = new wxButton(panel, wxID_ANY, "Confirm", wxPoint(size.x * 5 / 6, size.y * 4 / 6));
+		cancelEdit = new wxButton(panel, wxID_ANY, "Cancel", wxPoint(size.x * 5 / 6, size.y * 5 / 6));
+
+		confirmEdit->Hide();
+		cancelEdit->Hide();
+
 		//panel->Bind(wxEVT_LEFT_DOWN, &WordView::skip, this);
 		next->Bind(wxEVT_BUTTON, &WordView::showWord, this);
 		back->Bind(wxEVT_BUTTON, &WordView::showWord, this);
-
+		editDef->Bind(wxEVT_BUTTON, &WordView::OnEditDefClicked, this);
+		cancelEdit->Bind(wxEVT_BUTTON, &WordView::OnCancelEditClicked, this);
 	}
 
 
@@ -76,7 +86,7 @@ public:
 	}
 
 	void processWord(Word& word) {
-		//careful with this, must set cur = 0 when loading newword
+		//careful with this, must set cur = 0 when loading new word
 		if (word.empty()) return;
 
 		cur = 0;
@@ -156,4 +166,32 @@ public:
 			}
 		}
 	}
+
+	void OnEditDefClicked(wxCommandEvent& evt) {
+		defText->SetEditable(1);
+		defText->SetFocus();
+		defText->SetInsertionPointEnd();
+
+		confirmEdit->Show();
+		cancelEdit->Show();
+	}
+
+	void OnConfirmEditClicked(wxCommandEvent& evt) {
+		
+
+		defText->SetEditable(0);
+		confirmEdit->Hide();
+		cancelEdit->Hide();
+	}
+
+	void OnCancelEditClicked(wxCommandEvent& evt) {
+		defText->SetEditable(0);
+
+		wxString page = pageText->GetLabelText();
+		defText->SetLabel(wxString::FromUTF8(displayDef[wxAtoi(page.Left(page.First('/'))) - 1]));
+
+		confirmEdit->Hide();
+		cancelEdit->Hide();
+	}
+
 };
