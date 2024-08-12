@@ -318,7 +318,7 @@ int Trie::getSize() {
     return size;
 }
 
-bool Trie::loadData(string file, string dataset, string data) {
+bool Trie::loadData(string file, string dataset) {
     //string s;
 
     //key = tolower(key);
@@ -349,7 +349,7 @@ bool Trie::loadData(string file, string dataset, string data) {
 
     string s;
 
-    s = data + "\\" + dataset + "\\" + file + ".txt";
+    s = "DataSet\\" + dataset + "\\" + file + ".txt";
 
     ifstream fin;
     fin.open(s);
@@ -381,12 +381,12 @@ void WordFinder::addSubDef(string subdef, int order) {
     slots[order].addSubDef(subdef);
 }
 
-void WordFinder::load(string dataset, string data) {
+void WordFinder::load(string dataset) {
     //load from processed data
     int curbucket = 0;
 
     ifstream fin;
-    fin.open(data + "\\" + dataset + "\\sortedData.txt");
+    fin.open("DataSet\\" + dataset + "\\sortedData.txt");
 
     if (!fin.is_open()) {
         fin.close();
@@ -428,7 +428,7 @@ void WordFinder::load(string dataset, string data) {
     int cur = 0;
     for (int file = 1; file <= 28; ++file) {
         ifstream fin;
-        fin.open(data + "\\" + dataset + "\\" + to_string(file) + ".txt");
+        fin.open("DataSet\\" + dataset + "\\" + to_string(file) + ".txt");
 
         if (!fin.is_open()) {
             fin.close();

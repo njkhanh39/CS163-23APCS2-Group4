@@ -18,9 +18,9 @@ void Dictionary::runSearchEngine(string word, bool yesLogMessage) {
 
 //after calling, searchDefinitions function is ready.Turning off will disable that function.
 void Dictionary::runSearchDefinitionEngine() {
-	if (activeDataSet == EngEng) tool.load("Eng-Eng", activeData);
-	if (activeDataSet == EngVie) tool.load("Eng-Vie", activeData);
-	if (activeDataSet == VieEng) tool.load("Vie-Eng", activeData);
+	if (activeDataSet == EngEng) tool.load("Eng-Eng");
+	if (activeDataSet == EngVie) tool.load("Eng-Vie");
+	if (activeDataSet == VieEng) tool.load("Vie-Eng");
 	isSearchingDefinition = true;
 }
 
@@ -75,18 +75,6 @@ vector<Word> Dictionary::searchRelatedWords(string word, int limit) {
 vector<Word> Dictionary::searchDefToWord(string& keyword, int limit) {
 	vector<string> subkeys = transformSentence(keyword);
 	return tool.searchDefinitionsToWord(subkeys, limit);
-}
-
-void Dictionary::duplicateDataset() {
-	if (!fs::exists("Customized DataSet"))
-		fs::copy("DataSet", "Customized DataSet");
-	activeData = "Customized DataSet";
-}
-
-void Dictionary::deleteDataset() {
-	if (fs::exists("Customized DataSet"))
-		fs::remove_all("Customized DataSet");
-	activeData = "DataSet";
 }
 
 //helpers
@@ -210,7 +198,7 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 	
 
 	if (realLength == 1 && myTrie.empty()) {
-		myTrie.loadData(file,activeDataSet , activeData);
+		myTrie.loadData(file,activeDataSet);
 		wxLogStatus("Loading data...");
 	}
 	else if (realLength == 0) {

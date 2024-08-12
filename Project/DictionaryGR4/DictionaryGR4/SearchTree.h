@@ -80,7 +80,7 @@ public:
 
     //load
 
-    bool loadData(string file, string dataset, string data);
+    bool loadData(string file, string dataset);
 
 private:
     //helpers
@@ -144,7 +144,7 @@ public:
     
 	void addSubDef(string subdef, int order);
 
-    void load(string dataset, string data);
+    void load(string dataset);
 
     void unload();
 
