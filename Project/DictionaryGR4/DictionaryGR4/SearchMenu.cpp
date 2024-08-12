@@ -171,7 +171,7 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt) {
 
 
 		return;
-	}
+	}    
 
 	//word->def
 
@@ -217,7 +217,7 @@ void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt) {
 	if (!dict.isSearchingDefinition) {
 		wxString s = evt.GetString();
 
-		string word = string(s);
+		string word = (string)s.mb_str(wxConvUTF8);
 
 		dict.chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
 

@@ -259,8 +259,9 @@ bool Trie::loadData(char key, string dataset) {
 
 
     if (num == 1) s = "DataSet\\" + dataset + "\\1.txt";
-    else if (num == 2) s = "DataSet\\" + dataset + "\\1.txt";
+    else if (num == 2) s = "DataSet\\" + dataset + "\\2.txt";
     else {
+        if (dataset == "Vie-Eng") num -= 2;
         num -= 10;
         string idx = to_string(num);
 
