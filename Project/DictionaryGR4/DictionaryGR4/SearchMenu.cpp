@@ -171,7 +171,7 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt) {
 
 
 		return;
-	}    
+	}
 
 	//word->def
 
@@ -217,7 +217,7 @@ void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt) {
 	if (!dict.isSearchingDefinition) {
 		wxString s = evt.GetString();
 
-		string word = (string)s.mb_str(wxConvUTF8);
+		string word = string(s.mb_str(wxConvUTF8));
 
 		dict.chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
 
@@ -268,17 +268,5 @@ void SearchMenu::OnLoadTool(wxCommandEvent& evt) {
 
 void SearchMenu::OnUnLoadTool(wxCommandEvent& evt) {
 	dict.turnOffSearchDefinitionEngine();
-}
-
-void SearchMenu::OnResetButtonClicked() {
-	string curDataset = datasetCbb->GetStringSelection().ToStdString();
-
-	wxMessageDialog* ask = new wxMessageDialog(this,
-		"Are you sure to reset the dataset \"" + curDataset + "\"?",
-		"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
-
-	if (ask->ShowModal() == wxID_YES) {
-
-	}
 }
 

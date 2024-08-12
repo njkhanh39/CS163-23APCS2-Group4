@@ -1,37 +1,86 @@
-#pragma once 
+﻿#pragma once 
 #include "SearchTree.h"
-
-namespace fs = std::experimental::filesystem;
 
 //mapping a character to a child[i]
 
-char Trie::indexToChar(int i) {
-    if (i == 0) return ' ';
-    if (i == 1) return char(39); // '
-    if (i == 2) return '-';
-    if (3 <= i && i <= 12) return char(i + 45); // 0->9
-    if (13 <= i && i <= 38) return char(i + 84); // a -> z
-    if (i == 39) return '.';
+//char Trie::indexToChar(int i) {
+//    if (i == 0) return ' ';
+//    if (i == 1) return char(39); // '
+//    if (i == 2) return '-';
+//    if (3 <= i && i <= 12) return char(i + 45); // 0->9
+//    if (13 <= i && i <= 38) return char(i + 84); // a -> z
+//    if (i == 39) return '.';
+//
+//    return '*';
+//}
+//
+//int Trie::charToIndex(char s) {
+//    if (s == char(32)) return 0;
+//    if (s == char(39)) return 1;
+//    if (s == char(45)) return 2;
+//    if (s == char(46)) return 39;
+//
+//    if (48 <= int(s) && int(s) <= 57) return int(s) - 45;
+//    if (97 <= int(s) && int(s) <= 122) return int(s) - 84;
+//
+//    return -1;
+//}
 
-    return '*';
+int Trie::indexToCodePoint(int i) {
+    if (i == 0) return 32; // ' '
+    if (i == 1) return 39; // '
+    if (i == 2) return 45; // -
+    if (3 <= i && i <= 12) return (i + 45); //0->9
+    if (13 <= i && i <= 38) return (i + 84); //a->z
+
+    int idx = i - 39;
+    //vietkeys (67 chars), i = 39->105
+    if (0 <= idx && idx <= 66) return codepoints[idx];
+
+    if (i == 106) return 46; //.
+
+
+    //unidentified
+    return -1;
 }
 
-int Trie::charToIndex(char s) {
-    if (s == char(32)) return 0;
-    if (s == char(39)) return 1;
-    if (s == char(45)) return 2;
-    if (s == char(46)) return 39;
+int Trie::codePointToIndex(int code) {
+    if (code == 32) return 0; // idx 0 = ' '
+    if (code == 39) return 1; // idx 1 = '
+    if (code == 45) return 2; // idx 2 = -
 
-    if (48 <= int(s) && int(s) <= 57) return int(s) - 45;
-    if (97 <= int(s) && int(s) <= 122) return int(s) - 84;
+    //idx 3->12 = 0,...,9
+    if (48 <= code && code <= 57) return code - 45;
+    //idx 13->38 = a,...z
+    if (97 <= code && code <= 122) return code - 84;
 
+    //idx 106 = .
+    if (code == 46) return 106; //. 
+
+    //idx 39->105: vietkeys
+    int l = 0, r = 66;
+    while (l <= r) {
+        int mid = l + (r - l) / 2;
+
+        if (codepoints[mid] == code) {
+            return (39 + mid);
+        }
+        else if (codepoints[mid] > code) {
+            r = mid - 1;
+        }
+        else l = mid + 1;
+    }
+    //unidentified
     return -1;
 }
 
 void Trie::addWord(string word, string& def) {
     Node* p = root;
-    for (auto f : word) {
-        int c = charToIndex(f);
+    auto it = word.begin();
+    while(it!=word.end()){
+        uint32_t f = utf8::next(it, word.end());
+
+        int c = codePointToIndex(f);
         if (c == -1) return; //invalid
 
         if (p->child[c] == NULL) p->child[c] = new Node();
@@ -46,7 +95,7 @@ void Trie::addWord(string word, string& def) {
 }
 
 bool Trie::empty() {
-    for (int i = 0; i < 40; ++i) {
+    for (int i = 0; i < 107; ++i) {
         if (root->child[i]) return false;
     }
     return true;
@@ -54,8 +103,11 @@ bool Trie::empty() {
 
 bool Trie::findWord(string s) {
     Node* p = root;
-    for (auto f : s) {
-        int c = charToIndex(f);
+    auto it = s.begin();
+    while(it!=s.end()) {
+        uint32_t f = utf8::next(it, s.end());
+
+        int c = codePointToIndex(f);
         if (c == -1) return false; //invalid
 
         if (p->child[c] == NULL) return false;
@@ -72,7 +124,7 @@ void Trie::clear() {
 
 void Trie::deleteHelperAll(Node*& pRoot) {
     if (!pRoot) return;
-    for (int i = 0; i < 40; ++i) {
+    for (int i = 0; i < 107; ++i) {
         deleteHelperAll(pRoot->child[i]);
     }
     size = 0;
@@ -85,7 +137,7 @@ void Trie::deleteHelperAll(Node*& pRoot) {
 
 bool Trie::deleteWordRecursive(Node* p, string& s, int i) {
     if (i != (int)s.size()) {
-        int c = charToIndex(s[i]); 
+        int c = codePointToIndex(int(s[i])); 
         if (c == -1) return false; //invalid
         bool isChildDeleted = deleteWordRecursive(p->child[c], s, i + 1);
         if (isChildDeleted) p->child[c] = NULL;
@@ -113,8 +165,10 @@ void Trie::removeWord(string s) {
 vector<Definition> Trie::getDefinitions(string s) {
     vector<Definition> empty;
     Node* p = root;
-    for (auto f : s) {
-        int c = charToIndex(f);
+    auto it = s.begin();
+    while (it!=s.end()) {
+        uint32_t f = utf8::next(it, s.end());
+        int c = codePointToIndex(f);
         if (c == -1) return empty; //invalid
         if (p->child[c] == NULL) return empty;
         p = p->child[c];
@@ -130,8 +184,10 @@ vector<Definition> Trie::getDefinitions(string s) {
 Word Trie::getWordMatching(string s) {
     Word ans; //empty word
     Node* p = root;
-    for (auto f : s) {
-        int c = charToIndex(f);
+    auto it = s.begin();
+    while (it!=s.end()) {
+        uint32_t f = utf8::next(it, s.end());
+        int c = codePointToIndex(f);
         if (c == -1) return ans; //invalid
         if (p->child[c] == NULL) return ans;
         p = p->child[c];
@@ -150,8 +206,10 @@ Word Trie::getWordMatching(string s) {
 vector<string> Trie::getStringDefinitions(string s) {
     vector<string> empty;
     Node* p = root;
-    for (auto f : s) {
-        int c = charToIndex(f);
+    auto it = s.begin();
+    while (it!=s.end()) {
+        uint32_t f = utf8::next(it, s.end());
+        int c = codePointToIndex(f);
         if (c == -1) return empty; //invalid
         if (p->child[c] == NULL) return empty;
         p = p->child[c];
@@ -162,21 +220,27 @@ vector<string> Trie::getStringDefinitions(string s) {
     return empty;
 }
 
-void Trie::helperGetWordsPrefix(string prefix, Node* cur, vector<Word>& ans, bool& done, int& limit) {
+void Trie::helperGetWordsPrefix(vector<int>& cp, Node* cur, vector<Word>& ans, bool& done, int& limit) {
     if (!cur || done) return;
     
-    string temp = prefix;
-    for (int i = 0; i < 40; ++i) {
+    for (int i = 0; i < 107; ++i) {
         if ((int)ans.size() == limit) {
             done = true;
             return;
         }
         bool yes = false;
         if (cur->child[i]) {
-            temp.push_back(indexToChar(i));
+           cp.push_back(indexToCodePoint(i));
+           // temp.push_back(char(indexToCodePoint(i)));
             if (cur->child[i]->exist != 0) {
-               
-                cur->child[i]->emptyWord.setWord(temp);
+
+                u16string tmp16; for (int& x : cp) tmp16 += (char16_t)x;
+                
+                string str;
+
+                utf8::utf16to8(tmp16.begin(), tmp16.end(), back_inserter(str));
+
+                cur->child[i]->emptyWord.setWord(str);
 
                 ans.push_back(cur->child[i]->emptyWord); //add to ans
 
@@ -185,95 +249,113 @@ void Trie::helperGetWordsPrefix(string prefix, Node* cur, vector<Word>& ans, boo
             yes = true;
         }
 
-
-        helperGetWordsPrefix(temp, cur->child[i], ans, done, limit);
-        if (yes && !temp.empty()) temp.pop_back();
+        
+        helperGetWordsPrefix(cp, cur->child[i], ans, done, limit);
+        if (yes && !cp.empty()) cp.pop_back();
     }
-
-
 }
 
 vector<Word> Trie::getWordsWithPrefix(string s, int& limit) {
     vector<Word> empty;
     Node* p = root;
-    for (auto f : s) {
-        int c = charToIndex(f);
+    auto it = s.begin();
+    while (it!=s.end()) {
+        uint32_t f = utf8::next(it, s.end());
+        int c = codePointToIndex(f);
         if (c == -1) return empty; //invalid
         if (p->child[c] == NULL) return empty;
         p = p->child[c];
     }
     if (p->exist != 0) {
         p->emptyWord.setWord(s);
-
         empty.push_back(p->emptyWord);
         p->emptyWord.setWord("");
     }
 
     bool done = false;
 
-    helperGetWordsPrefix(s, p, empty, done, limit);
+    vector<int> cp;
+    it = s.begin();
+
+    while (it != s.end()) {
+        uint32_t q = utf8::next(it, s.end());
+        cp.push_back(q);
+    }
+
+    helperGetWordsPrefix(cp, p, empty, done, limit);
 
     return empty;
 }
 
-vector<Word> Trie::getClosestMatchWords(string s, int& desired) {
-
-    //suggested words will differ our word by at most one position
-
-    vector<Word> ans;
-
-    vector<string> possible;
-
-    for (int i = 0; i < (int)s.length(); ++i) {
-        char old = s[i];
-        for (int idx = 0; idx < 39; ++idx) {
-            char l = indexToChar(idx);
-            s[i] = l;
-            possible.push_back(s);
-        }
-        s[i] = old;
-    }
-
-    for (auto& str : possible) {
-        Word temp = getWordMatching(str);
-        if (!temp.empty()) ans.push_back(temp);
-        if ((int)ans.size() == desired) return ans;
-    }
-
-    return ans;
-}
+//vector<Word> Trie::getClosestMatchWords(string s, int& desired) {
+//
+//    //suggested words will differ our word by at most one position
+//
+//    vector<Word> ans;
+//
+//    vector<string> possible;
+//
+//    for (int i = 0; i < (int)s.length(); ++i) {
+//        char old = s[i];
+//        for (int idx = 0; idx < 39; ++idx) {
+//            char l = indexToChar(idx);
+//            s[i] = l;
+//            possible.push_back(s);
+//        }
+//        s[i] = old;
+//    }
+//
+//    for (auto& str : possible) {
+//        Word temp = getWordMatching(str);
+//        if (!temp.empty()) ans.push_back(temp);
+//        if ((int)ans.size() == desired) return ans;
+//    }
+//
+//    return ans;
+//}
 
 int Trie::getSize() {
     return size;
 }
 
-bool Trie::loadData(char key, string dataset) {
+bool Trie::loadData(string file, string dataset, string data) {
+    //string s;
+
+    //key = tolower(key);
+    //int num = codePointToIndex((int)key);
+
+
+    ////no character begins with numbers, spaces or special chars
+    //if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
+
+
+    //if (num == 1) s = data + "\\" + dataset + "\\1.txt";
+    //else if (num == 2) s = data + "\\" + dataset + "\\2.txt";
+    //else {
+    //    if (dataset == "Vie-Eng") num -= 2;
+    //    num -= 10;
+    //    if (key == 'x') num = 23;
+    //    if (key == 'y') num = 24;
+    //    if (key == 'z') num = 25;
+    //    string idx = to_string(num);
+    //    
+
+
+    //    s = data + "\\" + dataset + "\\" + idx + ".txt";
+
+    //   
+    //}
+    //cout << "Loading file: " << s << '\n';
+
     string s;
 
-    key = tolower(key);
-    int num = charToIndex(key);
+    s = data + "\\" + dataset + "\\" + file + ".txt";
 
-
-    //no character begins with numbers, spaces or special chars
-    if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
-
-
-    if (num == 1) s = "DataSet\\" + dataset + "\\1.txt";
-    else if (num == 2) s = "DataSet\\" + dataset + "\\2.txt";
-    else {
-        if (dataset == "Vie-Eng") num -= 2;
-        num -= 10;
-        string idx = to_string(num);
-
-        s = "DataSet\\" + dataset + "\\" + idx + ".txt";
-    }
-    //cout << "Loading file: " << s << '\n';
     ifstream fin;
     fin.open(s);
     if (fin.is_open()) {
         string line;
         while (getline(fin, line)) {
-
             string s, t;
             int i = 0;
             while (line[i] != '\t') {
@@ -283,7 +365,7 @@ bool Trie::loadData(char key, string dataset) {
 
             ++i;
 
-            for (int j = i; j < (int)line.length(); ++j) t.push_back(line[j]);
+            t = line.substr(i, (int)line.length());
 
             addWord(s, t);
             //cout << s << '\n';
@@ -294,21 +376,17 @@ bool Trie::loadData(char key, string dataset) {
     return true;
 }
 
-void Trie::resetDataset(string dataset) {
-    fs::copy("DataSet - Backup\\" + dataset, "DataSet\\" + dataset);
-}
-
 
 void WordFinder::addSubDef(string subdef, int order) {
     slots[order].addSubDef(subdef);
 }
 
-void WordFinder::load(string dataset) {
+void WordFinder::load(string dataset, string data) {
     //load from processed data
     int curbucket = 0;
 
     ifstream fin;
-    fin.open("DataSet\\" + dataset + "\\sortedData.txt");
+    fin.open(data + "\\" + dataset + "\\sortedData.txt");
 
     if (!fin.is_open()) {
         fin.close();
@@ -350,7 +428,7 @@ void WordFinder::load(string dataset) {
     int cur = 0;
     for (int file = 1; file <= 28; ++file) {
         ifstream fin;
-        fin.open("DataSet\\" + dataset + "\\" + to_string(file) + ".txt");
+        fin.open(data + "\\" + dataset + "\\" + to_string(file) + ".txt");
 
         if (!fin.is_open()) {
             fin.close();
@@ -391,14 +469,22 @@ Word WordFinder::searchWord(string text) {
 
     int j = -1;
 
+    u16string wxtest = tou16(text);
+
     while (left <= right) {
         int mid = left + (right - left) / 2;
+        string cur = slots[mid].word.getWord();
 
-        if (slots[mid].word.getWord() < text) {
+        u16string midstr = tou16(cur);
+
+        if (midstr == wxtest) {
+            j = mid;
+            right = mid - 1;
+        }
+        else if (compare(midstr,wxtest,alphabet) == 0) {
             left = mid + 1;
         }
         else {
-            if (slots[mid].word.getWord() == text) j = mid;
             right = mid - 1;
         }
     }
@@ -445,4 +531,41 @@ vector<Word> WordFinder::searchDefinitionsToWord(vector<string>& subkey, int lim
     }
 
     return ans;
+}
+
+//helpers
+
+u16string WordFinder::tou16(string& s) {
+    auto it = s.begin();
+    u16string u16;
+    while (it != s.end()) {
+        uint32_t cp = utf8::next(it, s.end());
+        u16 += (char16_t)cp;
+    }
+
+    return u16;
+}
+
+int WordFinder::getIndex(vector<char16_t> alphabet, char16_t c) {
+    auto iterator = find(alphabet.begin(), alphabet.end(), c);
+    if (iterator != alphabet.end())
+        return iterator - alphabet.begin();
+    else
+        return -1;
+}
+
+bool WordFinder::compare(u16string s1, u16string s2, vector<char16_t> alphabet) {
+    for (int i = 0; i <= min(s1.length(), s2.length()); ++i) {
+        int idx1 = getIndex(alphabet, s1[i]);
+
+        //if (idx1 == 0)
+        //    return 0;
+
+        int idx2 = getIndex(alphabet, s2[i]);
+        if (idx1 < idx2)
+            return 0;
+        if (idx1 > idx2)
+            return 1;
+    }
+    return 0;
 }
