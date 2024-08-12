@@ -81,4 +81,8 @@ public:
 
 	void clear();
 
+	//adjust-er
+
+	void modifyDefinition(string def, int index);
+
 };

@@ -1,5 +1,9 @@
 #pragma once
+
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+
 #include <fstream>
+#include <experimental/filesystem>
 
 #include "Word.h"
 
@@ -54,8 +58,7 @@ public:
 
     //get string definitions as strings 
     vector<string> getStringDefinitions(string s);
-
-    
+        
     //Get words with prefix s, with desired limit (max ... words)
     vector<Word> getWordsWithPrefix(string s, int& desired);
 
@@ -67,7 +70,9 @@ public:
 
     //load
 
-    bool loadData(char key, string dataset, string data);
+    bool loadData(char key, string dataset);
+
+    void resetDataset(string dataset);
 
 private:
     //helpers
@@ -126,7 +131,7 @@ public:
     
 	void addSubDef(string subdef, int order);
 
-    void load(string dataset, string data);
+    void load(string dataset);
 
     void unload();
 

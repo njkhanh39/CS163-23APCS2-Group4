@@ -15,6 +15,7 @@ private:
 
 public:
 	Definition(string& defText, Word* owningWord);
+
 	Definition() {
 		text = "";
 		owner = nullptr;

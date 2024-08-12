@@ -1,9 +1,6 @@
 #pragma once
 
-#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
-
 #include <wx/wx.h>
-#include <experimental/filesystem>
 
 #include "SearchTree.h"
 #include "History.h"
@@ -14,7 +11,6 @@ private:
 	Trie myTrie; //for word -> def in Eng-Eng & Eng-Vie
 	const string EngEng = "Eng-Eng", EngVie = "Eng-Vie", VieEng = "Vie-Eng"; //datasets
 	string activeDataSet = EngEng; //changeable
-	string activeData = "DataSet"; //changeable
 	
 public:
 	bool isSearchingDefinition = false;
@@ -47,10 +43,6 @@ public:
 
 	//this one needs runSearchDefinitionsEngine
 	vector<Word> searchDefToWord(string& keyword, int limit);
-
-	void duplicateDataset();
-
-	void deleteDataset();
 
 private:
 	//helpers

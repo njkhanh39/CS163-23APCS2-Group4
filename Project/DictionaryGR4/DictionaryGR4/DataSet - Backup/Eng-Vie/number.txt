@@ -1,0 +1,25 @@
+1 to 1 relationship	(danh từ) (kỹ thuật) quan hệ 1 đối 1.
+1 to many relationship	(danh từ) (kỹ thuật) quan hệ 1 đối nhiều.
+1-byte character	(danh từ) (kỹ thuật) ký tự 1 bai.
+1-byte character code	(danh từ) (kỹ thuật) mã ký tự 1 bai.
+1-byte character set	(danh từ) (kỹ thuật) bộ ký tự 1 bai.
+1-byte character string	(danh từ) (kỹ thuật) chuỗi ký tự 1 bai.
+2-way device	(danh từ) (kỹ thuật) thiết bị 2 chiều/thu phát.
+2d (two dimension)	(danh từ) (kỹ thuật) hai chiều, nhị thứ nguyên, phẳng.
+2d configuration	(danh từ) (kỹ thuật) cấu hình 2 chiều, cấu hình phẳng.
+2d image	(danh từ) (kỹ thuật) ảnh 2 chiều, ảnh phẳng.
+2d module	(danh từ) (kỹ thuật) mô đun hai chiều.
+3d (three dimension)	(danh từ) (kỹ thuật) ba chiều, tam thứ nguyên, nổi.
+3d (three dimension) calculation	(danh từ) (kỹ thuật) tính toán 3 chiều.
+3d (three dimension) configuration	(danh từ) (kỹ thuật) cấu hình 3 chiều, cấu hình nổi.
+3d (three dimension) image	(danh từ) (kỹ thuật) ảnh 3 chiều, ảnh nổi.
+4th generation language (4gl)	(danh từ) (kỹ thuật) ngôn ngữ thế hệ thứ tư.
+7-bit ascii code	(danh từ) (kỹ thuật) mã ascii 7 bít.
+7-bit ascii code set	(danh từ) (kỹ thuật) bộ mã ascii 7 bít.
+8-bit character	(danh từ) (kỹ thuật) ký tự 8 bít.
+8-bit character code	(danh từ) (kỹ thuật) mã ký tự 8 bít.
+8-bit character set	(danh từ) (kỹ thuật) bộ ký tự 8 bít.
+8-bit character string	(danh từ) (kỹ thuật) chuỗi ký tự 8 bít.
+8-bit microcomputer	(danh từ) (kỹ thuật) máy vi điện toán 8 bít, máy vi tính 8 bít, .
+8-bit microprocessor	(danh từ) (kỹ thuật) bộ vi xử lý 8 bít.
+8-bit personal computer	(danh từ) (kỹ thuật) máy điện toán cá nhân 8 bít.

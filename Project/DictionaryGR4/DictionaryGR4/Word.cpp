@@ -55,3 +55,9 @@ void Word::clear() {
 	text = "";
 	defList.clear();
 }
+
+//adjust-er
+
+void Word::modifyDefinition(string def, int index) {
+	defList[index] = Definition(def, this);
+}

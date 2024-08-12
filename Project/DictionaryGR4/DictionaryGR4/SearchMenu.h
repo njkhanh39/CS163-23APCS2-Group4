@@ -46,4 +46,6 @@ private:
 
 	void OnUnLoadTool(wxCommandEvent& evt);
 
+	void OnResetButtonClicked();
+
 };
