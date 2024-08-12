@@ -120,7 +120,7 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 
 	if ((int)word.length() == 1 && myTrie.empty()) {
 		char key = word[0];
-		myTrie.loadData(key,activeDataSet , activeData);
+		myTrie.loadData(key,activeDataSet);
 		wxLogStatus("Loading data...");
 	}
 	else if ((int)word.length() == 0) {
