@@ -35,14 +35,11 @@ Word Dictionary::searchWordMatching(string word) {
 	//format word
 	for (auto& x : word) x = tolower(x);
 
-	if (activeDataSet == EngEng) {
-		if (w.empty() && isSearchingDefinition) return tool.searchWord(word);
-		else w = myTrie.getWordMatching(word);
-	}
-	if (activeDataSet == EngVie) {
-		if (w.empty() && isSearchingDefinition) return tool.searchWord(word);
-		w = myTrie.getWordMatching(word);
-	}
+	
+	if (w.empty() && isSearchingDefinition) return tool.searchWord(word);
+	else w = myTrie.getWordMatching(word);
+	
+
 	return w;
 }
 
@@ -50,7 +47,7 @@ Word Dictionary::searchWordMatching(string word) {
 vector<Definition> Dictionary::searchDefinitions(string word) {
 	//format word
 	for (auto& x : word) x = tolower(x);
-	if (activeDataSet == EngEng || activeDataSet == EngVie) return myTrie.getDefinitions(word);
+	return myTrie.getDefinitions(word);
 	vector<Definition> ans;
 	return ans;
 }
@@ -59,7 +56,7 @@ vector<Definition> Dictionary::searchDefinitions(string word) {
 vector<string> Dictionary::searchStringDefinitions(string word) {
 	//format word
 	for (auto& x : word) x = tolower(x);
-	if (activeDataSet == EngEng || activeDataSet == EngVie) return myTrie.getStringDefinitions(word);
+	return myTrie.getStringDefinitions(word);
 	vector<string> ans;
 	return ans;
 }
@@ -70,7 +67,7 @@ vector<Word> Dictionary::searchRelatedWords(string word, int limit) {
 	//format word
 	for (auto& x : word) x = tolower(x);
 
-	if (activeDataSet == EngEng || activeDataSet == EngVie) return myTrie.getWordsWithPrefix(word, limit);
+	return myTrie.getWordsWithPrefix(word, limit);
 	return ans;
 }
 
@@ -132,12 +129,91 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 
 	while (m >= 0 && word[m] == ' ') word.pop_back();
 
-	if ((int)word.length() == 1 && myTrie.empty()) {
-		char key = word[0];
-		myTrie.loadData(key,activeDataSet , activeData);
+	int realLength = 0;
+
+	auto it = word.begin();
+
+	while (it != word.end()) {
+		uint32_t codepoint = utf8::next(it, word.end());
+		++realLength;
+	}
+
+	//get word's first character for loading
+
+	string file; //load using this one
+
+	//crucial
+	if (!word.empty()) {
+
+		auto it = word.begin();
+		uint32_t codepoint = utf8::next(it, word.end());
+
+		
+		int num = -1;
+		char16_t c = (char16_t)codepoint;
+
+		//handling the char
+
+		if (codepoint == 39) {
+			num = 1; //1.txt = '
+		}
+		if (codepoint == 45) {
+			num = 2; //2.txt = "-"
+		}
+		if (97 <= codepoint && codepoint <= 122) {
+			//eng chars
+			num = myTrie.codePointToIndex(codepoint) - 10;
+			if (activeDataSet == "Vie-Eng") {
+				num -= 2;
+				if (c == 'z') num = 25;
+				if (c == 'y') num = 24;
+				if (c == 'x') num = 23;
+			}
+		}
+		int tmp = myTrie.codePointToIndex(codepoint);
+		if (39 <= tmp && tmp <= 105) {
+			//vie chars
+
+			int idx = tool.getIndex(tool.alphabet, c);
+			if (idx < tool.getIndex(tool.alphabet, 'b')) {
+				//variations of 'a'
+				num = 1;
+			}
+			else if (idx < tool.getIndex(tool.alphabet, 'e')) {
+				// variations of 'd'
+				num = 4;
+			}
+			else if (idx < tool.getIndex(tool.alphabet, 'f')) {
+				//variations of 'e'
+				num = 5;
+			}
+			else if (idx < tool.getIndex(tool.alphabet, 'j')) {
+				//variations of 'i'
+				num = 9;
+			}
+			else if (idx < tool.getIndex(tool.alphabet, 'p')) {
+				//variations of 'o'
+				num = 15;
+			}
+			else if (idx < tool.getIndex(tool.alphabet, 'v')) {
+				//variations of 'u'
+				num = 21;
+			}
+			else {
+				//variations of 'y'
+				num = 24;
+			}
+
+		}
+		file = to_string(num);
+	}
+	
+
+	if (realLength == 1 && myTrie.empty()) {
+		myTrie.loadData(file,activeDataSet , activeData);
 		wxLogStatus("Loading data...");
 	}
-	else if ((int)word.length() == 0) {
+	else if (realLength == 0) {
 		if (!myTrie.empty()) myTrie.clear();
 		wxLogStatus("Clearing Search Tree...");
 	}

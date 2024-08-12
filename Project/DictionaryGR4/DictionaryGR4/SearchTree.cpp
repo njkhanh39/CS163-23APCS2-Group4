@@ -1,4 +1,4 @@
-#pragma once 
+﻿#pragma once 
 #include "SearchTree.h"
 
 //mapping a character to a child[i]
@@ -318,27 +318,39 @@ int Trie::getSize() {
     return size;
 }
 
-bool Trie::loadData(char key, string dataset, string data) {
+bool Trie::loadData(string file, string dataset, string data) {
+    //string s;
+
+    //key = tolower(key);
+    //int num = codePointToIndex((int)key);
+
+
+    ////no character begins with numbers, spaces or special chars
+    //if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
+
+
+    //if (num == 1) s = data + "\\" + dataset + "\\1.txt";
+    //else if (num == 2) s = data + "\\" + dataset + "\\2.txt";
+    //else {
+    //    if (dataset == "Vie-Eng") num -= 2;
+    //    num -= 10;
+    //    if (key == 'x') num = 23;
+    //    if (key == 'y') num = 24;
+    //    if (key == 'z') num = 25;
+    //    string idx = to_string(num);
+    //    
+
+
+    //    s = data + "\\" + dataset + "\\" + idx + ".txt";
+
+    //   
+    //}
+    //cout << "Loading file: " << s << '\n';
+
     string s;
 
-    key = tolower(key);
-    int num = codePointToIndex((int)key);
+    s = data + "\\" + dataset + "\\" + file + ".txt";
 
-
-    //no character begins with numbers, spaces or special chars
-    if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
-
-
-    if (num == 1) s = data + "\\" + dataset + "\\1.txt";
-    else if (num == 2) s = data + "\\" + dataset + "\\2.txt";
-    else {
-        if (dataset == "Vie-Eng") num -= 2;
-        num -= 10;
-        string idx = to_string(num);
-
-        s = data + "\\" + dataset + "\\" + idx + ".txt";
-    }
-    //cout << "Loading file: " << s << '\n';
     ifstream fin;
     fin.open(s);
     if (fin.is_open()) {
@@ -457,14 +469,22 @@ Word WordFinder::searchWord(string text) {
 
     int j = -1;
 
+    u16string wxtest = tou16(text);
+
     while (left <= right) {
         int mid = left + (right - left) / 2;
+        string cur = slots[mid].word.getWord();
 
-        if (slots[mid].word.getWord() < text) {
+        u16string midstr = tou16(cur);
+
+        if (midstr == wxtest) {
+            j = mid;
+            right = mid - 1;
+        }
+        else if (compare(midstr,wxtest,alphabet) == 0) {
             left = mid + 1;
         }
         else {
-            if (slots[mid].word.getWord() == text) j = mid;
             right = mid - 1;
         }
     }
@@ -511,4 +531,41 @@ vector<Word> WordFinder::searchDefinitionsToWord(vector<string>& subkey, int lim
     }
 
     return ans;
+}
+
+//helpers
+
+u16string WordFinder::tou16(string& s) {
+    auto it = s.begin();
+    u16string u16;
+    while (it != s.end()) {
+        uint32_t cp = utf8::next(it, s.end());
+        u16 += (char16_t)cp;
+    }
+
+    return u16;
+}
+
+int WordFinder::getIndex(vector<char16_t> alphabet, char16_t c) {
+    auto iterator = find(alphabet.begin(), alphabet.end(), c);
+    if (iterator != alphabet.end())
+        return iterator - alphabet.begin();
+    else
+        return -1;
+}
+
+bool WordFinder::compare(u16string s1, u16string s2, vector<char16_t> alphabet) {
+    for (int i = 0; i <= min(s1.length(), s2.length()); ++i) {
+        int idx1 = getIndex(alphabet, s1[i]);
+
+        //if (idx1 == 0)
+        //    return 0;
+
+        int idx2 = getIndex(alphabet, s2[i]);
+        if (idx1 < idx2)
+            return 0;
+        if (idx1 > idx2)
+            return 1;
+    }
+    return 0;
 }
