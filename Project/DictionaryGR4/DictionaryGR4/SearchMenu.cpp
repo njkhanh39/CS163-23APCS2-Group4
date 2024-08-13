@@ -1,7 +1,7 @@
 #include "SearchMenu.h"
 
-
 using namespace std;
+namespace fs = experimental::filesystem;
 
 SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 
@@ -271,3 +271,14 @@ void SearchMenu::OnUnLoadTool(wxCommandEvent& evt) {
 	dict.turnOffSearchDefinitionEngine();
 }
 
+void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt) {
+	string curDataset = datasetCbb->GetStringSelection().ToStdString();
+
+	wxMessageDialog* ask = new wxMessageDialog(this,
+		"Are you sure to reset the dataset \"" + curDataset + "\"?",
+		"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+
+	if (ask->ShowModal() == wxID_YES) {
+
+	}
+}
