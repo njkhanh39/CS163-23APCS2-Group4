@@ -8,6 +8,7 @@ namespace fs = std::experimental::filesystem;
 bool Dictionary::chooseLanguage(string t) {
 	if (t != EngEng && t != EngVie && t != VieEng) return false;
 	activeDataSet = t;
+	hist.setMode(activeDataSet);
 	return true;
 }
 
@@ -208,4 +209,8 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 	else {
 		wxLogStatus("Doing nothing...");
 	}
+}
+
+History Dictionary::getHistory() {
+	return hist;
 }
