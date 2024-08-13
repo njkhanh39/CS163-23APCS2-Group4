@@ -11,7 +11,7 @@ private:
 	wxTextCtrl* defText;
 	wxButton* fav, *next, *back, *editDef, *confirmEdit, *cancelEdit;
 
-	vector<string> displayDef, actualDef;
+	vector<string> defs;
 	vector<string> wordtype;
 
 	int cur = 0;
@@ -91,9 +91,8 @@ public:
 
 		cur = 0;
 		pages = word.getNumberOfDefinitions();
-		displayDef.clear(); wordtype.clear(); actualDef.clear();
-		displayDef.assign(pages, "");
-		actualDef.assign(pages, "");
+		defs.clear(); wordtype.clear();
+		defs.assign(pages, "");
 		wordtype.assign(pages, "");
 
 		for (int i = 0; i < pages; ++i) {
@@ -107,22 +106,21 @@ public:
 
 			++j;
 
-			displayDef[i] = str.substr(j, (int)str.length() - j);
-			actualDef[i] = displayDef[i];
+			defs[i] = str.substr(j, (int)str.length() - j);
 
-			int cnt = 0;
-			for (int k = 0; k < (int)displayDef[i].length(); ++k) {
-				++cnt;
-				if (cnt >= 55 && displayDef[i][k] == ' ') {
-					displayDef[i][k] = '\n';
-					cnt = 0;
-				}
-			}
+			//int cnt = 0;
+			//for (int k = 0; k < (int)displayDef[i].length(); ++k) {
+			//	++cnt;
+			//	if (cnt >= 55 && displayDef[i][k] == ' ') {
+			//		displayDef[i][k] = '\n';
+			//		cnt = 0;
+			//	}
+			//}
 		}
 		wxString unicodestr = wxString::FromUTF8(word.getWord());
 		if (text) text->SetLabel(unicodestr);
 		if (wordTypeText) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
-		if (defText) defText->SetLabel(wxString::FromUTF8(displayDef[cur]));
+		if (defText) defText->SetLabel(wxString::FromUTF8(defs[cur]));
 		if (pageText) {
 			string show = to_string(cur + 1) + "/" + to_string(pages);
 			pageText->SetLabel(show);
@@ -144,7 +142,7 @@ public:
 		if (!(cur >= 0 && cur < pages)) return;
 		
 		if (wordTypeText) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
-		if (defText) defText->SetLabel(wxString::FromUTF8(displayDef[cur]));
+		if (defText) defText->SetLabel(wxString::FromUTF8(defs[cur]));
 		if (pageText) {
 			string show = to_string(cur + 1) + "/" + to_string(pages);
 			pageText->SetLabel(show);
@@ -154,10 +152,10 @@ public:
 
 	void goToDefinition(string key) {
 		for (int i = 0; i < pages; ++i) {
-			if ((wordtype[i] +" " + actualDef[i]) == key) {
+			if ((wordtype[i] + " " + defs[i]) == key) {
 				cur = i;
 				if (wordTypeText) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
-				if (defText) defText->SetLabel(wxString::FromUTF8(displayDef[cur]));
+				if (defText) defText->SetLabel(wxString::FromUTF8(defs[cur]));
 				if (pageText) {
 					string show = to_string(cur + 1) + "/" + to_string(pages);
 					pageText->SetLabel(show);
@@ -188,7 +186,7 @@ public:
 		defText->SetEditable(0);
 
 		wxString page = pageText->GetLabelText();
-		defText->SetLabel(wxString::FromUTF8(displayDef[wxAtoi(page.Left(page.First('/'))) - 1]));
+		defText->SetLabel(wxString::FromUTF8(defs[wxAtoi(page.Left(page.First('/'))) - 1]));
 
 		confirmEdit->Hide();
 		cancelEdit->Hide();
