@@ -21,7 +21,7 @@ public:
 
 private:
 	Dictionary dict;
-	History hist;
+	//History hist;
 	wxPanel* titleBar, * mainPanel;
 	wxButton* button, * searchByDef, * searchByWord;
 	wxListBox* suggestBar;
