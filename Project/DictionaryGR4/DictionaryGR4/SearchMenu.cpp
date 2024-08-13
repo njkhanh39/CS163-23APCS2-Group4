@@ -74,6 +74,7 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	suggestBar->Bind(wxEVT_LISTBOX, &SearchMenu::OnViewWord, this);
 
 }
+
 SearchMenu::~SearchMenu() {
 
 }
