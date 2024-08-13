@@ -2,8 +2,6 @@
 
 using namespace std;
 
-namespace fs = std::experimental::filesystem;
-
 //"Eng-Eng", "Eng-Vie", "Vie-Eng"
 bool Dictionary::chooseLanguage(string t) {
 	if (t != EngEng && t != EngVie && t != VieEng) return false;
