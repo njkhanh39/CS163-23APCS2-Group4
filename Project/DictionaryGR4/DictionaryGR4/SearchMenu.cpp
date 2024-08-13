@@ -279,6 +279,6 @@ void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt) {
 		"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
 
 	if (ask->ShowModal() == wxID_YES) {
-
+		fs::copy("DataSet - Backup\\" + curDataset, "DataSet\\" + curDataset);
 	}
 }
