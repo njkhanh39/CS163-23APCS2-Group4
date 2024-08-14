@@ -83,7 +83,6 @@ void SearchMenu::skip(wxMouseEvent& evt) {
 	evt.Skip();
 }
 
-
 void SearchMenu::OnSearchButton(wxCommandEvent& evt) {
 	//#case 1: search by definition, press the button will list out
 	if (dict.isSearchingDefinition) {
@@ -136,6 +135,7 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt) {
 		Word word = dict.searchWordMatching(key);
 
 		wordView->processWord(word);
+		wordView->setWord(word);
 	}
 }
 

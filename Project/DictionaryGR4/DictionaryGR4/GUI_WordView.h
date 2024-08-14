@@ -4,13 +4,15 @@
 class WordView {
 private:
 
+	wxWindow* parentWindow;
 	wxPanel* panel;
 	wxBoxSizer* frame;
 	
-	wxStaticText* text, *wordTypeText, /**defText, */*pageText;
+	wxStaticText* text, *wordTypeText, *pageText;
 	wxTextCtrl* defText;
 	wxButton* fav, *next, *back, *editDef, *confirmEdit, *cancelEdit;
 
+	Word word;
 	vector<string> defs;
 	vector<string> wordtype;
 
@@ -18,8 +20,6 @@ private:
 	int pages = 0;
 
 public:
-	
-	
 
 	WordView() {
 
@@ -66,9 +66,16 @@ public:
 		next->Bind(wxEVT_BUTTON, &WordView::showWord, this);
 		back->Bind(wxEVT_BUTTON, &WordView::showWord, this);
 		editDef->Bind(wxEVT_BUTTON, &WordView::OnEditDefClicked, this);
+		confirmEdit->Bind(wxEVT_BUTTON, &WordView::OnConfirmEditClicked, this);
 		cancelEdit->Bind(wxEVT_BUTTON, &WordView::OnCancelEditClicked, this);
+
+		
+		parentWindow = parent;
 	}
 
+	void setWord(Word newWord) {
+		word = newWord;
+	}
 
 	void skip(wxMouseEvent& evt){
 		evt.Skip();
@@ -175,7 +182,18 @@ public:
 	}
 
 	void OnConfirmEditClicked(wxCommandEvent& evt) {
-		
+		wxString page = pageText->GetLabelText();
+		int curIndex = wxAtoi(page.Left(page.First('/'))) - 1;
+
+		wxMessageDialog* ask = new wxMessageDialog(parentWindow,
+			"Are you sure to modify this definition?",
+			"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+
+		if (ask->ShowModal() == wxID_YES) {
+			string newDef = defText->GetValue().ToStdString();
+			defs[curIndex] = newDef;
+			word.modifyDefinition(newDef, curIndex);
+		}
 
 		defText->SetEditable(0);
 		confirmEdit->Hide();
@@ -186,7 +204,12 @@ public:
 		defText->SetEditable(0);
 
 		wxString page = pageText->GetLabelText();
-		defText->SetLabel(wxString::FromUTF8(defs[wxAtoi(page.Left(page.First('/'))) - 1]));
+		int curIndex = wxAtoi(page.Left(page.First('/'))) - 1;
+
+		if (curIndex < 0)
+			defText->SetLabel(wxString("Definition."));
+		else
+			defText->SetLabel(wxString::FromUTF8(defs[curIndex]));
 
 		confirmEdit->Hide();
 		cancelEdit->Hide();
