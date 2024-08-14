@@ -166,7 +166,7 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt) {
 		SearchedWord SW(key);
 		SW.setTime();
 		SW.setDate();
-		hist.saveToFile(SW);
+		dict.getHistory().saveToFile(SW);
 
 
 
