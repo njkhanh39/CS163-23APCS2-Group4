@@ -15,7 +15,7 @@ private:
 	Word word;
 	vector<string> defs;
 	vector<string> wordtype;
-
+	      
 	int cur = 0;
 	int pages = 0;
 
