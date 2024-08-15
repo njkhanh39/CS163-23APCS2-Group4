@@ -86,5 +86,8 @@
     <ClInclude Include="Word.h">
       <Filter>BackEnd Header</Filter>
     </ClInclude>
+    <ClInclude Include="General.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

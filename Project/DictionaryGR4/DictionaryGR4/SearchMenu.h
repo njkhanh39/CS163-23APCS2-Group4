@@ -19,12 +19,18 @@ public:
 private:
 	Dictionary dict;
 	History hist;
-	wxPanel* titleBar, * mainPanel;
-	wxButton* button, * searchByDef, * searchByWord, *deleteword;
+	wxPanel * mainPanel;
+	wxButton * resetbutton ,* button,  *deleteword;
+	wxBitmapButton* searchByDef, * searchByWord ;
 	wxListBox* suggestBar;
 	wxTextCtrl* searchBar;
 	wxComboBox* datasetCbb;
 	WordView* wordView;
+
+	/*===============NaviPane==========================*/
+	wxButton* searchpane, * addpane, * quizpane, * hispane, * favpane;
+	wxPanel* titleBar;
+	/*=================================================*/
 
 	void skip(wxMouseEvent& evt);
 
