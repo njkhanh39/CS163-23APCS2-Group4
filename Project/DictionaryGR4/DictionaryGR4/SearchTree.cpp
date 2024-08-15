@@ -319,33 +319,6 @@ int Trie::getSize() {
 }
 
 bool Trie::loadData(string file, string dataset) {
-    //string s;
-
-    //key = tolower(key);
-    //int num = codePointToIndex((int)key);
-
-
-    ////no character begins with numbers, spaces or special chars
-    //if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
-
-
-    //if (num == 1) s = data + "\\" + dataset + "\\1.txt";
-    //else if (num == 2) s = data + "\\" + dataset + "\\2.txt";
-    //else {
-    //    if (dataset == "Vie-Eng") num -= 2;
-    //    num -= 10;
-    //    if (key == 'x') num = 23;
-    //    if (key == 'y') num = 24;
-    //    if (key == 'z') num = 25;
-    //    string idx = to_string(num);
-    //    
-
-
-    //    s = data + "\\" + dataset + "\\" + idx + ".txt";
-
-    //   
-    //}
-    //cout << "Loading file: " << s << '\n';
 
     string s;
 
