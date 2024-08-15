@@ -20,12 +20,11 @@ private:
 	Dictionary dict;
 	History hist;
 	wxPanel* titleBar, * mainPanel;
-	wxButton* button, * searchByDef, * searchByWord;
+	wxButton* button, * searchByDef, * searchByWord, *deleteword;
 	wxListBox* suggestBar;
 	wxTextCtrl* searchBar;
 	wxComboBox* datasetCbb;
 	WordView* wordView;
-
 
 	void skip(wxMouseEvent& evt);
 

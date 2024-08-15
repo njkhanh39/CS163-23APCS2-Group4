@@ -61,14 +61,16 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	searchByWord->SetFont(font);
 
 	//word view appears first
-	wordView = new WordView(mainPanel, wxPoint(234, 145), wxSize(979, 480));
+	wordView = new WordView(mainPanel, wxPoint(234, 133), wxSize(979, 440));
 	wordView->SetColor(wxColour(255, 255, 255));
 
 	//init height = 0
 	suggestBar = new wxListBox(mainPanel, wxID_ANY, wxPoint(357, 83), wxSize(450, 0));
 	suggestBar->SetFont(font);
 
-
+	deleteword = new wxButton(mainPanel, wxID_ANY, "Delete Word", wxPoint(1042, 590), wxSize(172, 60));
+	deleteword->SetBackgroundColour(wxColour(184, 89, 89));
+	deleteword->SetForegroundColour(wxColour(255, 255, 255));
 
 	//back button
 
