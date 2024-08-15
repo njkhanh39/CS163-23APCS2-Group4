@@ -61,3 +61,7 @@ void Word::clear() {
 void Word::modifyDefinition(string def, int index) {
 	defList[index] = Definition(def, this);
 }
+
+void Word::removeDefinition(int index) {
+	defList.erase(defList.begin() + index);
+}

@@ -33,6 +33,8 @@ public:
 	//get a "Word" object that matches a string
 	Word searchWordMatching(string word);
 
+	Word* getWordPtr(string word);
+
 	//return definitions of keyword
 	vector<Definition> searchDefinitions(string word);
 

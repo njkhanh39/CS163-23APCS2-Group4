@@ -85,4 +85,6 @@ public:
 
 	void modifyDefinition(string def, int index);
 
+	void removeDefinition(int index);
+
 };

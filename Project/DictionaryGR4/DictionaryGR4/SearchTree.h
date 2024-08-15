@@ -9,6 +9,7 @@ private:
         Node** child;
         int exist, cnt;
         Word emptyWord; //only stores definitions
+        Word* ptrToEmptyWord = &emptyWord;
 
         Node() {
             child = new Node * [107];
@@ -64,6 +65,8 @@ public:
 
     //get word that matches string s
     Word getWordMatching(string s);
+
+    Word* getWordPointer(string s);
 
     //get string definitions as strings 
     vector<string> getStringDefinitions(string s);

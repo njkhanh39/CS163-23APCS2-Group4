@@ -135,7 +135,10 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt) {
 		Word word = dict.searchWordMatching(key);
 
 		wordView->processWord(word);
-		wordView->setWord(word);
+
+		Word* ptr = dict.getWordPtr(key);
+		wordView->setWord(ptr);
+		wordView->setActiveDataset(datasetCbb->GetStringSelection().ToStdString());
 	}
 }
 
@@ -160,6 +163,10 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt) {
 		Word word = dict.searchWordMatching(key);
 
 		wordView->processWord(word);
+
+		Word* ptr = dict.getWordPtr(key);
+		wordView->setWord(ptr);
+		wordView->setActiveDataset(datasetCbb->GetStringSelection().ToStdString());
 
 		//avoiding overlapping panels
 		//wordView->Enable();
