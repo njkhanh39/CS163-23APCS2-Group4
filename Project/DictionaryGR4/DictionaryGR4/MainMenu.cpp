@@ -6,9 +6,10 @@ MainMenu::MainMenu(wxWindow* parent) :wxWindow(parent, wxID_ANY) {
 	wxFont fontTitle(18, wxFONTFAMILY_MODERN, wxFONTSTYLE_MAX, wxFONTWEIGHT_NORMAL);
 	fontTitle.MakeBold();
 
-	titleBar = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 120));
-	titleBar->SetBackgroundColour(wxColor(102, 255, 178));
-	mainPanel = new wxPanel(this, 10002, wxDefaultPosition, wxSize(1280, 600));
+	titleBar = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 80));
+	titleBar->SetBackgroundColour(wxColor(67, 57, 97));
+	mainPanel = new wxPanel(this, 10002, wxDefaultPosition, wxSize(1280, 752));
+	mainPanel->SetBackgroundColour(wxColor(34, 36, 40));
 
 
 	// panel #1 - title bar
