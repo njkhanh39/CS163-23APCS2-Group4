@@ -1,35 +1,54 @@
 #include "SearchMenu.h"
 
-
 using namespace std;
+namespace fs = experimental::filesystem;
 
 SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 
 	//font
 	wxFont font(14, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	wxFont fontTitle(18, wxFONTFAMILY_MODERN, wxFONTSTYLE_MAX, wxFONTWEIGHT_NORMAL);
+	wxFont fontCB(22, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	fontTitle.MakeBold();
 
-	titleBar = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 120));
-	titleBar->SetBackgroundColour(wxColor(100, 100, 200));
-	mainPanel = new wxPanel(this, 10002, wxDefaultPosition, wxSize(1280, 600));
+	titleBar = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 80), wxBORDER_NONE);
+	titleBar->SetBackgroundColour(wxColor(67, 57, 97));
+	mainPanel = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE);
+	mainPanel->SetBackgroundColour(wxColor(34, 36, 40));
+	 
+	//mainPanel->SetBackgroundColour((0xff, 0xcc, 0xcc));
 
-
-	wxBitmap bitmap(wxT("image.png"), wxBITMAP_TYPE_PNG);
+	wxBitmap bitmap(wxT("IMG/image.png"), wxBITMAP_TYPE_PNG);
 
 	wxStaticText* title = new wxStaticText(titleBar, wxID_ANY, "Dictionary", wxPoint(30, 30));
 	title->SetFont(fontTitle);
 
 	// Create a wxBitmapButton
-	button = new wxBitmapButton(mainPanel, wxID_ANY, bitmap, wxPoint(320, 40), wxDefaultSize);
-	searchBar = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(357, 40), wxSize(450, 40));
-	searchBar->SetFont(font);
+	button = new wxBitmapButton(mainPanel, wxID_ANY, bitmap, wxPoint(1010, 41), wxSize(60,60));
+	//button->SetBackgroundColour(wxColour(67, 57, 97));
+	searchBar = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(234, 41), wxSize(776, 60));
+	searchBar->SetFont(fontCB);
+
+	wxButton* rd_button = new wxButton(mainPanel, wxID_ANY, "Random", wxPoint(1097, 41), wxSize(116, 60));
+	rd_button->SetBackgroundColour(wxColour(67, 57, 97));
+	rd_button->SetForegroundColour(wxColour(255, 255, 255));
+	rd_button->SetFont(fontCB);
 
 	// Create combo box to choose dataset
+	
 	wxArrayString languages = { "Eng-Eng", "Eng-Vie", "Vie-Eng" };
-	datasetCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(200,40), wxSize(120, 40), languages, wxCB_DROPDOWN | wxCB_READONLY);
-	datasetCbb->SetFont(font);
+	datasetCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(53, 41), wxSize(154, -1), languages, wxCB_READONLY);
+
+	datasetCbb->SetFont(fontCB);
+	datasetCbb->SetSize(154, 60);
+
+	datasetCbb->SetBackgroundColour(wxColour(0, 199, 191));
+	datasetCbb->SetForegroundColour(wxColour(0, 0, 0));
+
 	datasetCbb->Select(0);
+	
+	datasetCbb->Refresh();
+	
 
 	//load
 	searchByDef = new wxButton(mainPanel, wxID_ANY, "Def->Word", wxPoint(60, 200), wxSize(120, 40));
@@ -42,7 +61,8 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	searchByWord->SetFont(font);
 
 	//word view appears first
-	wordView = new WordView(mainPanel, wxPoint(320, 200), wxSize(750, 350));
+	wordView = new WordView(mainPanel, wxPoint(234, 145), wxSize(979, 480));
+	wordView->SetColor(wxColour(255, 255, 255));
 
 	//init height = 0
 	suggestBar = new wxListBox(mainPanel, wxID_ANY, wxPoint(357, 83), wxSize(450, 0));
@@ -52,7 +72,7 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 
 	//back button
 
-	back_to_home = new wxButton(mainPanel, wxID_ANY, "Home", wxPoint(50, 100), wxSize(100, 50));
+	back_to_home = new wxButton(titleBar, wxID_ANY, "Home", wxPoint(0, 0), wxSize(100, 50));
 	back_to_home->SetFont(font);
 
 
@@ -60,8 +80,8 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 
 	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
-	sizer->Add(titleBar, 1, wxEXPAND | wxLEFT | wxUP | wxRIGHT, 2);
-	sizer->Add(mainPanel, 5, wxEXPAND | wxALL, 2);
+	sizer->Add(titleBar, 1, wxEXPAND | wxLEFT | wxUP | wxRIGHT,0);
+	sizer->Add(mainPanel, 5, wxEXPAND | wxALL,0);
 
 	this->SetSizerAndFit(sizer);
 
@@ -74,6 +94,7 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	suggestBar->Bind(wxEVT_LISTBOX, &SearchMenu::OnViewWord, this);
 
 }
+
 SearchMenu::~SearchMenu() {
 
 }
@@ -81,7 +102,6 @@ SearchMenu::~SearchMenu() {
 void SearchMenu::skip(wxMouseEvent& evt) {
 	evt.Skip();
 }
-
 
 void SearchMenu::OnSearchButton(wxCommandEvent& evt) {
 	//#case 1: search by definition, press the button will list out
@@ -135,6 +155,7 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt) {
 		Word word = dict.searchWordMatching(key);
 
 		wordView->processWord(word);
+		wordView->setWord(word);
 	}
 }
 
@@ -166,7 +187,7 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt) {
 		SearchedWord SW(key);
 		SW.setTime();
 		SW.setDate();
-		hist.saveToFile(SW);
+		dict.getHistory().saveToFile(SW);
 
 
 
@@ -270,3 +291,14 @@ void SearchMenu::OnUnLoadTool(wxCommandEvent& evt) {
 	dict.turnOffSearchDefinitionEngine();
 }
 
+void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt) {
+	string curDataset = datasetCbb->GetStringSelection().ToStdString();
+
+	wxMessageDialog* ask = new wxMessageDialog(this,
+		"Are you sure to reset the dataset \"" + curDataset + "\"?",
+		"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+
+	if (ask->ShowModal() == wxID_YES) {
+		fs::copy("DataSet - Backup\\" + curDataset, "DataSet\\" + curDataset);
+	}
+}

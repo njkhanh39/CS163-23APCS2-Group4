@@ -4,22 +4,22 @@
 class WordView {
 private:
 
+	wxWindow* parentWindow;
 	wxPanel* panel;
 	wxBoxSizer* frame;
 	
-	wxStaticText* text, *wordTypeText, /**defText, */*pageText;
+	wxStaticText* text, *wordTypeText, *pageText;
 	wxTextCtrl* defText;
 	wxButton* fav, *next, *back, *editDef, *confirmEdit, *cancelEdit;
 
-	vector<string> displayDef, actualDef;
+	Word word;
+	vector<string> defs;
 	vector<string> wordtype;
 
 	int cur = 0;
 	int pages = 0;
 
 public:
-	
-	
 
 	WordView() {
 
@@ -66,9 +66,16 @@ public:
 		next->Bind(wxEVT_BUTTON, &WordView::showWord, this);
 		back->Bind(wxEVT_BUTTON, &WordView::showWord, this);
 		editDef->Bind(wxEVT_BUTTON, &WordView::OnEditDefClicked, this);
+		confirmEdit->Bind(wxEVT_BUTTON, &WordView::OnConfirmEditClicked, this);
 		cancelEdit->Bind(wxEVT_BUTTON, &WordView::OnCancelEditClicked, this);
+
+		
+		parentWindow = parent;
 	}
 
+	void setWord(Word newWord) {
+		word = newWord;
+	}
 
 	void skip(wxMouseEvent& evt){
 		evt.Skip();
@@ -91,9 +98,8 @@ public:
 
 		cur = 0;
 		pages = word.getNumberOfDefinitions();
-		displayDef.clear(); wordtype.clear(); actualDef.clear();
-		displayDef.assign(pages, "");
-		actualDef.assign(pages, "");
+		defs.clear(); wordtype.clear();
+		defs.assign(pages, "");
 		wordtype.assign(pages, "");
 
 		for (int i = 0; i < pages; ++i) {
@@ -107,22 +113,21 @@ public:
 
 			++j;
 
-			displayDef[i] = str.substr(j, (int)str.length() - j);
-			actualDef[i] = displayDef[i];
+			defs[i] = str.substr(j, (int)str.length() - j);
 
-			int cnt = 0;
-			for (int k = 0; k < (int)displayDef[i].length(); ++k) {
-				++cnt;
-				if (cnt >= 55 && displayDef[i][k] == ' ') {
-					displayDef[i][k] = '\n';
-					cnt = 0;
-				}
-			}
+			//int cnt = 0;
+			//for (int k = 0; k < (int)displayDef[i].length(); ++k) {
+			//	++cnt;
+			//	if (cnt >= 55 && displayDef[i][k] == ' ') {
+			//		displayDef[i][k] = '\n';
+			//		cnt = 0;
+			//	}
+			//}
 		}
 		wxString unicodestr = wxString::FromUTF8(word.getWord());
 		if (text) text->SetLabel(unicodestr);
 		if (wordTypeText) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
-		if (defText) defText->SetLabel(wxString::FromUTF8(displayDef[cur]));
+		if (defText) defText->SetLabel(wxString::FromUTF8(defs[cur]));
 		if (pageText) {
 			string show = to_string(cur + 1) + "/" + to_string(pages);
 			pageText->SetLabel(show);
@@ -144,7 +149,7 @@ public:
 		if (!(cur >= 0 && cur < pages)) return;
 		
 		if (wordTypeText) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
-		if (defText) defText->SetLabel(wxString::FromUTF8(displayDef[cur]));
+		if (defText) defText->SetLabel(wxString::FromUTF8(defs[cur]));
 		if (pageText) {
 			string show = to_string(cur + 1) + "/" + to_string(pages);
 			pageText->SetLabel(show);
@@ -154,10 +159,10 @@ public:
 
 	void goToDefinition(string key) {
 		for (int i = 0; i < pages; ++i) {
-			if ((wordtype[i] +" " + actualDef[i]) == key) {
+			if ((wordtype[i] + " " + defs[i]) == key) {
 				cur = i;
 				if (wordTypeText) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
-				if (defText) defText->SetLabel(wxString::FromUTF8(displayDef[cur]));
+				if (defText) defText->SetLabel(wxString::FromUTF8(defs[cur]));
 				if (pageText) {
 					string show = to_string(cur + 1) + "/" + to_string(pages);
 					pageText->SetLabel(show);
@@ -177,7 +182,18 @@ public:
 	}
 
 	void OnConfirmEditClicked(wxCommandEvent& evt) {
-		
+		wxString page = pageText->GetLabelText();
+		int curIndex = wxAtoi(page.Left(page.First('/'))) - 1;
+
+		wxMessageDialog* ask = new wxMessageDialog(parentWindow,
+			"Are you sure to modify this definition?",
+			"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+
+		if (ask->ShowModal() == wxID_YES) {
+			string newDef = defText->GetValue().ToStdString();
+			defs[curIndex] = newDef;
+			word.modifyDefinition(newDef, curIndex);
+		}
 
 		defText->SetEditable(0);
 		confirmEdit->Hide();
@@ -188,7 +204,12 @@ public:
 		defText->SetEditable(0);
 
 		wxString page = pageText->GetLabelText();
-		defText->SetLabel(wxString::FromUTF8(displayDef[wxAtoi(page.Left(page.First('/'))) - 1]));
+		int curIndex = wxAtoi(page.Left(page.First('/'))) - 1;
+
+		if (curIndex < 0)
+			defText->SetLabel(wxString("Definition."));
+		else
+			defText->SetLabel(wxString::FromUTF8(defs[curIndex]));
 
 		confirmEdit->Hide();
 		cancelEdit->Hide();

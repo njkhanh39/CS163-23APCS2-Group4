@@ -9,7 +9,7 @@ wxIMPLEMENT_APP(App);
 
 bool App::OnInit() {
 	wxImage::AddHandler(new wxPNGHandler);
-	MainFrame* frame = new MainFrame("Dictionary", wxSize(1280,720));
+	MainFrame* frame = new MainFrame("Dictionary", wxSize(1280,800));
 	frame->Show(true);	
 	
 

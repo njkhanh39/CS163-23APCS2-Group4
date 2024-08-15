@@ -11,6 +11,7 @@ private:
 	Trie myTrie; //for word -> def in Eng-Eng & Eng-Vie
 	const string EngEng = "Eng-Eng", EngVie = "Eng-Vie", VieEng = "Vie-Eng"; //datasets
 	string activeDataSet = EngEng; //changeable
+	History hist;
 	
 public:
 	bool isSearchingDefinition = false;
@@ -43,6 +44,8 @@ public:
 
 	//this one needs runSearchDefinitionsEngine
 	vector<Word> searchDefToWord(string& keyword, int limit);
+
+	History getHistory();
 
 private:
 	//helpers
