@@ -23,7 +23,7 @@ private:
 	Dictionary dict;
 	//History hist;
 	wxPanel* titleBar, * mainPanel;
-	wxButton* button, * searchByDef, * searchByWord;
+	wxButton* button, * searchByDef, * searchByWord, * rd_button;
 	wxListBox* suggestBar;
 	wxTextCtrl* searchBar;
 	wxComboBox* datasetCbb;
@@ -51,4 +51,5 @@ private:
 
 	void OnResetButtonClicked(wxCommandEvent& evt);
 
+	void OnRandomClicked(wxCommandEvent& evt);
 };
