@@ -202,6 +202,28 @@ Word Trie::getWordMatching(string s) {
     return ans;
 }
 
+Word* Trie::getWordPointer(string s)
+{
+    Word* ans = nullptr; //empty word
+    Node* p = root;
+    auto it = s.begin();
+    while (it != s.end()) {
+        uint32_t f = utf8::next(it, s.end());
+        int c = codePointToIndex(f);
+        if (c == -1) return ans; //invalid
+        if (p->child[c] == NULL) return ans;
+        p = p->child[c];
+    }
+    if (p->exist != 0) {
+        ans = p->ptrToEmptyWord;
+        //ans.setWord(s);
+
+        return ans;
+    }
+
+    return ans;
+}
+
 
 vector<string> Trie::getStringDefinitions(string s) {
     vector<string> empty;

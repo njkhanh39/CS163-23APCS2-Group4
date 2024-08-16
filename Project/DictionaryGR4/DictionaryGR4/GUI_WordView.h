@@ -1,4 +1,5 @@
 #pragma once
+#include <codecvt>
 #include "Dictionary.h"
 
 class WordView {
@@ -10,9 +11,10 @@ private:
 	
 	wxStaticText* text, *wordTypeText, *pageText;
 	wxTextCtrl* defText;
-	wxButton* fav, *next, *back, *editDef, *confirmEdit, *cancelEdit;
+	wxButton* fav, *next, *back, *editDef, *confirmEdit, *cancelEdit, *removeDef;
 
-	Word word;
+	Word* word;
+	string activeDataset;
 	vector<string> defs;
 	vector<string> wordtype;
 	      
@@ -59,6 +61,8 @@ public:
 		confirmEdit = new wxButton(panel, wxID_ANY, "Confirm", wxPoint(size.x * 5 / 6, size.y * 4 / 6));
 		cancelEdit = new wxButton(panel, wxID_ANY, "Cancel", wxPoint(size.x * 5 / 6, size.y * 5 / 6));
 
+		removeDef = new wxButton(panel, wxID_ANY, "Remove", wxPoint(size.x * 5 / 6, size.y * 2 / 6));
+
 		confirmEdit->Hide();
 		cancelEdit->Hide();
 
@@ -68,13 +72,29 @@ public:
 		editDef->Bind(wxEVT_BUTTON, &WordView::OnEditDefClicked, this);
 		confirmEdit->Bind(wxEVT_BUTTON, &WordView::OnConfirmEditClicked, this);
 		cancelEdit->Bind(wxEVT_BUTTON, &WordView::OnCancelEditClicked, this);
-
+		removeDef->Bind(wxEVT_BUTTON, &WordView::OnRemoveDefClicked, this);
 		
 		parentWindow = parent;
 	}
 
-	void setWord(Word newWord) {
+	// Convert UTF-8 to UTF-16
+	std::u16string utf8ToUtf16(const std::string& utf8Str) {
+		std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
+		return convert.from_bytes(utf8Str);
+	}
+
+	// Convert UTF-16 to UTF-8
+	std::string utf16ToUtf8(const std::u16string& utf16Str) {
+		std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
+		return convert.to_bytes(utf16Str);
+	}
+
+	void setWord(Word* newWord) {
 		word = newWord;
+	}
+
+	void setActiveDataset(string dataset) {
+		activeDataset = dataset;
 	}
 
 	void skip(wxMouseEvent& evt){
@@ -172,6 +192,11 @@ public:
 		}
 	}
 
+	int getCurrentPage() {
+		wxString page = pageText->GetLabelText();
+		return wxAtoi(page.Left(page.First('/'))) - 1;
+	}
+
 	void OnEditDefClicked(wxCommandEvent& evt) {
 		defText->SetEditable(1);
 		defText->SetFocus();
@@ -192,8 +217,10 @@ public:
 		if (ask->ShowModal() == wxID_YES) {
 			string newDef = defText->GetValue().ToStdString();
 			defs[curIndex] = newDef;
-			word.modifyDefinition(newDef, curIndex);
+			word->modifyDefinition(newDef, curIndex);
 		}
+
+		
 
 		defText->SetEditable(0);
 		confirmEdit->Hide();
@@ -203,8 +230,7 @@ public:
 	void OnCancelEditClicked(wxCommandEvent& evt) {
 		defText->SetEditable(0);
 
-		wxString page = pageText->GetLabelText();
-		int curIndex = wxAtoi(page.Left(page.First('/'))) - 1;
+		int curIndex = getCurrentPage();
 
 		if (curIndex < 0)
 			defText->SetLabel(wxString("Definition."));
@@ -213,6 +239,27 @@ public:
 
 		confirmEdit->Hide();
 		cancelEdit->Hide();
+	}
+
+	void OnRemoveDefClicked(wxCommandEvent& evt) {
+		int curIndex = getCurrentPage();
+
+		wxMessageDialog* ask = new wxMessageDialog(parentWindow,
+			"Are you sure to remove this definition?",
+			"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+
+		if (ask->ShowModal() == wxID_YES) {
+			defs.erase(defs.begin() + curIndex);
+			wordtype.erase(wordtype.begin() + curIndex);
+			--pages;
+			if (curIndex == pages)
+				--curIndex;
+			pageText->SetLabel(to_string(curIndex + 1) + "/" + to_string(pages));
+			wordTypeText->SetLabel(wxString::FromUTF8(wordtype[curIndex]));
+			defText->SetLabel(wxString::FromUTF8(defs[curIndex]));
+			
+			word->removeDefinition(curIndex);
+		}
 	}
 
 };

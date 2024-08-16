@@ -42,6 +42,10 @@ Word Dictionary::searchWordMatching(string word) {
 	return w;
 }
 
+Word* Dictionary::getWordPtr(string word) {
+	return myTrie.getWordPointer(word);
+}
+
 //return definitions of keyword
 vector<Definition> Dictionary::searchDefinitions(string word) {
 	//format word
