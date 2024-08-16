@@ -57,6 +57,7 @@ public:
 		next->SetFont(font);
 		back->SetFont(font);
 
+		fav = new wxButton(panel, wxID_ANY, "Add to favourite", wxPoint(size.x * 5 / 6, size.y / 6));
 		editDef = new wxButton(panel, wxID_ANY, "Edit", wxPoint(size.x * 5 / 6, size.y * 3 / 6));
 		confirmEdit = new wxButton(panel, wxID_ANY, "Confirm", wxPoint(size.x * 5 / 6, size.y * 4 / 6));
 		cancelEdit = new wxButton(panel, wxID_ANY, "Cancel", wxPoint(size.x * 5 / 6, size.y * 5 / 6));
@@ -73,7 +74,7 @@ public:
 		confirmEdit->Bind(wxEVT_BUTTON, &WordView::OnConfirmEditClicked, this);
 		cancelEdit->Bind(wxEVT_BUTTON, &WordView::OnCancelEditClicked, this);
 		removeDef->Bind(wxEVT_BUTTON, &WordView::OnRemoveDefClicked, this);
-		
+		fav->Bind(wxEVT_BUTTON, &WordView::OnAddFavourite, this);
 		parentWindow = parent;
 	}
 
@@ -260,6 +261,10 @@ public:
 			
 			word->removeDefinition(curIndex);
 		}
+	}
+
+	void OnAddFavourite(wxCommandEvent& evt) {
+
 	}
 
 };

@@ -20,6 +20,13 @@ private:
         ~Node() {
             delete child;
         }
+
+        bool hasChild() {
+            for (int i = 0; i < 107; ++i)
+                if (child[i])
+                    return true;
+            return false;
+        }
     };
 
     int size;
@@ -67,6 +74,8 @@ public:
     Word getWordMatching(string s);
 
     Word* getWordPointer(string s);
+
+    Word* getRandomWord(string& wordText, string activeDataset);
 
     //get string definitions as strings 
     vector<string> getStringDefinitions(string s);

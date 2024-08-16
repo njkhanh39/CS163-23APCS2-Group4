@@ -4,6 +4,7 @@
 
 #include "SearchTree.h"
 #include "History.h"
+#include <list>
 
 class Dictionary {
 private:
@@ -12,6 +13,7 @@ private:
 	const string EngEng = "Eng-Eng", EngVie = "Eng-Vie", VieEng = "Vie-Eng"; //datasets
 	string activeDataSet = EngEng; //changeable
 	History hist;
+	list<string> favList;
 	
 public:
 	bool isSearchingDefinition = false;
@@ -35,6 +37,8 @@ public:
 
 	Word* getWordPtr(string word);
 
+	Word* getRandomWord(string& wordText, string activeDataset);
+
 	//return definitions of keyword
 	vector<Definition> searchDefinitions(string word);
 
@@ -46,6 +50,15 @@ public:
 
 	//this one needs runSearchDefinitionsEngine
 	vector<Word> searchDefToWord(string& keyword, int limit);
+
+
+
+
+
+
+
+	void resetDictionary();
+	void addToFavourite();
 
 	History getHistory();
 

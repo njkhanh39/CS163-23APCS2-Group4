@@ -46,6 +46,10 @@ Word* Dictionary::getWordPtr(string word) {
 	return myTrie.getWordPointer(word);
 }
 
+Word* Dictionary::getRandomWord(string& wordText, string activeDataset) {
+	return myTrie.getRandomWord(wordText, activeDataset);
+}
+
 //return definitions of keyword
 vector<Definition> Dictionary::searchDefinitions(string word) {
 	//format word

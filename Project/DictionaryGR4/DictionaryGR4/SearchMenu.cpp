@@ -29,7 +29,7 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	searchBar = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(234, 41), wxSize(776, 60));
 	searchBar->SetFont(fontCB);
 
-	wxButton* rd_button = new wxButton(mainPanel, wxID_ANY, "Random", wxPoint(1097, 41), wxSize(116, 60));
+	rd_button = new wxButton(mainPanel, wxID_ANY, "Random", wxPoint(1097, 41), wxSize(116, 60));
 	rd_button->SetBackgroundColour(wxColour(67, 57, 97));
 	rd_button->SetForegroundColour(wxColour(255, 255, 255));
 	rd_button->SetFont(fontCB);
@@ -92,7 +92,7 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	button->Bind(wxEVT_BUTTON, &SearchMenu::OnSearchButton, this);
 	searchBar->Bind(wxEVT_TEXT, &SearchMenu::OnSearchAndSuggestHandler, this);
 	suggestBar->Bind(wxEVT_LISTBOX, &SearchMenu::OnViewWord, this);
-
+	rd_button->Bind(wxEVT_BUTTON, &SearchMenu::OnRandomClicked, this);
 }
 
 SearchMenu::~SearchMenu() {
@@ -308,4 +308,19 @@ void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt) {
 	if (ask->ShowModal() == wxID_YES) {
 		fs::copy("DataSet - Backup\\" + curDataset, "DataSet\\" + curDataset);
 	}
+}
+
+void SearchMenu::OnRandomClicked(wxCommandEvent& evt) {
+	string activeDataset = datasetCbb->GetStringSelection().ToStdString();
+
+	string wordText;
+	Word* onlyDefWord = dict.getRandomWord(wordText, activeDataset);
+
+	Word withTextWord = *onlyDefWord;
+	withTextWord.setWord(wordText);
+
+	wordView->processWord(withTextWord);
+
+	wordView->setWord(onlyDefWord);
+	wordView->setActiveDataset(activeDataset);
 }
