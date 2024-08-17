@@ -10,6 +10,10 @@ AddWordMenu::AddWordMenu(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDefault
 	wxFont fontCB(22, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	fontTitle.MakeBold();
 
+	auto purple = wxColour(101, 86, 142), red = wxColour(184, 89, 89), green = wxColour(11, 199, 189), white = wxColour(255, 255, 255), black = wxColour(34, 36, 40);
+
+	SetBackgroundColour(black);
+
 	/*titleBar = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 80), wxBORDER_NONE);
 	titleBar->SetBackgroundColour(wxColor(67, 57, 97));
 	mainPanel = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE);
