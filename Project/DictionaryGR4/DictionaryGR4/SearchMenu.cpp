@@ -1,10 +1,11 @@
 #include "SearchMenu.h"
-#include "General.h"
 
 
 using namespace std;
 
 SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
+
+	auto purple = wxColour(101, 86, 142), red = wxColour(184, 89, 89), green = wxColour(11, 199, 189), white = wxColour(255, 255, 255), black = wxColour(34, 36, 40);
 
 	//font
 	wxFont font(14, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);

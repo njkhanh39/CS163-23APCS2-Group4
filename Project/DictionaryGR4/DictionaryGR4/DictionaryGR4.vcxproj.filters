@@ -51,6 +51,9 @@
     <ClCompile Include="Dictionary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="QuizMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -86,7 +89,7 @@
     <ClInclude Include="Word.h">
       <Filter>BackEnd Header</Filter>
     </ClInclude>
-    <ClInclude Include="General.h">
+    <ClInclude Include="QuizMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -24,6 +24,8 @@ MainMenu::MainMenu(wxWindow* parent) :wxWindow(parent, wxID_ANY) {
 	next_Search_Word = new wxButton(mainPanel, wxID_ANY,"Search Word", wxPoint(600, 300), wxSize(300,100));
 	next_Search_Word->SetFont(fontTitle);
 
+	tmp_Quiz = new wxButton(mainPanel, wxID_ANY, "Quiz", wxPoint(600, 500), wxSize(300, 100));
+	tmp_Quiz->SetFont(fontTitle);
 	
 
 	//sizer

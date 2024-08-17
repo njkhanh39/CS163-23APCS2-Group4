@@ -6,21 +6,22 @@ MainFrame::MainFrame(const wxString& Title, wxSize FrameSize) : wxFrame(NULL, wx
 	
     MainMenu* mainMenu = new MainMenu(simpleBook);
 	SearchMenu* searchMenu = new SearchMenu(simpleBook);
+    QuizMenu* quizMenu = new QuizMenu(simpleBook);
     
-    simpleBook->AddPage(searchMenu, "Search Menu", true);//selection = 0
-	simpleBook->AddPage(mainMenu, "Main Menu", true); //selection = 1
-	
-
-
-    
+    simpleBook->AddPage(quizMenu, "Quiz Menu", true); //selection = 0
+    simpleBook->AddPage(searchMenu, "Search Menu", true);//selection = 1
+	simpleBook->AddPage(mainMenu, "Main Menu", true); //selection = 2
+   
 
     //binding
 
 
-    mainMenu->next_Search_Word->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(0); });
+    mainMenu->next_Search_Word->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(1); });
 
+    searchMenu->back_to_home->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(2); });
 
-    searchMenu->back_to_home->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(1); });
+    mainMenu->tmp_Quiz->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(0);});
+
     //sizing
 
     wxBoxSizer* frameSizer = new wxBoxSizer(wxVERTICAL);

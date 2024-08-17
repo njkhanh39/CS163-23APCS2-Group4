@@ -2,6 +2,7 @@
 
 #include "MainMenu.h"
 #include "SearchMenu.h"
+#include "QuizMenu.h"
 
 class MainFrame: public wxFrame {
 private:
