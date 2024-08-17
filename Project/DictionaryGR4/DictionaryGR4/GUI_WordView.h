@@ -11,10 +11,9 @@ private:
 	
 	wxStaticText* text, *wordTypeText, *pageText;
 	wxTextCtrl* defText;
-	wxButton* fav, *next, *back, *editDef, *confirmEdit, *cancelEdit, *removeDef;
-
-	Word* word;
-	string activeDataset;
+	wxButton* fav, *confirmEdit, *cancelEdit;
+	wxBitmapButton* back, * next, *editDef, *delDef, *favDef;
+		
 	vector<string> defs;
 	vector<string> wordtype;
 
@@ -48,19 +47,33 @@ public:
 		defText->SetEditable(0);
 		defText->SetFont(font);
 
-		next = new wxButton(panel, 10017, "Next", wxPoint(5 * size.x / 6, 0), size / 6);
-		back = new wxButton(panel, 10016, "Back", wxPoint(2 * size.x / 3, 0), size / 6);
+		//next = new wxButton(panel, 10017, "Next", wxPoint(5 * size.x / 6, 0), size / 6);
+		//back = new wxButton(panel, 10016, "Back", wxPoint(2 * size.x / 3, 0), size / 6);
+
+		wxBitmap bitmapnext(wxT("IMG/nextdef.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmapback(wxT("IMG/prevdef.png"), wxBITMAP_TYPE_PNG);
+
+		back = new wxBitmapButton(panel, 10016, bitmapback, wxPoint(0, 194), wxSize(53, 53));
+		next = new wxBitmapButton(panel, 10017, bitmapnext, wxPoint(926, 194), wxSize(53, 53));
 		
 		pageText = new wxStaticText(panel, wxID_ANY, "0/0", wxPoint(6*size.x / 10, 0), wxDefaultSize);
 		pageText->SetFont(font);
 
-		next->SetFont(font);
-		back->SetFont(font);
+		wxBitmap bitmapdel(wxT("IMG/delbutton.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmapedit(wxT("IMG/editbutton.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmapfav(wxT("IMG/favbutton.png"), wxBITMAP_TYPE_PNG);
 
-		fav = new wxButton(panel, wxID_ANY, "Add to favourite", wxPoint(size.x * 5 / 6, size.y / 6));
-		editDef = new wxButton(panel, wxID_ANY, "Edit", wxPoint(size.x * 5 / 6, size.y * 3 / 6));
-		confirmEdit = new wxButton(panel, wxID_ANY, "Confirm", wxPoint(size.x * 5 / 6, size.y * 4 / 6));
-		cancelEdit = new wxButton(panel, wxID_ANY, "Cancel", wxPoint(size.x * 5 / 6, size.y * 5 / 6));
+		editDef = new wxBitmapButton(panel, wxID_ANY, bitmapedit, wxPoint(744, 20), wxSize(44, 44));
+		delDef = new wxBitmapButton(panel, wxID_ANY, bitmapdel, wxPoint(808, 20), wxSize(44, 44));
+		favDef = new wxBitmapButton(panel, wxID_ANY, bitmapfav, wxPoint(872, 20), wxSize(44, 44));
+
+		confirmEdit = new wxButton(panel, wxID_ANY, "Confirm", wxPoint(744, 380), wxSize(91,44));
+		confirmEdit->SetBackgroundColour(wxColour(67, 57, 97));
+		confirmEdit->SetForegroundColour(wxColour(255, 255, 255));
+
+		cancelEdit = new wxButton(panel, wxID_ANY, "Cancel", wxPoint(845,380), wxSize(91,44));
+		cancelEdit->SetBackgroundColour(wxColour(67, 57, 97));
+		cancelEdit->SetForegroundColour(wxColour(255, 255, 255));
 
 		removeDef = new wxButton(panel, wxID_ANY, "Remove", wxPoint(size.x * 5 / 6, size.y * 2 / 6));
 

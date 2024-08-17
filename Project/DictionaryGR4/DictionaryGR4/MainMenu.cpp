@@ -26,6 +26,9 @@ MainMenu::MainMenu(wxWindow* parent) :wxWindow(parent, wxID_ANY) {
 
 	to_Add_to_Dataset = new wxButton(mainPanel, wxID_ANY, "Add to Dataset", wxPoint(600, 500), wxSize(300, 100));
 	to_Add_to_Dataset->SetFont(fontTitle);
+	tmp_Quiz = new wxButton(mainPanel, wxID_ANY, "Quiz", wxPoint(600, 500), wxSize(300, 100));
+	tmp_Quiz->SetFont(fontTitle);
+	
 
 	//sizer
 	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);

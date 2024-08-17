@@ -14,6 +14,8 @@
 class MainMenu : public wxWindow {
 public:
     wxButton* to_Search_Word, * to_Add_to_Dataset;
+    wxButton* next_Search_Word;
+    wxButton* tmp_Quiz;
     MainMenu(wxWindow* parent);
 
 private:   

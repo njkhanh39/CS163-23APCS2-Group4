@@ -1,0 +1,3 @@
+#include "NavPane.h"
+
+NavigationPane::
