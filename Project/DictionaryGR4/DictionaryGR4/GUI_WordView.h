@@ -17,6 +17,9 @@ private:
 	vector<string> defs;
 	vector<string> wordtype;
 
+	Word* word;
+	string activeDataset;
+
 	int cur = 0;
 	int pages = 0;
 
@@ -75,7 +78,7 @@ public:
 		cancelEdit->SetBackgroundColour(wxColour(67, 57, 97));
 		cancelEdit->SetForegroundColour(wxColour(255, 255, 255));
 
-		removeDef = new wxButton(panel, wxID_ANY, "Remove", wxPoint(size.x * 5 / 6, size.y * 2 / 6));
+		//removeDef = new wxButton(panel, wxID_ANY, "Remove", wxPoint(size.x * 5 / 6, size.y * 2 / 6));
 
 		confirmEdit->Hide();
 		cancelEdit->Hide();
@@ -86,8 +89,8 @@ public:
 		editDef->Bind(wxEVT_BUTTON, &WordView::OnEditDefClicked, this);
 		confirmEdit->Bind(wxEVT_BUTTON, &WordView::OnConfirmEditClicked, this);
 		cancelEdit->Bind(wxEVT_BUTTON, &WordView::OnCancelEditClicked, this);
-		removeDef->Bind(wxEVT_BUTTON, &WordView::OnRemoveDefClicked, this);
-		fav->Bind(wxEVT_BUTTON, &WordView::OnAddFavourite, this);
+		delDef->Bind(wxEVT_BUTTON, &WordView::OnRemoveDefClicked, this);
+		favDef->Bind(wxEVT_BUTTON, &WordView::OnAddFavourite, this);
 		parentWindow = parent;
 	}
 

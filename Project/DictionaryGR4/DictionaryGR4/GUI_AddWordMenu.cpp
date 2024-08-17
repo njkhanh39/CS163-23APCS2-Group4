@@ -2,7 +2,7 @@
 
 using namespace std;
 
-AddWordMenu::AddWordMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
+AddWordMenu::AddWordMenu(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
 
 	//font
 	wxFont font(14, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
@@ -10,42 +10,42 @@ AddWordMenu::AddWordMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	wxFont fontCB(22, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	fontTitle.MakeBold();
 
-	titleBar = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 80), wxBORDER_NONE);
+	/*titleBar = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 80), wxBORDER_NONE);
 	titleBar->SetBackgroundColour(wxColor(67, 57, 97));
 	mainPanel = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE);
-	mainPanel->SetBackgroundColour(wxColor(34, 36, 40));
+	mainPanel->SetBackgroundColour(wxColor(34, 36, 40));*/
 
-	//mainPanel->SetBackgroundColour((0xff, 0xcc, 0xcc));
+	//this->SetBackgroundColour((0xff, 0xcc, 0xcc));
 
-	wxStaticText* title = new wxStaticText(titleBar, wxID_ANY, "Dictionary", wxPoint(30, 30));
-	title->SetFont(fontTitle);
+	/*wxStaticText* title = new wxStaticText(titleBar, wxID_ANY, "Dictionary", wxPoint(30, 30));
+	title->SetFont(fontTitle);*/
 
-	wordText = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(114, 161), wxSize(635, 60));
+	wordText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(114, 161), wxSize(635, 60));
 	wordText->SetFont(fontCB);
 
 	wxArrayString datasets = { "Eng-Eng", "Eng-Vie", "Vie-Eng" };
-	datasetCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(773, 161), wxSize(210, 60), datasets, wxCB_READONLY);	
+	datasetCbb = new wxComboBox(this, wxID_ANY, "", wxPoint(773, 161), wxSize(210, 60), datasets, wxCB_READONLY);	
 	datasetCbb->SetFont(fontCB);
 	datasetCbb->SetSize(154, 60);
 
-	partCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(1007, 161), wxSize(154, 60));
+	partCbb = new wxComboBox(this, wxID_ANY, "", wxPoint(1007, 161), wxSize(154, 60));
 
-	defText = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(110, 300), wxSize(700, 300));
+	defText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(110, 300), wxSize(700, 300));
 		
-	submit = new wxButton(mainPanel, wxID_ANY, "Submit", wxPoint(1000, 800), wxDefaultSize);
+	submit = new wxButton(this, wxID_ANY, "Submit", wxPoint(1000, 800), wxDefaultSize);
 	
 	//back button
-	back_to_home = new wxButton(titleBar, wxID_ANY, "Home", wxPoint(0, 0), wxSize(100, 50));
-	back_to_home->SetFont(font);
+	//back_to_home = new wxButton(titleBar, wxID_ANY, "Home", wxPoint(0, 0), wxSize(100, 50));
+	//back_to_home->SetFont(font);
 
 
 	//sizer
-	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+	//wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
-	sizer->Add(titleBar, 1, wxEXPAND | wxLEFT | wxUP | wxRIGHT, 0);
-	sizer->Add(mainPanel, 5, wxEXPAND | wxALL, 0);
+	//sizer->Add(titleBar, 1, wxEXPAND | wxLEFT | wxUP | wxRIGHT, 0);
+	//sizer->Add(mainPanel, 5, wxEXPAND | wxALL, 0);
 
-	this->SetSizerAndFit(sizer);
+	//this->SetSizerAndFit(sizer);
 
 	//events
 

@@ -31,19 +31,21 @@ MainFrame::MainFrame(const wxString& Title, wxSize FrameSize) : wxFrame(NULL, wx
     //MainMenu* mainMenu = new MainMenu(simpleBook);
 	SearchMenu* searchMenu = new SearchMenu(simpleBook);
     QuizMenu* quizMenu = new QuizMenu(simpleBook);
+    AddWordMenu* addMenu = new AddWordMenu(simpleBook);
     
-    simpleBook->AddPage(quizMenu, "Quiz Menu", true); //selection = 0
-    simpleBook->AddPage(searchMenu, "Search Menu", true);//selection = 1
+    simpleBook->AddPage(addMenu, "Add Menu", true); //selection = 0
+    simpleBook->AddPage(quizMenu, "Quiz Menu", true); //selection = 1
+    simpleBook->AddPage(searchMenu, "Search Menu", true);//selection = 2
 	//simpleBook->AddPage(mainMenu, "Main Menu", true); //selection = 2
 
-    simpleBook->SetSelection(1);
+    simpleBook->SetSelection(2);
    
 
     //binding
 
 
     searchpane->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
-        simpleBook->SetSelection(1); 
+        simpleBook->SetSelection(2); 
         searchpane->SetBackgroundColour(black);
         addpane->SetBackgroundColour(purple);
         hispane->SetBackgroundColour(purple);
@@ -52,7 +54,7 @@ MainFrame::MainFrame(const wxString& Title, wxSize FrameSize) : wxFrame(NULL, wx
         });
 
     quizpane->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
-        simpleBook->SetSelection(0); 
+        simpleBook->SetSelection(1); 
         searchpane->SetBackgroundColour(purple);
         addpane->SetBackgroundColour(purple);
         hispane->SetBackgroundColour(purple);
@@ -60,8 +62,17 @@ MainFrame::MainFrame(const wxString& Title, wxSize FrameSize) : wxFrame(NULL, wx
         favpane->SetBackgroundColour(purple);
         });
 
-    searchMenu->back_to_home->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(0); });
-    addWordMenu->back_to_home->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(0); });
+    addpane->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+        simpleBook->SetSelection(0);
+        searchpane->SetBackgroundColour(purple);
+        addpane->SetBackgroundColour(black);
+        hispane->SetBackgroundColour(purple);
+        quizpane->SetBackgroundColour(purple);
+        favpane->SetBackgroundColour(purple);
+        });
+
+    //searchMenu->back_to_home->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(0); });
+    //addWordMenu->back_to_home->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(0); });
 
     //sizing
 

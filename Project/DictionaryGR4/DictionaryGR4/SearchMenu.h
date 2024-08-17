@@ -22,7 +22,7 @@ public:
 private:
 	Dictionary dict;
 	//History hist;
-	wxButton * resetbutton ,* button,  *deleteword;
+	wxButton * resetbutton ,* button,  *deleteword, *rd_button;
 	wxBitmapButton* searchByDef, * searchByWord ;
 	wxListBox* suggestBar;
 	wxTextCtrl* searchBar;

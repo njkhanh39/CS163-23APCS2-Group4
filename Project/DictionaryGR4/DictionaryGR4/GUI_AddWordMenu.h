@@ -11,7 +11,7 @@
 #include "Dictionary.h"
 #include "GUI_WordView.h"
 
-class AddWordMenu : public wxWindow {
+class AddWordMenu : public wxPanel {
 public:
 	wxButton* back_to_home;
 	AddWordMenu(wxWindow* parent);

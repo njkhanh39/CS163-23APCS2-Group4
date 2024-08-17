@@ -73,20 +73,13 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxPanel(parent, 10001, wxDefaultPosit
 	searchByWord->Bind(wxEVT_BUTTON, &SearchMenu::OnUnLoadTool, this);
 	searchByWord->SetFont(font);*/
 
-	//testinggg
-
-	//-------
-	wxButton* addWord = new wxButton(mainPanel, wxID_ANY, "Add Word", wxPoint(60, 280), wxSize(120, 40));
-	addWord->Bind(wxEVT_BUTTON, &SearchMenu::OnAddWordTest, this);
-	addWord->SetFont(font);
-	//------
 
 	//word view appears first
 	wordView = new WordView(this, wxPoint(234, 133), wxSize(979, 460));
 	wordView->SetColor(white);
 
 	//init height = 0
-	suggestBar = new wxListBox(this, wxID_ANY, wxPoint(357, 83), wxSize(450, 0));
+	suggestBar = new wxListBox(this, wxID_ANY, wxPoint(357, 100), wxSize(450, 0));
 	suggestBar->SetFont(font);
 
 	deleteword = new wxButton(this, wxID_ANY, "Delete Word", wxPoint(1042, 610), wxSize(172, 60));
