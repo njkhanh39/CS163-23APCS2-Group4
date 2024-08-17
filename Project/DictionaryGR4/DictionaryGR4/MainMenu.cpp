@@ -24,7 +24,8 @@ MainMenu::MainMenu(wxWindow* parent) :wxWindow(parent, wxID_ANY) {
 	to_Search_Word = new wxButton(mainPanel, wxID_ANY,"Search Word", wxPoint(600, 300), wxSize(300,100));
 	to_Search_Word->SetFont(fontTitle);
 
-	
+	to_Add_to_Dataset = new wxButton(mainPanel, wxID_ANY, "Add to Dataset", wxPoint(600, 500), wxSize(300, 100));
+	to_Add_to_Dataset->SetFont(fontTitle);
 
 	//sizer
 	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);

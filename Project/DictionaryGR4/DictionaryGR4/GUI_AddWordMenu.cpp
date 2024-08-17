@@ -29,6 +29,8 @@ AddWordMenu::AddWordMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	datasetCbb->SetSize(154, 60);
 
 	//partCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(1007, 161), wxSize(154, 60), wxCB_READONLY);
+
+	defText = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(110, 300), wxSize(700, 300));
 		
 	submit = new wxButton(mainPanel, wxID_ANY, "Submit", wxPoint(1000, 800), wxDefaultSize);
 	

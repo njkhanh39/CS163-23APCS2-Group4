@@ -19,9 +19,11 @@ MainFrame::MainFrame(const wxString& Title, wxSize FrameSize) : wxFrame(NULL, wx
 
 
     mainMenu->to_Search_Word->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(1); });
-
+    mainMenu->to_Add_to_Dataset->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) { simpleBook->SetSelection(2); });
 
     searchMenu->back_to_home->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(0); });
+    addWordMenu->back_to_home->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(0); });
+
     //sizing
 
     wxBoxSizer* frameSizer = new wxBoxSizer(wxVERTICAL);
