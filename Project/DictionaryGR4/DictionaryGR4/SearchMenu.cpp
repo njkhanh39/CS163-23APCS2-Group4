@@ -3,7 +3,7 @@
 
 using namespace std;
 
-SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
+SearchMenu::SearchMenu(wxWindow* parent) : wxPanel(parent, 10001, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
 
 	auto purple = wxColour(101, 86, 142), red = wxColour(184, 89, 89), green = wxColour(11, 199, 189), white = wxColour(255, 255, 255), black = wxColour(34, 36, 40);
 
@@ -13,64 +13,33 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	wxFont fontCB(22, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	fontTitle.MakeBold();
 
-	/*===============NaviPane==========================*/
-	titleBar = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 80), wxBORDER_NONE);
-	titleBar->SetBackgroundColour(purple);
-
-	searchpane = new wxButton(titleBar, wxID_ANY, "SEARCH", wxPoint(344, 18), wxSize(147, 44), wxBORDER_NONE);
-	searchpane->SetBackgroundColour(black);
-	searchpane->SetForegroundColour(white);
-
-	addpane = new wxButton(titleBar, wxID_ANY, "ADD TO DATASET", wxPoint(524, 18), wxSize(147, 44), wxBORDER_NONE);
-	addpane->SetBackgroundColour(purple);
-	addpane->SetForegroundColour(white);
-
-	quizpane = new wxButton(titleBar, wxID_ANY, "QUIZ GAME", wxPoint(704, 18), wxSize(147, 44), wxBORDER_NONE);
-	quizpane->SetBackgroundColour(purple);
-	quizpane->SetForegroundColour(white);
-
-	hispane = new wxButton(titleBar, wxID_ANY, "HISTORY", wxPoint(884, 18), wxSize(147, 44), wxBORDER_NONE);
-	hispane->SetBackgroundColour(purple);
-	hispane->SetForegroundColour(white);
-
-	favpane = new wxButton(titleBar, wxID_ANY, "FAVOURITE", wxPoint(1064, 18), wxSize(147, 44), wxBORDER_NONE);
-	favpane->SetBackgroundColour(purple);
-	favpane->SetForegroundColour(white);
-
-	/*=================================================*/
-
-	mainPanel = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE);
-	mainPanel->SetBackgroundColour(black);
+	SetBackgroundColour(black);
 	 
 	//mainPanel->SetBackgroundColour((0xff, 0xcc, 0xcc));
 
 	wxBitmap bitmap(wxT("IMG/image.png"), wxBITMAP_TYPE_PNG);
 
 	// Create a wxBitmapButton
-	button = new wxBitmapButton(mainPanel, wxID_ANY, bitmap, wxPoint(1010, 41), wxSize(60,60));
+	button = new wxBitmapButton(this, wxID_ANY, bitmap, wxPoint(1010, 41), wxSize(60,60));
 	//button->SetBackgroundColour(purple);
-	searchBar = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(234, 41), wxSize(776, 60));
+	searchBar = new wxTextCtrl(this, wxID_ANY, "", wxPoint(234, 41), wxSize(776, 60));
 	searchBar->SetFont(fontCB);
 
-	wxButton* rd_button = new wxButton(mainPanel, wxID_ANY, "Random", wxPoint(1097, 41), wxSize(116, 60), wxBORDER_NONE);
+	wxButton* rd_button = new wxButton(this, wxID_ANY, "Random", wxPoint(1097, 41), wxSize(116, 60), wxBORDER_NONE);
 	rd_button->SetBackgroundColour(purple);
 	rd_button->SetForegroundColour(white);
 
 	wxBitmap bitmaphexa(wxT("IMG/Hexagon.png"), wxBITMAP_TYPE_PNG);
 
-	searchByDef = new wxBitmapButton(mainPanel, wxID_ANY, bitmaphexa, wxPoint(40,123), wxSize(181,181), wxBORDER_NONE);
+	searchByDef = new wxBitmapButton(this, wxID_ANY, bitmaphexa, wxPoint(40,123), wxSize(181,181), wxBORDER_NONE);
 
-	searchByWord = new wxBitmapButton(mainPanel, wxID_ANY, bitmaphexa, wxPoint(40, 304), wxSize(181, 181), wxBORDER_NONE);
+	searchByWord = new wxBitmapButton(this, wxID_ANY, bitmaphexa, wxPoint(40, 304), wxSize(181, 181), wxBORDER_NONE);
 
 	//def2word->SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
 	//word2def->SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
 
 	searchByDef->SetBackgroundColour(black);
 	searchByWord->SetBackgroundColour(black);
-
-	resetbutton = new wxButton(mainPanel, wxID_ANY, "RESET", wxPoint(53, 495), wxSize(154, 78), wxBORDER_NONE);
-	resetbutton->SetBackgroundColour(red);
-	resetbutton->SetForegroundColour(white);
 
 	searchByDef->Bind(wxEVT_BUTTON, &SearchMenu::OnLoadTool, this);
 	searchByWord->Bind(wxEVT_BUTTON, &SearchMenu::OnUnLoadTool, this);
@@ -79,7 +48,7 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	// Create combo box to choose dataset
 	
 	wxArrayString languages = { "Eng-Eng", "Eng-Vie", "Vie-Eng" };
-	datasetCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(53, 41), wxSize(154, -1), languages, wxCB_READONLY);
+	datasetCbb = new wxComboBox(this, wxID_ANY, "", wxPoint(53, 41), wxSize(154, -1), languages, wxCB_READONLY);
 
 	datasetCbb->SetFont(fontCB);
 	datasetCbb->SetSize(154, 60);
@@ -103,31 +72,21 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	searchByWord->SetFont(font);*/
 
 	//word view appears first
-	wordView = new WordView(mainPanel, wxPoint(234, 133), wxSize(979, 440));
+	wordView = new WordView(this, wxPoint(234, 133), wxSize(979, 460));
 	wordView->SetColor(white);
 
 	//init height = 0
-	suggestBar = new wxListBox(mainPanel, wxID_ANY, wxPoint(357, 83), wxSize(450, 0));
+	suggestBar = new wxListBox(this, wxID_ANY, wxPoint(357, 83), wxSize(450, 0));
 	suggestBar->SetFont(font);
 
-	deleteword = new wxButton(mainPanel, wxID_ANY, "Delete Word", wxPoint(1042, 590), wxSize(172, 60));
+	deleteword = new wxButton(this, wxID_ANY, "Delete Word", wxPoint(1042, 610), wxSize(172, 60));
 	deleteword->SetBackgroundColour(red);
 	deleteword->SetForegroundColour(white);
 
-	//back button
+	resetbutton = new wxButton(this, wxID_ANY, "RESET", wxPoint(53, 495), wxSize(154, 98), wxBORDER_NONE);
+	resetbutton->SetBackgroundColour(red);
+	resetbutton->SetForegroundColour(white);
 
-	back_to_home = new wxButton(titleBar, wxID_ANY, "Home", wxPoint(0, 0), wxSize(100, 50));
-	back_to_home->SetFont(font);
-
-
-	//sizer
-
-	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-
-	sizer->Add(titleBar, 1, wxEXPAND | wxLEFT | wxUP | wxRIGHT,0);
-	sizer->Add(mainPanel, 5, wxEXPAND | wxALL,0);
-
-	this->SetSizerAndFit(sizer);
 
 	//events
 	

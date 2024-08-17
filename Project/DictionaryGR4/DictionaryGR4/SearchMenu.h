@@ -10,7 +10,7 @@
 #include "Dictionary.h"
 #include "GUI_WordView.h"
 
-class SearchMenu : public wxWindow {
+class SearchMenu : public wxPanel {
 public:
 	wxButton* back_to_home;
 	SearchMenu(wxWindow* parent);
@@ -19,18 +19,12 @@ public:
 private:
 	Dictionary dict;
 	History hist;
-	wxPanel * mainPanel;
 	wxButton * resetbutton ,* button,  *deleteword;
 	wxBitmapButton* searchByDef, * searchByWord ;
 	wxListBox* suggestBar;
 	wxTextCtrl* searchBar;
 	wxComboBox* datasetCbb;
 	WordView* wordView;
-
-	/*===============NaviPane==========================*/
-	wxButton* searchpane, * addpane, * quizpane, * hispane, * favpane;
-	wxPanel* titleBar;
-	/*=================================================*/
 
 	void skip(wxMouseEvent& evt);
 

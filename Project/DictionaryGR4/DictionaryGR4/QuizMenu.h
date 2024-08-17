@@ -8,16 +8,13 @@
 #include <cstring>
 #include <algorithm>
 
-class QuizMenu : public wxWindow {
+class QuizMenu : public wxPanel {
 public:
 
 	QuizMenu(wxWindow* parent);
 
 private:
-	/*===============NaviPane==========================*/
-	wxButton* searchpane, * addpane, * quizpane, * hispane, * favpane;
-	wxPanel* titleBar;
-	/*=================================================*/
+
 
 };
 #endif
