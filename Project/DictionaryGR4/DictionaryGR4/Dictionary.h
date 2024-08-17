@@ -62,12 +62,63 @@ public:
 
 	History getHistory();
 
-private:
+	//setters & adders
+
+	void addNewWord(string text, string def) {
+		//First, change word in file as trie is empty
+		string file = mapStringToFile(text);
+
+		u16string u16text = tool.tou16(text); u16text += (char16_t)'\t';
+		u16string u16def = tool.tou16(def);
+
+		u16string u16word = u16text + u16def;
+
+		bool added = false;
+
+		//handle in case add word to top of file
+		vector<string> alls;
+		ifstream fin; string line; u16string u16line;
+
+		fin.open(file);
+
+		while (getline(fin, line)) {
+			u16line = tool.tou16(line);
+
+			//u16word <= u16line
+			if (!tool.compare(u16word, u16line) && !added) {
+				added = true;
+				alls.push_back(text + "\t" + def);
+			}
+			alls.push_back(line);
+		}
+
+		fin.close();
+
+
+		//rewrite
+
+		ofstream fout;
+
+		fout.open(file);
+
+		for (auto& str : alls) {
+			fout << str << '\n';
+		}
+
+		fout.close();
+
+		//then, change in active wordfinder, when program ends, remember to save back to file
+
+		tool.addWord(text, def);
+	}
+
 	//helpers
 
 	vector<string> transformSentence(string& input);
 	
 	void EngineHelper(string keyword, bool yesLogMessage);
+
+	string mapStringToFile(string word);
 
 
 	//vector<Word> helperDefToWordENGENG(string keyword, int limit){

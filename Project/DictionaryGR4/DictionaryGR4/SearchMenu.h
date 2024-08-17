@@ -23,7 +23,7 @@ private:
 	Dictionary dict;
 	//History hist;
 	wxPanel* titleBar, * mainPanel;
-	wxButton* button, * searchByDef, * searchByWord, * rd_button;
+	wxButton* button, * searchByDef, * searchByWord;
 	wxListBox* suggestBar;
 	wxTextCtrl* searchBar;
 	wxComboBox* datasetCbb;
@@ -51,5 +51,8 @@ private:
 
 	void OnResetButtonClicked(wxCommandEvent& evt);
 
-	void OnRandomClicked(wxCommandEvent& evt);
+	//test
+	void OnAddWordTest(wxCommandEvent& evt) {
+		dict.addNewWord("doraemon", "a blue cat");
+	}
 };
