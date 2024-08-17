@@ -51,4 +51,8 @@ private:
 
 	void OnResetButtonClicked(wxCommandEvent& evt);
 
+	//test
+	void OnAddWordTest(wxCommandEvent& evt) {
+		dict.addNewWord("doraemon", "a blue cat");
+	}
 };

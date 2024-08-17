@@ -34,6 +34,7 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	rd_button->SetForegroundColour(wxColour(255, 255, 255));
 	rd_button->SetFont(fontCB);
 
+
 	// Create combo box to choose dataset
 	
 	wxArrayString languages = { "Eng-Eng", "Eng-Vie", "Vie-Eng" };
@@ -60,12 +61,20 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	searchByWord->Bind(wxEVT_BUTTON, &SearchMenu::OnUnLoadTool, this);
 	searchByWord->SetFont(font);
 
+	//testinggg
+
+	//-------
+	wxButton* addWord = new wxButton(mainPanel, wxID_ANY, "Add Word", wxPoint(60, 280), wxSize(120, 40));
+	addWord->Bind(wxEVT_BUTTON, &SearchMenu::OnAddWordTest, this);
+	addWord->SetFont(font);
+	//------
+
 	//word view appears first
 	wordView = new WordView(mainPanel, wxPoint(234, 145), wxSize(979, 480));
 	wordView->SetColor(wxColour(255, 255, 255));
 
 	//init height = 0
-	suggestBar = new wxListBox(mainPanel, wxID_ANY, wxPoint(357, 83), wxSize(450, 0));
+	suggestBar = new wxListBox(mainPanel, wxID_ANY, wxPoint(357, 100), wxSize(450, 0));
 	suggestBar->SetFont(font);
 
 

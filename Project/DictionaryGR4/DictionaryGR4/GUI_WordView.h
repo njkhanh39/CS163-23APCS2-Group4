@@ -106,12 +106,15 @@ public:
 			string str = word.getDefinitionAt(i).getStringDefinition();
 
 			int j = 0;
-			while (j < (int)str.length() && (j == 0 || str[j - 1] != ')')) {
-				wordtype[i].push_back(str[j]);
+			if (str[j] == '(') {
+				while (j < (int)str.length() && (j == 0 || str[j - 1] != ')')) {
+					wordtype[i].push_back(str[j]);
+					++j;
+				}
 				++j;
 			}
-
-			++j;
+			else wordtype[i] = "";
+			
 
 			defs[i] = str.substr(j, (int)str.length() - j);
 
