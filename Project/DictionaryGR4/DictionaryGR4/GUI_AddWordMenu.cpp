@@ -28,7 +28,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	datasetCbb->SetFont(fontCB);
 	datasetCbb->SetSize(154, 60);
 
-	//partCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(1007, 161), wxSize(154, 60), wxCB_READONLY);
+	partCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(1007, 161), wxSize(154, 60));
 
 	defText = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(110, 300), wxSize(700, 300));
 		
