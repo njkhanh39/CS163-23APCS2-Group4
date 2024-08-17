@@ -8,20 +8,20 @@ MainFrame::MainFrame(const wxString& Title, wxSize FrameSize) : wxFrame(NULL, wx
 	SearchMenu* searchMenu = new SearchMenu(simpleBook);
     AddWordMenu* addWordMenu = new AddWordMenu(simpleBook);
     
-    simpleBook->AddPage(searchMenu, "Search Menu", true);//selection = 0
-	simpleBook->AddPage(mainMenu, "Main Menu", true); //selection = 1
+	simpleBook->AddPage(mainMenu, "Main Menu", true); //selection = 0
+    simpleBook->AddPage(searchMenu, "Search Menu", true);//selection = 1
     simpleBook->AddPage(addWordMenu, "Add Word", true); //selection = 2
 
-    simpleBook->SetSelection(1);
+    simpleBook->SetSelection(0);
     
 
     //binding
 
 
-    mainMenu->next_Search_Word->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(0); });
+    mainMenu->to_Search_Word->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(1); });
 
 
-    searchMenu->back_to_home->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(1); });
+    searchMenu->back_to_home->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(0); });
     //sizing
 
     wxBoxSizer* frameSizer = new wxBoxSizer(wxVERTICAL);

@@ -13,7 +13,7 @@
 
 class MainMenu : public wxWindow {
 public:
-    wxButton* next_Search_Word;
+    wxButton* to_Search_Word;
     MainMenu(wxWindow* parent);
 
 private:   

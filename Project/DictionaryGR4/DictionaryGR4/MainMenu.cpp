@@ -21,8 +21,8 @@ MainMenu::MainMenu(wxWindow* parent) :wxWindow(parent, wxID_ANY) {
 	// panel #2 - mainPanel
 	
 	
-	next_Search_Word = new wxButton(mainPanel, wxID_ANY,"Search Word", wxPoint(600, 300), wxSize(300,100));
-	next_Search_Word->SetFont(fontTitle);
+	to_Search_Word = new wxButton(mainPanel, wxID_ANY,"Search Word", wxPoint(600, 300), wxSize(300,100));
+	to_Search_Word->SetFont(fontTitle);
 
 	
 
