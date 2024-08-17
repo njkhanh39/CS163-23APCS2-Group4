@@ -38,14 +38,14 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	// Create combo box to choose dataset
 	
 	wxArrayString languages = { "Eng-Eng", "Eng-Vie", "Vie-Eng" };
-	wxComboBox* datasetCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(53, 41), wxSize(150, 60));
+	datasetCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(53, 41), wxSize(150, 60), languages, wxCB_READONLY);
 
 	datasetCbb->SetBackgroundColour(wxColour(0, 199, 191));
 	datasetCbb->SetForegroundColour(wxColour(0, 0, 0));
 
 	datasetCbb->SetFont(fontCB);
 	datasetCbb->SetSize(154, 60);
-		
+	datasetCbb->SetSelection(0);
 	datasetCbb->Refresh();
 
 
