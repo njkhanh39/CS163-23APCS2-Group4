@@ -224,42 +224,42 @@ Word* Trie::getWordPointer(string s)
     return ans;
 }
 
-Word* Trie::getRandomWord(string& wordText, string activeDataset) {
-    int n = -1;
-    string fileName;
-    if (activeDataset == "Eng-Eng" or activeDataset == "Eng-Vie") {
-        n = 39;
-        if (activeDataset == "Eng-Eng")
-            fileName = char(rand() % 28 + 1 + 48);
-        else
-            
-    }
-    else if (activeDataset == "Vie-Eng")
-        n = 106;
-
-    wordText = "";
-    Node* cur = root;
-
-    while (true) {
-        if (!cur->hasChild()) {
-            cur = root;
-            wordText = "";
-        }
-
-        int t = rand() % (n + 1);
-        int iChild = (t < n) ? t : 106;
-        if (cur->child[iChild]) {
-            cur = cur->child[iChild];
-            wordText.push_back(indexToCodePoint(iChild));
-            if (cur->exist) {
-                bool take = rand() % 2;
-                if (take) {
-                    return cur->ptrToEmptyWord;
-                }
-            }
-        }
-    }
-}
+//Word* Trie::getRandomWord(string& wordText, string activeDataset) {
+//    int n = -1;
+//    string fileName;
+//    if (activeDataset == "Eng-Eng" or activeDataset == "Eng-Vie") {
+//        n = 39;
+//        if (activeDataset == "Eng-Eng")
+//            fileName = char(rand() % 28 + 1 + 48);
+//        //else
+//            
+//    }
+//    else if (activeDataset == "Vie-Eng")
+//        n = 106;
+//
+//    wordText = "";
+//    Node* cur = root;
+//
+//    while (true) {
+//        if (!cur->hasChild()) {
+//            cur = root;
+//            wordText = "";
+//        }
+//
+//        int t = rand() % (n + 1);
+//        int iChild = (t < n) ? t : 106;
+//        if (cur->child[iChild]) {
+//            cur = cur->child[iChild];
+//            wordText.push_back(indexToCodePoint(iChild));
+//            if (cur->exist) {
+//                bool take = rand() % 2;
+//                if (take) {
+//                    return cur->ptrToEmptyWord;
+//                }
+//            }
+//        }
+//    }
+//}
 
 vector<string> Trie::getStringDefinitions(string s) {
     vector<string> empty;

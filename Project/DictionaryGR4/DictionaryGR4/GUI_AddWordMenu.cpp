@@ -28,7 +28,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	datasetCbb->SetFont(fontCB);
 	datasetCbb->SetSize(154, 60);
 
-	partCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(1007, 161), wxSize(154, 60), wxCB_READONLY);
+	//partCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(1007, 161), wxSize(154, 60), wxCB_READONLY);
 		
 	submit = new wxButton(mainPanel, wxID_ANY, "Submit", wxPoint(1000, 800), wxDefaultSize);
 	
@@ -53,36 +53,36 @@ AddWordMenu::~AddWordMenu() {
 
 }
 
-void AddWordMenu::OnDatasetChosen(wxCommandEvent& evt) {
-	string activeDataset = datasetCbb->GetStringSelection().ToStdString();
-	wxArrayString parts;
+//void AddWordMenu::OnDatasetChosen(wxCommandEvent& evt) {
+//	string activeDataset = datasetCbb->GetStringSelection().ToStdString();
+//	wxArrayString parts;
+//
+//	if (activeDataset == "Eng-Eng")
+//		parts = { "", "noun", "verb", "adjective", "adverb", "preposition", "conjunction" , "interjection", "plural of", "single of", "transitive verb", "intransitive verb", "past participle", "superlative", "imperative" };
+//	
+//	else if (activeDataset == "Vie-Eng")
+//		parts = { "", "danh từ", "động từ", "tính từ", "phó từ", "giới từ", "ngoại động từ", "nội động từ", "thành ngữ" };
+//	
+//	else if (activeDataset == "Eng-Vie")
+//		parts = { "", "danh từ", "động từ", "tính từ", "phó từ", "trạng từ", "giới từ", "liên từ", "thán từ", "số nhiều", "số ít", "ngoại động từ", "nội động từ", "quá khứ phân từ", "viết tắt", "thành ngữ"};
+//		
+//	partCbb->Append(parts);
+//}
 
-	if (activeDataset == "Eng-Eng")
-		parts = { "", "noun", "verb", "adjective", "adverb", "preposition", "conjunction" , "interjection", "plural of", "single of", "transitive verb", "intransitive verb", "past participle", "superlative", "imperative" };
-	
-	else if (activeDataset == "Vie-Eng")
-		parts = { "", "danh từ", "động từ", "tính từ", "phó từ", "giới từ", "ngoại động từ", "nội động từ", "thành ngữ" };
-	
-	else if (activeDataset == "Eng-Vie")
-		parts = { "", "danh từ", "động từ", "tính từ", "phó từ", "trạng từ", "giới từ", "liên từ", "thán từ", "số nhiều", "số ít", "ngoại động từ", "nội động từ", "quá khứ phân từ", "viết tắt", "thành ngữ"};
-		
-	partCbb->Append(parts);
-}
-
-void AddWordMenu::OnSubmitClicked(wxCommandEvent& evt) {
-	string activeDataset = datasetCbb->GetStringSelection().ToStdString();
-	string part;
-
-	//convert from combobox to in-file
-	if (activeDataset == "Eng-Eng") {
-		vector<string> partInFile = { "", "n.", "v.", "adj.", "adv.", "prep.", "conj.", "interj." "pl.", "sgl.", "v. t.", "v. i.", "p. p.", "superl.", "imp." };
-		part = partInFile[datasetCbb->GetCurrentSelection()];
-	}
-	else if (activeDataset == "Vie-Eng") {
-		vector<string> partInFile = { "", "dtừ", "đtừ", "ttừ", "phó từ", "gtừ", "ngđtừ", "nđtừ", "thngữ" };
-		part = partInFile[datasetCbb->GetCurrentSelection()];
-	}
-	else if (activeDataset == "Eng-Vie")
-		part = partCbb->GetStringSelection().ToStdString();
-
-}
+//void AddWordMenu::OnSubmitClicked(wxCommandEvent& evt) {
+//	string activeDataset = datasetCbb->GetStringSelection().ToStdString();
+//	string part;
+//
+//	//convert from combobox to in-file
+//	if (activeDataset == "Eng-Eng") {
+//		vector<string> partInFile = { "", "n.", "v.", "adj.", "adv.", "prep.", "conj.", "interj." "pl.", "sgl.", "v. t.", "v. i.", "p. p.", "superl.", "imp." };
+//		part = partInFile[datasetCbb->GetCurrentSelection()];
+//	}
+//	else if (activeDataset == "Vie-Eng") {
+//		vector<string> partInFile = { "", "dtừ", "đtừ", "ttừ", "phó từ", "gtừ", "ngđtừ", "nđtừ", "thngữ" };
+//		part = partInFile[datasetCbb->GetCurrentSelection()];
+//	}
+//	else if (activeDataset == "Eng-Vie")
+//		part = partCbb->GetStringSelection().ToStdString();
+//
+//}

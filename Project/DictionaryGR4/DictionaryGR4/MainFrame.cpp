@@ -6,12 +6,13 @@ MainFrame::MainFrame(const wxString& Title, wxSize FrameSize) : wxFrame(NULL, wx
 	
     MainMenu* mainMenu = new MainMenu(simpleBook);
 	SearchMenu* searchMenu = new SearchMenu(simpleBook);
+    AddWordMenu* addWordMenu = new AddWordMenu(simpleBook);
     
     simpleBook->AddPage(searchMenu, "Search Menu", true);//selection = 0
 	simpleBook->AddPage(mainMenu, "Main Menu", true); //selection = 1
-	
+    simpleBook->AddPage(addWordMenu, "Add Word", true); //selection = 2
 
-
+    simpleBook->SetSelection(1);
     
 
     //binding

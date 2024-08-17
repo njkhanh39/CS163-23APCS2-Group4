@@ -90,7 +90,7 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 	button->Bind(wxEVT_BUTTON, &SearchMenu::OnSearchButton, this);
 	searchBar->Bind(wxEVT_TEXT, &SearchMenu::OnSearchAndSuggestHandler, this);
 	suggestBar->Bind(wxEVT_LISTBOX, &SearchMenu::OnViewWord, this);
-	rd_button->Bind(wxEVT_BUTTON, &SearchMenu::OnRandomClicked, this);
+	//rd_button->Bind(wxEVT_BUTTON, &SearchMenu::OnRandomClicked, this);
 }
 
 SearchMenu::~SearchMenu() {
@@ -308,17 +308,17 @@ void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt) {
 	}
 }
 
-void SearchMenu::OnRandomClicked(wxCommandEvent& evt) {
-	string activeDataset = datasetCbb->GetStringSelection().ToStdString();
-
-	string wordText;
-	Word* onlyDefWord = dict.getRandomWord(wordText, activeDataset);
-
-	Word withTextWord = *onlyDefWord;
-	withTextWord.setWord(wordText);
-
-	wordView->processWord(withTextWord);
-
-	wordView->setWord(onlyDefWord);
-	wordView->setActiveDataset(activeDataset);
-}
+//void SearchMenu::OnRandomClicked(wxCommandEvent& evt) {
+//	string activeDataset = datasetCbb->GetStringSelection().ToStdString();
+//
+//	string wordText;
+//	Word* onlyDefWord = dict.getRandomWord(wordText, activeDataset);
+//
+//	Word withTextWord = *onlyDefWord;
+//	withTextWord.setWord(wordText);
+//
+//	wordView->processWord(withTextWord);
+//
+//	wordView->setWord(onlyDefWord);
+//	wordView->setActiveDataset(activeDataset);
+//}

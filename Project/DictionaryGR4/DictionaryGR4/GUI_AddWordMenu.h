@@ -20,7 +20,7 @@ public:
 private:
 	Dictionary dict;
 	wxPanel* titleBar, * mainPanel;
-	wxTextCtrl* wordText, defText;
+	wxTextCtrl* wordText, * defText;
 	wxComboBox* partCbb, * datasetCbb;
 	wxButton* submit;
 
