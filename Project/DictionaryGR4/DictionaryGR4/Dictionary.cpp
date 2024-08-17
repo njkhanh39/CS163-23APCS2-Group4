@@ -47,7 +47,7 @@ Word* Dictionary::getWordPtr(string word) {
 }
 
 Word* Dictionary::getRandomWord(string& wordText, string activeDataset) {
-	return myTrie.getRandomWord(wordText, activeDataset);
+	string dir;
 }
 
 //return definitions of keyword

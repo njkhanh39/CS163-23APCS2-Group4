@@ -51,6 +51,9 @@
     <ClCompile Include="Dictionary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GUI_AddWordMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="Word.h">
       <Filter>BackEnd Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI_AddWordMenu.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

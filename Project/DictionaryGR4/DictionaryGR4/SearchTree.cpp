@@ -226,8 +226,14 @@ Word* Trie::getWordPointer(string s)
 
 Word* Trie::getRandomWord(string& wordText, string activeDataset) {
     int n = -1;
-    if (activeDataset == "Eng-Eng" or activeDataset == "Eng-Vie")
+    string fileName;
+    if (activeDataset == "Eng-Eng" or activeDataset == "Eng-Vie") {
         n = 39;
+        if (activeDataset == "Eng-Eng")
+            fileName = char(rand() % 28 + 1 + 48);
+        else
+            
+    }
     else if (activeDataset == "Vie-Eng")
         n = 106;
 
