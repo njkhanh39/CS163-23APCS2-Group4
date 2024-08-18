@@ -87,4 +87,6 @@ public:
 
 	void removeDefinition(int index);
 
+	void removeDefinition(string& def);
+
 };

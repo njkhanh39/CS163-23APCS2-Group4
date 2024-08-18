@@ -18,7 +18,7 @@ private:
 public:
 	bool isSearchingDefinition = false;
 	Dictionary() {
-		//tool.load(EngEng);
+
 	}
 
 	//"Eng-Eng", "Eng-Vie", "Vie-Eng"
@@ -31,6 +31,9 @@ public:
 	void runSearchDefinitionEngine();
 
 	void turnOffSearchDefinitionEngine();
+
+	//user may delete words, those which are saved in a file, we will ignore these
+	bool getAvailableWords(Word& w);
 
 	//get a "Word" object that matches a string
 	Word searchWordMatching(string word);

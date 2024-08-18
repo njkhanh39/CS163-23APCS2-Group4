@@ -65,3 +65,12 @@ void Word::modifyDefinition(string def, int index) {
 void Word::removeDefinition(int index) {
 	defList.erase(defList.begin() + index);
 }
+
+void Word::removeDefinition(string& def) {
+	for (auto it = defList.begin(); it != defList.end(); ++it) {
+		if (it->getStringDefinition() == def) {
+			defList.erase(it);
+			return;
+		}
+	}
+}

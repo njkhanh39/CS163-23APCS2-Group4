@@ -35,9 +35,11 @@ Word Dictionary::searchWordMatching(string word) {
 	for (auto& x : word) x = tolower(x);
 
 	
-	if (w.empty() && isSearchingDefinition) return tool.searchWord(word);
+	if (w.empty() && isSearchingDefinition) w = tool.searchWord(word);
 	else w = myTrie.getWordMatching(word);
 	
+	//since some of w's definitions may be deleted by user, we have to check.
+	getAvailableWords(w);
 
 	return w;
 }
@@ -74,17 +76,72 @@ vector<Word> Dictionary::searchRelatedWords(string word, int limit) {
 	//format word
 	for (auto& x : word) x = tolower(x);
 
-	return myTrie.getWordsWithPrefix(word, limit);
+	ans = myTrie.getWordsWithPrefix(word, limit);
+
+	for (int i = 0; i < (int)ans.size(); ++i) {
+		getAvailableWords(ans[i]);
+		if (ans[i].empty()) {
+			swap(ans[i], ans.back());
+			ans.pop_back();
+		}
+	}
+
 	return ans;
 }
 
 //this one needs runSearchDefinitionsEngine
 vector<Word> Dictionary::searchDefToWord(string& keyword, int limit) {
 	vector<string> subkeys = transformSentence(keyword);
-	return tool.searchDefinitionsToWord(subkeys, limit);
+	vector<Word> ans;
+	ans = tool.searchDefinitionsToWord(subkeys, limit);
+
+	for (int i = 0; i < (int)ans.size(); ++i) {
+		getAvailableWords(ans[i]);
+		if (ans[i].empty()) {
+			swap(ans[i], ans.back());
+			ans.pop_back();
+		}
+	}
+
+	return ans;
 }
 
 //helpers
+
+bool Dictionary::getAvailableWords(Word& w) {
+	string file = "DataSet\\" + activeDataSet + "\\deletedWords.txt";
+
+	ifstream fin;
+	fin.open(file);
+
+	string line;
+	while (getline(fin, line)) {
+		int i = 0;
+		string comp;
+		while (line[i] != '\t') {
+			comp.push_back(line[i]);
+			++i;
+		}
+		++i;
+
+		//match
+		if (comp == w.getWord()) {
+			char check = line[i];
+			if (check == '*') {
+				w.clear();
+				break;
+			}
+
+			string def = line.substr(i);
+
+			w.removeDefinition(def);
+		}
+	}
+
+	fin.close();
+
+	return true;
+}
 
 vector<string> Dictionary::transformSentence(string& input) {
 	string intermediate;
@@ -207,6 +264,8 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 
 	string file; //load using this one
 
+	string file2 = "DataSet\\" + activeDataSet + "\\addedWords.txt";
+
 	//crucial
 	if (!word.empty()) {
 		file = mapStringToFile(word);
@@ -214,7 +273,7 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 	
 
 	if (realLength == 1 && myTrie.empty()) {
-		myTrie.loadData(file,activeDataSet);
+		myTrie.loadData(file,file2,activeDataSet);
 		wxLogStatus("Loading data...");
 	}
 	else if (realLength == 0) {
