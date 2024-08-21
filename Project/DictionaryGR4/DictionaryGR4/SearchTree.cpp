@@ -161,6 +161,16 @@ void Trie::removeWord(string s) {
     deleteWordRecursive(root, s, 0);
 }
 
+void Trie::saveToFile(string& file) {
+    ofstream fout;
+
+    fout.open(file);
+
+    vector<int> cps;
+    traverseWrite(root, fout, cps);
+    fout.close();
+}
+
 //get definitions of a string s
 vector<Definition> Trie::getDefinitions(string s) {
     vector<Definition> empty;
@@ -224,36 +234,42 @@ Word* Trie::getWordPointer(string s)
     return ans;
 }
 
-Word* Trie::getRandomWord(string& wordText, string activeDataset) {
-    int n = -1;
-    if (activeDataset == "Eng-Eng" or activeDataset == "Eng-Vie")
-        n = 39;
-    else if (activeDataset == "Vie-Eng")
-        n = 106;
-
-    wordText = "";
-    Node* cur = root;
-
-    while (true) {
-        if (!cur->hasChild()) {
-            cur = root;
-            wordText = "";
-        }
-
-        int t = rand() % (n + 1);
-        int iChild = (t < n) ? t : 106;
-        if (cur->child[iChild]) {
-            cur = cur->child[iChild];
-            wordText.push_back(indexToCodePoint(iChild));
-            if (cur->exist) {
-                bool take = rand() % 2;
-                if (take) {
-                    return cur->ptrToEmptyWord;
-                }
-            }
-        }
-    }
-}
+//Word* Trie::getRandomWord(string& wordText, string activeDataset) {
+//    int n = -1;
+//    string fileName;
+//    if (activeDataset == "Eng-Eng" or activeDataset == "Eng-Vie") {
+//        n = 39;
+//        if (activeDataset == "Eng-Eng")
+//            fileName = char(rand() % 28 + 1 + 48);
+//        //else
+//            
+//    }
+//    else if (activeDataset == "Vie-Eng")
+//        n = 106;
+//
+//    wordText = "";
+//    Node* cur = root;
+//
+//    while (true) {
+//        if (!cur->hasChild()) {
+//            cur = root;
+//            wordText = "";
+//        }
+//
+//        int t = rand() % (n + 1);
+//        int iChild = (t < n) ? t : 106;
+//        if (cur->child[iChild]) {
+//            cur = cur->child[iChild];
+//            wordText.push_back(indexToCodePoint(iChild));
+//            if (cur->exist) {
+//                bool take = rand() % 2;
+//                if (take) {
+//                    return cur->ptrToEmptyWord;
+//                }
+//            }
+//        }
+//    }
+//}
 
 vector<string> Trie::getStringDefinitions(string s) {
     vector<string> empty;
@@ -304,6 +320,34 @@ void Trie::helperGetWordsPrefix(vector<int>& cp, Node* cur, vector<Word>& ans, b
         
         helperGetWordsPrefix(cp, cur->child[i], ans, done, limit);
         if (yes && !cp.empty()) cp.pop_back();
+    }
+}
+
+void Trie::traverseWrite(Node*& cur, ofstream& fout, vector<int>& cps) {
+    if (!cur) return;
+    
+    for (int i = 0; i < 107; ++i) {
+        cps.push_back(indexToCodePoint(i));
+        traverseWrite(cur->child[i], fout, cps);
+
+        if (cur->child[i] && cur->child[i]->exist != 0) {
+            u16string str;
+            for (auto& c : cps) {
+                str += (char16_t)c;
+            }
+
+            string s;
+            utf8::utf16to8(str.begin(), str.end(), back_inserter(s));
+
+            for (auto& def : cur->child[i]->emptyWord.getDefinitions()) {
+                string d = def.getStringDefinition();
+                fout << s << '\t' << d << '\n';
+            }
+        }
+        cps.pop_back();
+        
+
+        //if (cur->child[i]) cps.pop_back();
     }
 }
 
@@ -371,43 +415,12 @@ int Trie::getSize() {
 }
 
 bool Trie::loadData(string file, string dataset) {
-    //string s;
-
-    //key = tolower(key);
-    //int num = codePointToIndex((int)key);
-
-
-    ////no character begins with numbers, spaces or special chars
-    //if (!(num == 1 || num == 2 || (13 <= num && num <= 38))) return false;
-
-
-    //if (num == 1) s = data + "\\" + dataset + "\\1.txt";
-    //else if (num == 2) s = data + "\\" + dataset + "\\2.txt";
-    //else {
-    //    if (dataset == "Vie-Eng") num -= 2;
-    //    num -= 10;
-    //    if (key == 'x') num = 23;
-    //    if (key == 'y') num = 24;
-    //    if (key == 'z') num = 25;
-    //    string idx = to_string(num);
-    //    
-
-
-    //    s = data + "\\" + dataset + "\\" + idx + ".txt";
-
-    //   
-    //}
-    //cout << "Loading file: " << s << '\n';
-
-    string s;
-
-    s = "DataSet\\" + dataset + "\\" + file + ".txt";
-
     ifstream fin;
-    fin.open(s);
+    fin.open(file);
     if (fin.is_open()) {
         string line;
         while (getline(fin, line)) {
+            if (line.empty()) continue;
             string s, t;
             int i = 0;
             while (line[i] != '\t') {
@@ -429,6 +442,24 @@ bool Trie::loadData(string file, string dataset) {
 }
 
 
+void WordFinder::addWord(string s, string def) {
+    slots[size + numWordsAdded].setWord(s, def);
+    //remember to sort the subdef
+
+    string sortedDef = transformSentence(def);
+
+    stringstream iss(sortedDef);
+    string subdef;
+
+    //add the subdefs
+    while (iss >> subdef) addSubDef(subdef, size + numWordsAdded);
+
+    //sort for the sake of finding
+    slots[size + numWordsAdded].arrange();
+
+    ++numWordsAdded;
+}
+
 void WordFinder::addSubDef(string subdef, int order) {
     slots[order].addSubDef(subdef);
 }
@@ -447,6 +478,7 @@ void WordFinder::load(string dataset) {
 
     string line; //1 line = 1 bucket
     while (getline(fin, line)) {
+        if (line.empty()) continue;
         string s;
         int i = 0;
         while (line[i] != '\t') {
@@ -513,6 +545,28 @@ void WordFinder::unload() {
     }
 }
 
+//save to sorted data.txt
+void WordFinder::saveToFile(string& file) {
+    ofstream fout;
+    fout.open(file);
+
+    if (!fout.is_open()) {
+        fout.close();
+        return;
+    }
+
+    for (int i = 0; i < size; ++i) {
+        fout << slots[i].word.getWord() << '\t';
+        for (int j = 0; j < (int)slots[i].subdef.size(); ++j) {
+            fout << slots[i].subdef[j];
+            if (j + 1 != (int)slots[i].subdef.size()) fout << ' ';
+        }
+        if (i != size - 1) fout << '\n';
+    }
+
+    fout.close();
+}
+
 Word WordFinder::searchWord(string text) {
     int left = 0, right = size - 1;
 
@@ -523,6 +577,7 @@ Word WordFinder::searchWord(string text) {
 
     u16string wxtest = tou16(text);
 
+    //bin search for left most word matches text
     while (left <= right) {
         int mid = left + (right - left) / 2;
         string cur = slots[mid].word.getWord();
@@ -533,7 +588,7 @@ Word WordFinder::searchWord(string text) {
             j = mid;
             right = mid - 1;
         }
-        else if (compare(midstr,wxtest,alphabet) == 0) {
+        else if (compare(midstr,wxtest) == 0) {
             left = mid + 1;
         }
         else {
@@ -541,17 +596,31 @@ Word WordFinder::searchWord(string text) {
         }
     }
 
-    if (j == -1) return ans;
+    if (j != -1) { //move up to find same word, different def
+        for (int i = j; i < size; ++i) {
+            if (slots[i].word.getWord() != text) break;
 
-    for (int i = j; i < size; ++i) {
-        if (slots[i].word.getWord() != text) break;
+            if (!yes) {
+                ans.setWord(text);
+                yes = true;
+            }
 
-        if (!yes) {
-            ans.setWord(text);
-            yes = true;
+            ans.addDefinition(slots[i].word.getDefinitions().back());
         }
+    }
 
-        ans.addDefinition(slots[i].word.getDefinitions().back());
+
+    //find possibly user-added word
+    for (int i = size + numWordsAdded - 1; i >= size; --i) {
+        string cur = slots[i].word.getWord();
+        u16string u16cur = tou16(cur);
+        if (u16cur == wxtest) {
+            if (!yes) {
+                ans.setWord(text);
+                yes = true;
+            }
+            ans.addDefinition(slots[i].word.getDefinitions().back());
+        }
     }
 
     return ans;
@@ -561,8 +630,8 @@ vector<Word> WordFinder::searchDefinitionsToWord(vector<string>& subkey, int lim
     vector<Word> ans;
 
 
-    //loop through "size" slots
-    for (int i = 0; i < size; ++i) {
+    //loop through "size+numWordsAdded" slots
+    for (int i = 0; i < size+numWordsAdded; ++i) {
 
         bool checkAns = true;
 
@@ -587,6 +656,45 @@ vector<Word> WordFinder::searchDefinitionsToWord(vector<string>& subkey, int lim
 
 //helpers
 
+bool WordFinder::isUnwantedPunctuation(char c) {
+    return c == '.' || c == ',' || c == ';' || c == '(' || c == ')';
+}
+
+// Helper function to transform a single character
+char WordFinder::transformChar(char c) {
+    if (isUnwantedPunctuation(c)) {
+        return ' '; // Replace unwanted punctuation with space
+    }
+    else {
+        return std::tolower(c);
+    }
+}
+
+std::string WordFinder::transformSentence(std::string& sentence) {
+    std::string result;
+    result.reserve(sentence.size());
+
+    // Convert to lowercase and remove unwanted punctuation
+    for (char c : sentence) {
+        result.push_back(transformChar(c));
+    }
+
+    // Remove redundant spaces
+    std::istringstream iss(result);
+    std::string word;
+    result.clear();
+    bool firstWord = true;
+    while (iss >> word) {
+        if (!firstWord) {
+            result += " ";
+        }
+        result += word;
+        firstWord = false;
+    }
+
+    return result;
+}
+
 u16string WordFinder::tou16(string& s) {
     auto it = s.begin();
     u16string u16;
@@ -598,7 +706,7 @@ u16string WordFinder::tou16(string& s) {
     return u16;
 }
 
-int WordFinder::getIndex(vector<char16_t> alphabet, char16_t c) {
+int WordFinder::getIndex(char16_t c) {
     auto iterator = find(alphabet.begin(), alphabet.end(), c);
     if (iterator != alphabet.end())
         return iterator - alphabet.begin();
@@ -606,14 +714,32 @@ int WordFinder::getIndex(vector<char16_t> alphabet, char16_t c) {
         return -1;
 }
 
-bool WordFinder::compare(u16string s1, u16string s2, vector<char16_t> alphabet) {
+//true if s1 > s2, false otherwise
+bool WordFinder::compare(u16string& s1, u16string& s2) {
     for (int i = 0; i <= min(s1.length(), s2.length()); ++i) {
-        int idx1 = getIndex(alphabet, s1[i]);
+        int idx1 = getIndex(s1[i]);
 
         //if (idx1 == 0)
         //    return 0;
 
-        int idx2 = getIndex(alphabet, s2[i]);
+        int idx2 = getIndex(s2[i]);
+        if (idx1 < idx2)
+            return 0;
+        if (idx1 > idx2)
+            return 1;
+    }
+    return 0;
+}
+
+//true if s1 > s2, false otherwise
+bool WordFinder::compare(string& s1, string& s2) {
+    for (int i = 0; i <= min(s1.length(), s2.length()); ++i) {
+        int idx1 = getIndex((char16_t)s1[i]);
+
+        //if (idx1 == 0)
+        //    return 0;
+
+        int idx2 = getIndex(s2[i]);
         if (idx1 < idx2)
             return 0;
         if (idx1 > idx2)

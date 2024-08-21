@@ -37,7 +37,10 @@ private:
 public:
     Trie() : size(0) { root = new Node(); };
 
-    ~Trie() { deleteHelperAll(root); }
+    ~Trie() { 
+
+        deleteHelperAll(root); 
+    }
 
     //mapping a character to a child[i]
 
@@ -66,6 +69,8 @@ public:
 
     //remove a word from Trie
     void removeWord(string s);
+
+    void saveToFile(string& file);
 
     //get definitions of a string s
     vector<Definition> getDefinitions(string s);
@@ -97,6 +102,7 @@ public:
 private:
     //helpers
 
+    void traverseWrite(Node*& cur, ofstream& fout, vector<int>& cps);
     void deleteHelperAll(Node*& pRoot);
     bool deleteWordRecursive(Node* p, string& s, int i);
     void helperGetWordsPrefix(vector<int>& cp, Node* cur, vector<Word>& ans, bool& done, int& limit);
@@ -138,7 +144,8 @@ struct Bucket {
 class WordFinder {
 private:
 	Bucket* slots;
-	int size = 0;    
+	int size = 0;
+    int numWordsAdded = 0;
 public:
     vector<char16_t> alphabet = { char16_t(39), ',', '-', ' ', 'a', L'á', L'à', L'ả', L'ã', L'ạ', L'ă', L'ắ', L'ằ', L'ẳ', L'ẵ', L'ặ',
                         L'â', L'ấ', L'ầ', L'ẩ', L'ẫ', L'ậ', 'b', 'c', 'd', L'đ', L'e', L'é', L'è', L'ẻ', L'ẽ', L'ẹ',
@@ -153,6 +160,7 @@ public:
 		delete[] slots;
 	}
 
+    void addWord(string s, string def);
     
 	void addSubDef(string subdef, int order);
 
@@ -160,58 +168,33 @@ public:
 
     void unload();
 
+    void saveToFile(string& file);
+
     Word searchWord(string text);
 
     vector<Word> searchDefinitionsToWord(vector<string>& subkey, int limit);
 
     //helpers
 
+
+    bool isUnwantedPunctuation(char c);
+
+    // Helper function to transform a single character
+    char transformChar(char c);
+
+    std::string transformSentence(std::string& sentence);
+
     u16string tou16(string& s);
 
-    int getIndex(vector<char16_t> alphabet, char16_t c);
+    int getIndex(char16_t c);
 
-    bool compare(u16string s1, u16string s2, vector<char16_t> alphabet);
-        
+    //true if s1 > s2, false otherwise
+    bool compare(u16string& s1, u16string& s2);
+    
+    //true if s1 > s2, false otherwise
+    bool compare(string& s1, string& s2);
 };
-//     bool isUnwantedPunctuation(char c) {
-//     return c == '.' || c == ',' || c == ';' || c == '(' || c == ')';
-// }
-//
-// // Helper function to transform a single character
-// char transformChar(char c) {
-//     if (isUnwantedPunctuation(c)) {
-//         return ' '; // Replace unwanted punctuation with space
-//     }
-//     else {
-//         return std::tolower(c);
-//     }
-// }
-//
-// std::string transformSentence(std::string& sentence) {
-//    std::string result;
-//    result.reserve(sentence.size());
-//
-//    // Convert to lowercase and remove unwanted punctuation
-//    for (char c : sentence) {
-//        result.push_back(transformChar(c));
-//    }
-//
-//    // Remove redundant spaces
-//    std::istringstream iss(result);
-//    std::string word;
-//    result.clear();
-//    bool firstWord = true;
-//    while (iss >> word) {
-//        if (!firstWord) {
-//            result += " ";
-//        }
-//        result += word;
-//        firstWord = false;
-//    }
-//
-//    return result;
-//}
-//
+
 // void loadThenWriteVieEng() {
 //     int curbucket = 0;
 //     for (int file = 1; file <= 28; ++file) {

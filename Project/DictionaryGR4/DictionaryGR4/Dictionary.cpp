@@ -46,9 +46,9 @@ Word* Dictionary::getWordPtr(string word) {
 	return myTrie.getWordPointer(word);
 }
 
-Word* Dictionary::getRandomWord(string& wordText, string activeDataset) {
-	return myTrie.getRandomWord(wordText, activeDataset);
-}
+//Word* Dictionary::getRandomWord(string& wordText, string activeDataset) {
+//	string dir;
+//}
 
 //return definitions of keyword
 vector<Definition> Dictionary::searchDefinitions(string word) {
@@ -109,6 +109,76 @@ vector<string> Dictionary::transformSentence(string& input) {
 	return words;
 }
 
+string Dictionary::mapStringToFile(string word) {
+	string file; string temp;
+
+	auto it = word.begin();
+	uint32_t codepoint = utf8::next(it, word.end());
+
+
+	int num = -1;
+	char16_t c = (char16_t)codepoint;
+
+	//handling the char
+
+	if (codepoint == 39) {
+		num = 1; //1.txt = '
+	}
+	if (codepoint == 45) {
+		num = 2; //2.txt = "-"
+	}
+	if (97 <= codepoint && codepoint <= 122) {
+		//eng chars
+		num = myTrie.codePointToIndex(codepoint) - 10;
+		if (activeDataSet == "Vie-Eng") {
+			num -= 2;
+			if (c == 'z') num = 25;
+			if (c == 'y') num = 24;
+			if (c == 'x') num = 23;
+		}
+	}
+	int tmp = myTrie.codePointToIndex(codepoint);
+	if (39 <= tmp && tmp <= 105) {
+		//vie chars
+
+		int idx = tool.getIndex(c);
+		if (idx < tool.getIndex('b')) {
+			//variations of 'a'
+			num = 1;
+		}
+		else if (idx < tool.getIndex('e')) {
+			// variations of 'd'
+			num = 4;
+		}
+		else if (idx < tool.getIndex('f')) {
+			//variations of 'e'
+			num = 5;
+		}
+		else if (idx < tool.getIndex('j')) {
+			//variations of 'i'
+			num = 9;
+		}
+		else if (idx < tool.getIndex('p')) {
+			//variations of 'o'
+			num = 15;
+		}
+		else if (idx < tool.getIndex('v')) {
+			//variations of 'u'
+			num = 21;
+		}
+		else {
+			//variations of 'y'
+			num = 24;
+		}
+
+	}
+    temp = to_string(num);
+
+	file = "DataSet\\" + activeDataSet + "\\" + temp + ".txt";
+
+	return file;
+}
+
 void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 	//format the word
 	string word;
@@ -139,68 +209,7 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 
 	//crucial
 	if (!word.empty()) {
-
-		auto it = word.begin();
-		uint32_t codepoint = utf8::next(it, word.end());
-
-		
-		int num = -1;
-		char16_t c = (char16_t)codepoint;
-
-		//handling the char
-
-		if (codepoint == 39) {
-			num = 1; //1.txt = '
-		}
-		if (codepoint == 45) {
-			num = 2; //2.txt = "-"
-		}
-		if (97 <= codepoint && codepoint <= 122) {
-			//eng chars
-			num = myTrie.codePointToIndex(codepoint) - 10;
-			if (activeDataSet == "Vie-Eng") {
-				num -= 2;
-				if (c == 'z') num = 25;
-				if (c == 'y') num = 24;
-				if (c == 'x') num = 23;
-			}
-		}
-		int tmp = myTrie.codePointToIndex(codepoint);
-		if (39 <= tmp && tmp <= 105) {
-			//vie chars
-
-			int idx = tool.getIndex(tool.alphabet, c);
-			if (idx < tool.getIndex(tool.alphabet, 'b')) {
-				//variations of 'a'
-				num = 1;
-			}
-			else if (idx < tool.getIndex(tool.alphabet, 'e')) {
-				// variations of 'd'
-				num = 4;
-			}
-			else if (idx < tool.getIndex(tool.alphabet, 'f')) {
-				//variations of 'e'
-				num = 5;
-			}
-			else if (idx < tool.getIndex(tool.alphabet, 'j')) {
-				//variations of 'i'
-				num = 9;
-			}
-			else if (idx < tool.getIndex(tool.alphabet, 'p')) {
-				//variations of 'o'
-				num = 15;
-			}
-			else if (idx < tool.getIndex(tool.alphabet, 'v')) {
-				//variations of 'u'
-				num = 21;
-			}
-			else {
-				//variations of 'y'
-				num = 24;
-			}
-
-		}
-		file = to_string(num);
+		file = mapStringToFile(word);
 	}
 	
 
@@ -209,7 +218,9 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 		wxLogStatus("Loading data...");
 	}
 	else if (realLength == 0) {
-		if (!myTrie.empty()) myTrie.clear();
+		if (!myTrie.empty()) {
+			myTrie.clear();
+		}
 		wxLogStatus("Clearing Search Tree...");
 	}
 	else {
