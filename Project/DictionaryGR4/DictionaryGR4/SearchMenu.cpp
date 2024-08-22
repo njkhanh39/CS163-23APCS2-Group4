@@ -114,7 +114,9 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	suggestBar->Bind(wxEVT_LISTBOX, [this, dict](wxCommandEvent& evt) {
 		OnViewWord(evt, dict);
 	});
-	//rd_button->Bind(wxEVT_BUTTON, &SearchMenu::OnRandomClicked, this);
+	rd_button->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+		OnRandomClicked(evt, dict);
+	});
 
 	wxProgressDialog progressDialog("Please Wait", "Performing a long task...", 100, this,
 		wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
@@ -187,7 +189,7 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt, Dictionary* dict) {
 
 		Word* ptr = dict->getWordPtr(key);
 		wordView->setWord(ptr);
-		wordView->setActiveDataset(datasetCbb->GetStringSelection().ToStdString());
+		wordView->setActiveDataset(dict->getActiveDataset());
 	}
 }
 
@@ -215,7 +217,7 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt, Dictionary* dict) {
 
 		Word* ptr = dict->getWordPtr(key);
 		wordView->setWord(ptr);
-		wordView->setActiveDataset(datasetCbb->GetStringSelection().ToStdString());
+		wordView->setActiveDataset(dict->getActiveDataset());
 
 		//avoiding overlapping panels
 		//wordView->Enable();
@@ -327,7 +329,7 @@ void SearchMenu::OnSearchingByWord(wxCommandEvent& evt, Dictionary* dict) {
 }
 
 void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt, Dictionary* dict) {
-	string curDataset = datasetCbb->GetStringSelection().ToStdString();
+	string curDataset = dict->getActiveDataset();
 
 	wxMessageDialog* ask = new wxMessageDialog(this,
 		"Are you sure to reset the dataset \"" + curDataset + "\"?",
@@ -339,14 +341,12 @@ void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt, Dictionary* dict) {
 }
 
 void SearchMenu::OnRandomClicked(wxCommandEvent& evt, Dictionary* dict) {
-	string activeDataset = datasetCbb->GetStringSelection().ToStdString();
-
 	string wordText;
-	Word word = dict.getRandomWord(wordText);
+	Word word = dict->getRandomWord(wordText);
 
 	wordView->processWord(word);
 
-	Word * ptr = dict.getWordPtr(word.getWord());
+	Word* ptr = dict->getWordPtr(word.getWord());
 	wordView->setWord(ptr);
-	wordView->setActiveDataset(activeDataset);
+	wordView->setActiveDataset(dict->getActiveDataset());
 }

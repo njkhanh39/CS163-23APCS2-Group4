@@ -57,36 +57,21 @@ Word* Dictionary::getWordPtr(string word) {
 	return myTrie.getWordPointer(word);
 }
 
+std::mt19937 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+int RandInt(int l, int r)
+{
+	return l + rng() % (r - l + 1);
+}
+
 Word Dictionary::getRandomWord(string& wordText) {
-	//string dir, temp;
-	//if (dataset == "Eng-Eng")
-	//	temp = to_string(rand() % 28 + 1);
-
-	//else if (dataset == "Eng-Vie") {
-	//	int t = rand() % 29 + 1;
-	//	if (t == 29)
-	//		temp = "number";
-	//	else
-	//		temp = to_string(t);
-	//}
-
-	//else if (dataset == "Vie-Eng")
-	//	temp = to_string(rand() % 25 + 1);
-
-	//dir = "DataSet\\" + dataset + "\\" + temp + ".txt";
-
-	//myTrie.loadData(dir, dataset);
-
-	//return myTrie.getRandomWord(wordText, dataset, temp);
-
 	srand(time(NULL));
 	string text;
 	while (text.empty()) {
-		int r = rand() % 200000;
-		text = tool.getWord(r).getWord();
+		int r = RandInt(0, 200000);
+		text = activeSearcher->getWord(r).getWord();
 	}
 
-	return tool.searchWord(text);
+	return activeSearcher->searchWord(text);
 }
 
 //return definitions of keyword
@@ -196,6 +181,10 @@ bool Dictionary::getAvailableWords(Word& w) {
 	if (w.getNumberOfDefinitions() == 0) w.clear();
 
 	return true;
+}
+
+string Dictionary::getActiveDataset() {
+	return activeDataSet;
 }
 
 vector<string> Dictionary::transformSentence(string& input) {

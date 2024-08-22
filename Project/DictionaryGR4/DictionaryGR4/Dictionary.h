@@ -1,6 +1,8 @@
 #pragma once
 
 #include <wx/wx.h>
+#include <chrono>
+#include <random>
 
 #include "SearchTree.h"
 #include "History.h"
@@ -38,6 +40,8 @@ public:
 	//user may delete words, those which are saved in a file, we will ignore these
 	bool getAvailableWords(Word& w);
 
+	string getActiveDataset();
+
 	//get a "Word" object that matches a string
 	Word searchWordMatching(string word);
 
@@ -62,8 +66,6 @@ public:
 
 
 
-
-	void resetDictionary();
 	void addToFavourite();
 
 	History getHistory();
