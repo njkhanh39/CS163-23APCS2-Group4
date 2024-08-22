@@ -25,6 +25,9 @@ public:
 	Dictionary() {
 		activeSearcher = &toolEngEng;
 	}
+	~Dictionary() {
+		//saveToFile();
+	}
 
 	//"Eng-Eng", "Eng-Vie", "Vie-Eng"
 	bool chooseLanguage(string t);
@@ -36,6 +39,9 @@ public:
 	void runSearchDefinitionEngine();
 
 	void turnOffSearchDefinitionEngine();
+
+	//save changed features. Automatically call when ending program
+	void saveToFile();
 
 	//user may delete words, those which are saved in a file, we will ignore these
 	bool getAvailableWords(Word& w);
@@ -63,24 +69,20 @@ public:
 
 
 
-
-
-
 	void addToFavourite();
 
 	History getHistory();
 
-	//setters & adders
-
 	void editDefinition(string text, string def, int index);
 
-	void addNewWord(Word& newWord) {
+	void deleteWord(Word& word);
 
-	}
+	int	deleteWordOneDef(string& text, string& def);
 
-	void addNewWordOneDef(string& text, string& def) {
-		
-	}
+	void addNewWord(Word& newWord);
+
+	//return true if add word successfully
+	bool addNewWordOneDef(string& text, string& def);
 
 	//helpers
 
@@ -90,6 +92,14 @@ public:
 
 	string mapStringToFile(string word);
 
+	void sortVectorString(vector<string>& vec) {
+		int n = vec.size();
+		mergeSort(vec, 0, n - 1, n);
+	}
+
+	void merge(vector<string>& a, int l, int r, int mid);
+
+	void mergeSort(vector<string>& a, int l, int r, int n);
 
 	//vector<Word> helperDefToWordENGENG(string keyword, int limit){
 	//	//format word

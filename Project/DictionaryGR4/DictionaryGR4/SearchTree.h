@@ -161,15 +161,15 @@ public:
 		delete[] slots;
 	}
 
-    void addWord(string s, string def);
+    void addNewWord(string s, string def);
     
 	void addSubDef(string subdef, int order);
 
     void load(string dataset);
 
     void unload();
-
-    void saveToFile(string& file);
+    //save to sorteddata.txt & addedSorted, do this when ending program
+    void saveToFile(string dataset);
 
     Word searchWord(string text);
 
