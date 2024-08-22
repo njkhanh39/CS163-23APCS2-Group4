@@ -32,7 +32,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 
 	datasetCbb->SetFont(fontCB);
 	datasetCbb->SetSize(154, 60);
 
-	partCbb = new wxComboBox(this, wxID_ANY, "", wxPoint(1007, 161), wxSize(154, 60), wxCB_READONLY);
+	partCbb = new wxComboBox(this, wxID_ANY, "", wxPoint(1007, 161), wxSize(154, 60));
 
 	defText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(110, 300), wxSize(700, 300));
 		
