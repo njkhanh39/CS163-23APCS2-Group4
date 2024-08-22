@@ -375,7 +375,12 @@ public:
 	}
 
 	void OnAddFavourite(wxCommandEvent& evt) {
-		
+		ofstream out;
+		out.open("Favourite\\" + activeDataset + "\\favList.txt", ios::app);
+		if (!out.is_open()) return;
+		out << getShowingWord().getWord()  << endl;
+		out.close();
+		getShowingWord().markFavourite();
 	}
 
 };

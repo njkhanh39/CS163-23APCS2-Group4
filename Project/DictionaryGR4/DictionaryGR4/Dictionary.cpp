@@ -223,7 +223,7 @@ string Dictionary::mapStringToFile(string word) {
 	//handling the char
 
 	if (codepoint == 39) {
-		num = 1; //1.txt = '
+		num = 1; //1.txt = ' 
 	}
 	if (codepoint == 45) {
 		num = 2; //2.txt = "-"
