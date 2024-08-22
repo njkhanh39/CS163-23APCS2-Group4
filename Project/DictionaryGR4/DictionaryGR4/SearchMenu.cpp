@@ -26,7 +26,11 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	searchBar = new wxTextCtrl(this, wxID_ANY, "", wxPoint(234, 41), wxSize(776, 60));
 	searchBar->SetFont(fontCB);
 
-	rd_button = new wxButton(this, wxID_ANY, "Random", wxPoint(1097, 41), wxSize(116, 60), wxBORDER_NONE);
+	rd_button = new wxButton(this, wxID_ANY, "RANDOM", wxPoint(1097, 41), wxSize(116, 60), wxBORDER_NONE);
+	auto fnt = rd_button->GetFont();
+	fnt.SetPointSize(16);
+
+	rd_button->SetFont(fnt);
 	rd_button->SetBackgroundColour(purple);
 	rd_button->SetForegroundColour(white);
 
@@ -91,11 +95,13 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	suggestBar = new wxListBox(this, wxID_ANY, wxPoint(357, 100), wxSize(450, 0));
 	suggestBar->SetFont(font);
 
-	deleteword = new wxButton(this, wxID_ANY, "Delete Word", wxPoint(1042, 610), wxSize(172, 60));
+	deleteword = new wxButton(this, wxID_ANY, "DELETE WORD", wxPoint(1042, 610), wxSize(172, 60));
+	deleteword->SetFont(fnt);
 	deleteword->SetBackgroundColour(red);
 	deleteword->SetForegroundColour(white);
 
 	resetbutton = new wxButton(this, wxID_ANY, "RESET", wxPoint(53, 495), wxSize(154, 98)/*, wxBORDER_NONE*/);
+	resetbutton->SetFont(fnt);
 	resetbutton->SetBackgroundColour(red);
 	resetbutton->SetForegroundColour(white);
 
@@ -128,12 +134,12 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 		OnResetButtonClicked(evt, dict);
 	});
 
-	wxProgressDialog progressDialog("Please Wait", "Performing a long task...", 100, this,
+	/*wxProgressDialog progressDialog("Please Wait", "Performing a long task...", 100, this,
 		wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
 
 	dict->runSearchDefinitionEngine();
 
-	wxLogMessage("Task completed!");
+	wxLogMessage("Task completed!");*/
 }
 
 SearchMenu::~SearchMenu() {
