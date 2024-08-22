@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <fstream>
+#include <ctime>
 #include "Word.h"
 
 
@@ -80,7 +81,7 @@ public:
 
     Word* getWordPointer(string s);
 
-    Word* getRandomWord(string& wordText, string activeDataset);
+    Word* getRandomWord(string& wordText, string activeDataset, string filename);
 
     //get string definitions as strings 
     vector<string> getStringDefinitions(string s);
@@ -171,6 +172,8 @@ public:
     void saveToFile(string& file);
 
     Word searchWord(string text);
+
+    Word getWord(int index);
 
     vector<Word> searchDefinitionsToWord(vector<string>& subkey, int limit);
 

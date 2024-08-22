@@ -37,7 +37,7 @@ public:
 
 	Word* getWordPtr(string word);
 
-	Word* getRandomWord(string& wordText, string activeDataset);
+	Word getRandomWord(string& wordText);
 
 	//return definitions of keyword
 	vector<Definition> searchDefinitions(string word);

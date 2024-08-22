@@ -320,13 +320,11 @@ void SearchMenu::OnRandomClicked(wxCommandEvent& evt) {
 	string activeDataset = datasetCbb->GetStringSelection().ToStdString();
 
 	string wordText;
-	Word* onlyDefWord = dict.getRandomWord(wordText, activeDataset);
+	Word word = dict.getRandomWord(wordText);
 
-	Word withTextWord = *onlyDefWord;
-	withTextWord.setWord(wordText);
+	wordView->processWord(word);
 
-	wordView->processWord(withTextWord);
-
-	wordView->setWord(onlyDefWord);
+	Word * ptr = dict.getWordPtr(word.getWord());
+	wordView->setWord(ptr);
 	wordView->setActiveDataset(activeDataset);
 }

@@ -234,7 +234,7 @@ Word* Trie::getWordPointer(string s)
     return ans;
 }
 
-Word* Trie::getRandomWord(string& wordText, string activeDataset) {
+Word* Trie::getRandomWord(string& wordText, string activeDataset, string filename) {
     int n = -1;
 
     if (activeDataset == "Eng-Eng" or activeDataset == "Eng-Vie")
@@ -244,25 +244,28 @@ Word* Trie::getRandomWord(string& wordText, string activeDataset) {
 
     wordText = "";
     Node* cur = root;
+    int cnt = 0;
 
     while (true) {
         if (!cur->hasChild()) {
-            cur = root;
-            wordText = "";
+            //cur = root;
+            //wordText = "";
+            //cnt = 0;
+
+            return cur->ptrToEmptyWord;
         }
 
         // iChild = 0 -> n or iChild = 106
+        srand(time(0));
         int t = rand() % (n + 1);
         int iChild = (t < n) ? t : 106;
 
         if (cur->child[iChild]) {
             cur = cur->child[iChild];
             wordText.push_back(indexToCodePoint(iChild));
-            if (cur->exist) {
-                bool take = rand() % 2;
-                if (take) {
-                    return cur->ptrToEmptyWord;
-                }
+            ++cnt;
+            if (cur->exist and rand() % 15 + 1 < cnt) {
+                return cur->ptrToEmptyWord;
             }
         }
     }
@@ -621,6 +624,10 @@ Word WordFinder::searchWord(string text) {
     }
 
     return ans;
+}
+
+Word WordFinder::getWord(int index) {
+    return slots[index].word;
 }
 
 vector<Word> WordFinder::searchDefinitionsToWord(vector<string>& subkey, int limit) {

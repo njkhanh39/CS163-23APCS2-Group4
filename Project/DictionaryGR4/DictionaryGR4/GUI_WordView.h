@@ -91,6 +91,8 @@ public:
 		cancelEdit->Bind(wxEVT_BUTTON, &WordView::OnCancelEditClicked, this);
 		delDef->Bind(wxEVT_BUTTON, &WordView::OnRemoveDefClicked, this);
 		favDef->Bind(wxEVT_BUTTON, &WordView::OnAddFavourite, this);
+		defText->Bind(wxEVT_KILL_FOCUS, &WordView::OnDefTextKillFocus, this);
+
 		parentWindow = parent;
 	}
 
@@ -227,14 +229,13 @@ public:
 	}
 
 	void OnConfirmEditClicked(wxCommandEvent& evt) {
-		wxString page = pageText->GetLabelText();
-		int curIndex = wxAtoi(page.Left(page.First('/'))) - 1;
+		int curIndex = getCurrentPage();
 
 		wxMessageDialog* ask = new wxMessageDialog(parentWindow,
 			"Are you sure to modify this definition?",
 			"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
 
-		if (ask->ShowModal() == wxID_YES) {
+		if (ask->ShowModal() == wxID_YES and curIndex >= 0) {
 			string newDef = defText->GetValue().ToStdString();
 			defs[curIndex] = newDef;
 			word->modifyDefinition(newDef, curIndex);
@@ -259,6 +260,35 @@ public:
 
 		confirmEdit->Hide();
 		cancelEdit->Hide();
+	}
+
+	void OnDefTextKillFocus(wxFocusEvent& evt) {
+		wxWindow* curFocus = wxWindow::FindFocus();
+
+		if (defText->IsEditable() and curFocus != confirmEdit and curFocus != cancelEdit) {
+			wxMessageDialog* ask = new wxMessageDialog(parentWindow,
+				"Do you want to continue the ongoing definition editing?",
+				"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+
+			if (ask->ShowModal() == wxID_YES) {
+				defText->SetFocus();
+				defText->SetInsertionPointEnd();
+			}
+
+			if (ask->ShowModal() == wxID_NO) {
+				defText->SetEditable(0);
+
+				int curIndex = getCurrentPage();
+
+				if (curIndex < 0)
+					defText->SetLabel(wxString("Definition."));
+				else
+					defText->SetLabel(wxString::FromUTF8(defs[curIndex]));
+
+				confirmEdit->Hide();
+				cancelEdit->Hide();
+			}
+		}
 	}
 
 	void OnRemoveDefClicked(wxCommandEvent& evt) {
