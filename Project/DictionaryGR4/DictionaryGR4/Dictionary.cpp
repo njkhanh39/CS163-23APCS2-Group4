@@ -339,8 +339,6 @@ bool Dictionary::editDefInSpecificFile(string text, string olddef, string newdef
 	ifstream fin;
 	fin.open(dir);
 
-	string prev, after;
-	string word, line;
 
 	if (fin.is_open()) {
 		if (!getline(fin, line))
@@ -387,4 +385,9 @@ void Dictionary::editDefinition(string text, string olddef, string newdef) {
 
 	if (!editDefInSpecificFile(text, olddef, newdef, "DataSet\\" + activeDataSet + "\\addedWords.txt"))
 		editDefInSpecificFile(text, olddef, newdef, dir);
+}
+void Dictionary::addToFavourite(string word) {
+	ofstream out;
+	out.open("Favourite\\" + activeDataSet + "\\favList.txt", ios::app);
+	out << word << endl;
 }

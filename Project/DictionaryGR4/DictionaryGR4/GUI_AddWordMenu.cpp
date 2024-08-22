@@ -2,7 +2,7 @@
 
 using namespace std;
 
-AddWordMenu::AddWordMenu(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
+AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
 
 	//font
 	wxFont font(14, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
@@ -36,24 +36,22 @@ AddWordMenu::AddWordMenu(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDefault
 
 	defText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(110, 300), wxSize(700, 300));
 		
-	submit = new wxButton(this, wxID_ANY, "Submit", wxPoint(1000, 800), wxDefaultSize);
+	submit = new wxButton(this, wxID_ANY, "Submit", wxPoint(1000, 600), wxDefaultSize);
+
+	datasetCbb->Bind(wxEVT_COMBOBOX, [this, dict](wxCommandEvent& evt) {
+		dict->chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
+	});
+
+	submit->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+		string text = (string)wordText->GetValue();
+		string def = (string)defText->GetValue();
+		dict->addNewWordOneDef(text, def);
+	});
 	
-	//back button
-	//back_to_home = new wxButton(titleBar, wxID_ANY, "Home", wxPoint(0, 0), wxSize(100, 50));
-	//back_to_home->SetFont(font);
-
-
-	//sizer
-	//wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-
-	//sizer->Add(titleBar, 1, wxEXPAND | wxLEFT | wxUP | wxRIGHT, 0);
-	//sizer->Add(mainPanel, 5, wxEXPAND | wxALL, 0);
-
-	//this->SetSizerAndFit(sizer);
-
-	//events
-
+	
 }
+
+
 
 AddWordMenu::~AddWordMenu() {
 

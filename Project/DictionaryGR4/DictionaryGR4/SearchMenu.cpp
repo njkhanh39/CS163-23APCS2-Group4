@@ -102,6 +102,12 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 
 	//events
 	
+	deleteword->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+		Word get = wordView->getShowingWord();
+		if (get.empty()) return;
+		dict->deleteWord(get);
+		wordView->SetBackDefault();
+	});
 	
 	suggestBar->Bind(wxEVT_LEFT_DOWN, &SearchMenu::skip, this);
 	button->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
