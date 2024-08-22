@@ -36,8 +36,8 @@ vector<string> Word::getStringDefinitions() {
 	return ans;
 }
 
-bool Word::getFavourite() {
-	return isFavourite;
+void Word::markFavourite() {
+	isFavourite = true;
 }
 
 string Word::getDataset() {

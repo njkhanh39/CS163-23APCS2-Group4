@@ -337,8 +337,11 @@ History Dictionary::getHistory() {
 
 
 
-void Dictionary::addToFavourite(string word) {
+void Dictionary::addToFavourite(Word& word) {
 	ofstream out;
 	out.open("Favourite\\" + activeDataSet + "\\favList.txt", ios::app);
-	out << word << endl;
+	if (!out.is_open()) return;
+	out << word.getWord() << endl;
+	out.close();
+	word.markFavourite();
 }

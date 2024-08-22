@@ -369,7 +369,7 @@ public:
 	}
 
 	void OnAddFavourite(wxCommandEvent& evt) {
-
+		
 	}
 
 };

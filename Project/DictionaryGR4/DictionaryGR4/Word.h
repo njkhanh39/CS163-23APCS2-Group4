@@ -85,7 +85,7 @@ public:
 
 	vector<string> getStringDefinitions();
 
-	bool getFavourite();
+	void markFavourite();
 
 	string getDataset();
 
