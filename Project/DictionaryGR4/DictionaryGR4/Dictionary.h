@@ -73,7 +73,11 @@ public:
 
 	History getHistory();
 
-	void editDefinition(string text, string def, int index);
+	//setters & adders
+
+	bool editDefInSpecificFile(string text, string olddef, string newdef, string dir);
+
+	void editDefinition(string text, string olddef, string newdef);
 
 	void deleteWord(Word& word);
 

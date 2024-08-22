@@ -96,6 +96,7 @@ public:
 			OnRemoveDefClicked(evt, dict);
 		});
 		favDef->Bind(wxEVT_BUTTON, &WordView::OnAddFavourite, this);
+		defText->Bind(wxEVT_SET_FOCUS, &WordView::OnTextFocus, this);
 		defText->Bind(wxEVT_KILL_FOCUS, &WordView::OnDefTextKillFocus, this);
 
 		parentWindow = parent;
@@ -277,9 +278,9 @@ public:
 
 		if (ask->ShowModal() == wxID_YES and curIndex >= 0) {
 			string newDef = defText->GetValue().ToStdString();
+			dict->editDefinition(text->GetLabel().ToStdString(), defs[curIndex], newDef);
 			defs[curIndex] = newDef;
 			word->modifyDefinition(newDef, curIndex);
-			//dict->editDefinition(text->GetLabel().ToStdString(), newDef, curIndex);
 		}
 
 		defText->SetEditable(0);
@@ -302,6 +303,10 @@ public:
 		cancelEdit->Hide();
 	}
 
+	void OnTextFocus(wxFocusEvent& evt) {
+		evt.Skip();
+	}
+
 	void OnDefTextKillFocus(wxFocusEvent& evt) {
 		wxWindow* curFocus = wxWindow::FindFocus();
 
@@ -315,7 +320,7 @@ public:
 				defText->SetInsertionPointEnd();
 			}
 
-			if (ask->ShowModal() == wxID_NO) {
+			else {
 				defText->SetEditable(0);
 
 				int curIndex = getCurrentPage();
@@ -329,6 +334,7 @@ public:
 				cancelEdit->Hide();
 			}
 		}
+		evt.Skip();
 	}
 
 	void OnRemoveDefClicked(wxCommandEvent& evt, Dictionary* dict) {
