@@ -37,12 +37,6 @@ void Dictionary::turnOffSearchDefinitionEngine() {
 	isSearchingDefinition = false;
 }
 
-void Dictionary::saveToFile() {
-	toolEngEng.saveToFile("Eng-Eng");
-	toolEngVie.saveToFile("Eng-Vie");
-	toolVieEng.saveToFile("Vie-Eng");
-}
-
 //get a "Word" object that matches a string
 Word Dictionary::searchWordMatching(string word) {
 	Word w;
@@ -50,12 +44,8 @@ Word Dictionary::searchWordMatching(string word) {
 	for (auto& x : word) x = tolower(x);
 
 	
-	if (!myTrie.empty()) {
-		w = myTrie.getWordMatching(word);
-		if(w.empty()) w = activeSearcher->searchWord(word);
-	}
-	else w = activeSearcher->searchWord(word);
-	 
+	if (w.empty() && isSearchingDefinition) w = activeSearcher->searchWord(word);
+	else w = myTrie.getWordMatching(word);
 	
 	//since some of w's definitions may be deleted by user, we have to check.
 	getAvailableWords(w);
@@ -152,160 +142,6 @@ vector<Word> Dictionary::searchDefToWord(string& keyword, int limit) {
 	}
 
 	return ans;
-}
-void Dictionary::addNewWord(Word& newWord) {
-	string text = newWord.getWord();
-	auto v = newWord.getDefinitions();
-	for (auto& def : v) {
-		string defStr = def.getStringDefinition();
-		addNewWordOneDef(text, defStr);
-	}
-}
-
-bool Dictionary::addNewWordOneDef(string& text, string& def) {
-	//find and delete in deleted.txt
-
-	ifstream fin;
-	vector<string> deletedFile; string line; bool found = false;
-	fin.open("DataSet\\" + activeDataSet + "\\deletedWords.txt");
-
-	while (getline(fin, line)) {
-		string lineText, lineDef;
-		int i = 0;
-		while (line[i] != '\t') {
-			lineText.push_back(line[i]);
-			++i;
-		}
-		++i;
-
-		if (lineText != text) {
-			deletedFile.push_back(line);
-			continue;
-		}
-
-		lineDef = line.substr(i);
-
-		//found the word in deleted.txt
-		if (lineText == text && lineDef == def) {
-			found = true;
-			continue;
-		}
-
-		deletedFile.push_back(line);
-	}
-
-	fin.close();
-
-	if (found == true) { //remove the found line in deletedWords.txt
-		ofstream fout;
-		fout.open("DataSet\\" + activeDataSet + "\\deletedWords.txt");
-
-		for (auto& str : deletedFile) {
-			fout << str << '\n';
-		}
-
-		fout.close();
-
-		return true; //success adding
-	}
-
-	//check if word already existed
-
-	Word match = searchWordMatching(text);
-
-	if (match.findDefinition(def) != -1) {
-		return false; //word already exists
-	}
-
-	//couldnt find word, now we add it to wordfinder
-
-	activeSearcher->addNewWord(text, def);
-
-
-	//append the word to addedwords.txt and addsorted.txt
-
-	ofstream fout;
-
-	fout.open("DataSet\\" + activeDataSet + "\\addedWords.txt", ios::app);
-
-	fout << text << '\t' << def << '\n';
-
-	fout.close();
-
-	vector<string> sortedDef = transformSentence(def);
-
-	//remember to sort
-	sortVectorString(sortedDef);
-
-
-	fout.open("DataSet\\" + activeDataSet + "\\sortedAddedWords.txt", ios::app);
-
-	fout << text << '\t';
-	for (int i = 0; i < (int)sortedDef.size(); ++i) {
-		fout << sortedDef[i];
-		if (i + 1 == (int)sortedDef.size()) {
-			fout << '\n';
-		}
-		else fout << ' ';
-	}
-
-	fout.close();
-
-	return true;
-}
-
-void Dictionary::deleteWord(Word& word) {
-	string text = word.getWord();
-	auto v = word.getDefinitions();
-	for (auto& defs : v) {
-		string def = defs.getStringDefinition();
-		deleteWordOneDef(text, def);
-	}
-}
-
-int	Dictionary::deleteWordOneDef(string& text, string& def) {
-	//check if word exists
-	Word match = searchWordMatching(text);
-	if (match.findDefinition(def) == -1) {
-		return -1; //word does not exist 
-	}
-
-	ifstream fin; bool appear = false;
-	string line;
-
-	//check if it has been deleted already
-	fin.open("DataSet\\" + activeDataSet + "\\deletedWords.txt");
-
-	while (getline(fin, line)) {
-		string lineText, lineDef;
-		int i = 0;
-		while (line[i] != '\t') {
-			lineText.push_back(line[i]);
-			++i;
-		}
-		++i;
-
-		if (lineText != text) continue;
-
-		if (lineDef == def) {
-			fin.close();
-			return 0; //word was deleted before
-		}
-	}
-
-	fin.close();
-
-	//adding it to deleted file
-
-	ofstream fout;
-
-	fout.open("DataSet\\" + activeDataSet + "\\deletedWords.txt", ios::app);
-
-	fout << text << '\t' << def << '\n';
-
-	fout.close();
-
-	return 1; //word deleted successfully
 }
 
 //helpers
@@ -495,87 +331,14 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 	}
 }
 
-void Dictionary::merge(vector<string>& a, int l, int r, int mid) {
-	vector<string> temp(r - l + 1);
-
-	int ptr1 = l, ptr2 = mid + 1, cur = 0;
-
-	while (ptr1 <= mid && ptr2 <= r) {
-		if (a[ptr1] < a[ptr2])
-			temp[cur++] = a[ptr1++];
-		else
-			temp[cur++] = a[ptr2++];
-	}
-
-	while (ptr1 <= mid) temp[cur++] = a[ptr1++];
-	while (ptr2 <= r) temp[cur++] = a[ptr2++];
-
-	for (int i = l, cnt = 0; i <= r; ++i) a[i] = temp[cnt++];
-}
-
-void Dictionary::mergeSort(vector<string>& a, int l, int r, int n) {
-	if (l > r || l == r) return;
-
-	int mid = l + (r - l) / 2;
-
-	mergeSort(a, l, mid, n);
-	mergeSort(a, mid + 1, r, n);
-
-	merge(a, l, r, mid);
-}
-
 History Dictionary::getHistory() {
 	return hist;
 }
 
-<<<<<<< Updated upstream
-void Dictionary::editDefinition(string text, string def, int index) {
-	string dir = mapStringToFile(text);
-	ifstream fin;
-	fin.open(dir);
-
-	string prev, after;
-	string word, line;
-
-	if (fin.is_open()) {
-		getline(fin, line);
-		word = line.substr(0, line.find("\t"));
-		while (word != text) {
-			prev += line + "\n";
-			getline(fin, line);
-			word = line.substr(0, line.find("\t"));
-		}
-		for (int i = 0; i < index; ++i) {
-			prev += line + "\n";
-			getline(fin, line);
-			word = line.substr(0, line.find("\t"));
-		}
-		prev += line.substr(0, line.find(")") + 2);
-
-		string temp;
-		while (getline(fin, temp))
-			after += temp + "\n";
-		fin.close();
-	}
-
-	ofstream fout;
-	fout.open(dir);
-	if (fout.is_open()) {
-		fout << prev << def << "\n" << after;
-		fout.close();
-	}
-}
-=======
-list<string> Dictionary::getFavList() {
-	return favList;
-}
 
 
-void Dictionary::addToFavourite(Word word) {
+void Dictionary::addToFavourite(string word) {
 	ofstream out;
-	out.open("Favourite\\" + word.getDataset() + "\\fav.txt", ios::app);
-	if (!out.is_open()) return;
-	out << word.getWord() << endl;
-	out.close();
+	out.open("Favourite\\" + activeDataSet + "\\favList.txt", ios::app);
+	out << word << endl;
 }
->>>>>>> Stashed changes

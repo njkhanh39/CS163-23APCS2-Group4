@@ -69,7 +69,7 @@ public:
 
 
 
-	void addToFavourite();
+	void addToFavourite(string word);
 
 	History getHistory();
 
