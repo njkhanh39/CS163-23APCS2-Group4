@@ -339,6 +339,7 @@ bool Dictionary::editDefInSpecificFile(string text, string olddef, string newdef
 	ifstream fin;
 	fin.open(dir);
 
+	string word, line, prev, after;
 
 	if (fin.is_open()) {
 		if (!getline(fin, line))
