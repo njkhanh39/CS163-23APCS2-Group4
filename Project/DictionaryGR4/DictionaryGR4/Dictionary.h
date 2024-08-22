@@ -72,9 +72,7 @@ public:
 
 	//setters & adders
 
-	void editDefinition(string text, string def) {
-		
-	}
+	void editDefinition(string text, string def, int index);
 
 	void addNewWord(Word& newWord) {
 

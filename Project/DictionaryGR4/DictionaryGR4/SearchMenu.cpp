@@ -1,7 +1,7 @@
 #include "SearchMenu.h"
 
 using namespace std;
-namespace fs = experimental::filesystem;
+namespace fs = std::experimental::filesystem;
 
 SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10001, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
 	
@@ -84,7 +84,7 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 
 
 	//word view appears first
-	wordView = new WordView(this, wxPoint(234, 133), wxSize(979, 460));
+	wordView = new WordView(this, wxPoint(234, 133), wxSize(979, 460), dict);
 	wordView->SetColor(white);
 
 	//init height = 0
@@ -95,7 +95,7 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	deleteword->SetBackgroundColour(red);
 	deleteword->SetForegroundColour(white);
 
-	resetbutton = new wxButton(this, wxID_ANY, "RESET", wxPoint(53, 495), wxSize(154, 98), wxBORDER_NONE);
+	resetbutton = new wxButton(this, wxID_ANY, "RESET", wxPoint(53, 495), wxSize(154, 98)/*, wxBORDER_NONE*/);
 	resetbutton->SetBackgroundColour(red);
 	resetbutton->SetForegroundColour(white);
 
@@ -116,6 +116,10 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	});
 	rd_button->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		OnRandomClicked(evt, dict);
+	});
+
+	resetbutton->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+		OnResetButtonClicked(evt, dict);
 	});
 
 	wxProgressDialog progressDialog("Please Wait", "Performing a long task...", 100, this,
@@ -336,7 +340,7 @@ void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt, Dictionary* dict) {
 		"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
 
 	if (ask->ShowModal() == wxID_YES) {
-		fs::copy("DataSet - Backup\\" + curDataset, "DataSet\\" + curDataset);
+		fs::copy("DataSet - Backup\\" + curDataset, "DataSet\\" + curDataset, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
 	}
 }
 

@@ -334,3 +334,40 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 History Dictionary::getHistory() {
 	return hist;
 }
+
+void Dictionary::editDefinition(string text, string def, int index) {
+	string dir = mapStringToFile(text);
+	ifstream fin;
+	fin.open(dir);
+
+	string prev, after;
+	string word, line;
+
+	if (fin.is_open()) {
+		getline(fin, line);
+		word = line.substr(0, line.find("\t"));
+		while (word != text) {
+			prev += line + "\n";
+			getline(fin, line);
+			word = line.substr(0, line.find("\t"));
+		}
+		for (int i = 0; i < index; ++i) {
+			prev += line + "\n";
+			getline(fin, line);
+			word = line.substr(0, line.find("\t"));
+		}
+		prev += line.substr(0, line.find(")") + 2);
+
+		string temp;
+		while (getline(fin, temp))
+			after += temp + "\n";
+		fin.close();
+	}
+
+	ofstream fout;
+	fout.open(dir);
+	if (fout.is_open()) {
+		fout << prev << def << "\n" << after;
+		fout.close();
+	}
+}

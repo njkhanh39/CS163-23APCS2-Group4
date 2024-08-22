@@ -29,7 +29,7 @@ public:
 
 	}
 
-	WordView(wxWindow* parent, wxPoint pos, wxSize size) {
+	WordView(wxWindow* parent, wxPoint pos, wxSize size, Dictionary* dict) {
 		wxFont font(12, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 		wxFont largerFont(16, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 		largerFont.MakeBold();
@@ -87,7 +87,9 @@ public:
 		next->Bind(wxEVT_BUTTON, &WordView::showWord, this);
 		back->Bind(wxEVT_BUTTON, &WordView::showWord, this);
 		editDef->Bind(wxEVT_BUTTON, &WordView::OnEditDefClicked, this);
-		confirmEdit->Bind(wxEVT_BUTTON, &WordView::OnConfirmEditClicked, this);
+		confirmEdit->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+			OnConfirmEditClicked(evt, dict);
+		});
 		cancelEdit->Bind(wxEVT_BUTTON, &WordView::OnCancelEditClicked, this);
 		delDef->Bind(wxEVT_BUTTON, &WordView::OnRemoveDefClicked, this);
 		favDef->Bind(wxEVT_BUTTON, &WordView::OnAddFavourite, this);
@@ -228,7 +230,7 @@ public:
 		cancelEdit->Show();
 	}
 
-	void OnConfirmEditClicked(wxCommandEvent& evt) {
+	void OnConfirmEditClicked(wxCommandEvent& evt, Dictionary* dict) {
 		int curIndex = getCurrentPage();
 
 		wxMessageDialog* ask = new wxMessageDialog(parentWindow,
@@ -239,9 +241,8 @@ public:
 			string newDef = defText->GetValue().ToStdString();
 			defs[curIndex] = newDef;
 			word->modifyDefinition(newDef, curIndex);
+			dict->editDefinition(text->GetLabel().ToStdString(), newDef, curIndex);
 		}
-
-		
 
 		defText->SetEditable(0);
 		confirmEdit->Hide();
