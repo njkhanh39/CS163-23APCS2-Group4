@@ -335,8 +335,7 @@ History Dictionary::getHistory() {
 	return hist;
 }
 
-void Dictionary::editDefinition(string text, string def, int index) {
-	string dir = mapStringToFile(text);
+bool Dictionary::editDefInSpecificFile(string text, string olddef, string newdef, string dir) {
 	ifstream fin;
 	fin.open(dir);
 
@@ -344,18 +343,28 @@ void Dictionary::editDefinition(string text, string def, int index) {
 	string word, line;
 
 	if (fin.is_open()) {
-		getline(fin, line);
+		if (!getline(fin, line))
+			return 0;
 		word = line.substr(0, line.find("\t"));
 		while (word != text) {
 			prev += line + "\n";
-			getline(fin, line);
+			if (!getline(fin, line))
+				return 0;
 			word = line.substr(0, line.find("\t"));
 		}
-		for (int i = 0; i < index; ++i) {
+
+		int i = line.find(")") + 2;
+		string curdef = line.substr(i, line.length() - i);
+		while (curdef.compare(olddef)) {
 			prev += line + "\n";
 			getline(fin, line);
 			word = line.substr(0, line.find("\t"));
+			if (word != text)
+				return 0;
+			i = line.find(")") + 2;
+			curdef = line.substr(i, line.length() - i);
 		}
+
 		prev += line.substr(0, line.find(")") + 2);
 
 		string temp;
@@ -367,7 +376,15 @@ void Dictionary::editDefinition(string text, string def, int index) {
 	ofstream fout;
 	fout.open(dir);
 	if (fout.is_open()) {
-		fout << prev << def << "\n" << after;
+		fout << prev << newdef << "\n" << after;
 		fout.close();
+		return 1;
 	}
+}
+
+void Dictionary::editDefinition(string text, string olddef, string newdef) {
+	string dir = mapStringToFile(text);
+
+	if (!editDefInSpecificFile(text, olddef, newdef, "DataSet\\" + activeDataSet + "\\addedWords.txt"))
+		editDefInSpecificFile(text, olddef, newdef, dir);
 }

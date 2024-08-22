@@ -72,7 +72,9 @@ public:
 
 	//setters & adders
 
-	void editDefinition(string text, string def, int index);
+	bool editDefInSpecificFile(string text, string olddef, string newdef, string dir);
+
+	void editDefinition(string text, string olddef, string newdef);
 
 	void addNewWord(Word& newWord) {
 
