@@ -411,7 +411,7 @@ int Trie::getSize() {
     return size;
 }
 
-bool Trie::loadData(string file, string dataset) {
+bool Trie::loadData(string file,string file2, string dataset) {
     ifstream fin;
     fin.open(file);
     if (fin.is_open()) {
@@ -433,7 +433,40 @@ bool Trie::loadData(string file, string dataset) {
             //cout << s << '\n';
         }
     }
-    else return false;
+    else {
+        fin.close();
+        return false;
+    }
+    
+    fin.close();
+
+    //added words by user
+    fin.open(file2);
+    if (fin.is_open()) {
+        string line;
+        while (getline(fin, line)) {
+            if (line.empty()) continue;
+            string s, t;
+            int i = 0;
+            while (line[i] != '\t') {
+                s.push_back(line[i]);
+                ++i;
+            }
+
+            ++i;
+
+            t = line.substr(i, (int)line.length());
+
+            addWord(s, t);
+            //cout << s << '\n';
+        }
+    }
+    else {
+        fin.close();
+        return false;
+    }
+
+    fin.close();
 
     return true;
 }
@@ -506,6 +539,45 @@ void WordFinder::load(string dataset) {
     fin.close();
     size = curbucket;
 
+    //read from user-added file
+
+
+    fin.open("DataSet\\" + dataset + "\\sortedAddedWords.txt");
+    while (getline(fin, line)) {
+        if (line.empty()) continue;
+        string s;
+        int i = 0;
+        while (line[i] != '\t') {
+            s.push_back(line[i]);
+            ++i;
+        }
+
+        ++i;
+
+        string cur = "";
+        for (int j = i; j < (int)line.length(); ++j) {
+            if (line[j] == ' ') {
+                if (cur != "") addSubDef(cur, size+numWordsAdded);
+                cur = "";
+            }
+            else cur.push_back(line[j]);
+        }
+
+        if (cur != "") addSubDef(cur, size+numWordsAdded);
+
+
+        //no need sorting
+        //slots[curbucket].arrange();
+
+        ++numWordsAdded;
+    }
+
+
+    fin.close();
+
+
+    //get actual words
+
     int cur = 0;
     for (int file = 1; file <= 28; ++file) {
         ifstream fin;
@@ -534,6 +606,32 @@ void WordFinder::load(string dataset) {
 
         fin.close();
     }
+
+    //get actual words from user-added file
+
+    fin.open("DataSet\\" + dataset + "\\addedWords.txt");
+
+    cur = 0;
+
+    while (getline(fin, line)) {
+        string word = "";
+        int j = 0;
+        while (line[j] != '\t') {
+            word.push_back(line[j]);
+            ++j;
+        }
+
+        ++j;
+        string def = line.substr(j, (int)line.length());
+
+        slots[size+cur].setWord(word, def);
+        cur++;
+    }
+
+    fin.close();
+
+
+    fin.close();
 }
 
 void WordFinder::unload() {

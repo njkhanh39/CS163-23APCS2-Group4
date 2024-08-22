@@ -10,7 +10,7 @@ private:
 	wxSimplebook* simpleBook;
 
 public: 
-	MainFrame(const wxString& Title, wxSize FrameSize);
+	MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize);
 
     void OnPreviousPage(wxCommandEvent& event);
 
