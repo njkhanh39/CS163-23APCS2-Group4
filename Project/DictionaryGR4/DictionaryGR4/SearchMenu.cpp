@@ -3,7 +3,8 @@
 using namespace std;
 namespace fs = experimental::filesystem;
 
-SearchMenu::SearchMenu(wxWindow* parent) : wxPanel(parent, 10001, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
+SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10001, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
+	
 
 	auto purple = wxColour(101, 86, 142), red = wxColour(184, 89, 89), green = wxColour(11, 199, 189), white = wxColour(255, 255, 255), black = wxColour(34, 36, 40);
 
@@ -41,8 +42,12 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxPanel(parent, 10001, wxDefaultPosit
 	searchByDef->SetBackgroundColour(black);
 	searchByWord->SetBackgroundColour(black);
 
-	searchByDef->Bind(wxEVT_BUTTON, &SearchMenu::OnLoadTool, this);
-	searchByWord->Bind(wxEVT_BUTTON, &SearchMenu::OnUnLoadTool, this);
+	searchByDef->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+		OnSearchingByDef(evt, dict);
+	});
+	searchByWord->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+		OnSearchingByWord(evt, dict);
+	});
 
 
 
@@ -62,6 +67,9 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxPanel(parent, 10001, wxDefaultPosit
 	datasetCbb->SetSelection(0);
 	datasetCbb->Refresh();
 
+	datasetCbb->Bind(wxEVT_COMBOBOX, [this, dict](wxCommandEvent& evt) {
+		dict->chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
+	});
 
 	//load
 	/*	searchByDef = new wxButton(mainPanel, wxID_ANY, "Def->Word", wxPoint(60, 200), wxSize(120, 40));
@@ -95,10 +103,24 @@ SearchMenu::SearchMenu(wxWindow* parent) : wxPanel(parent, 10001, wxDefaultPosit
 	
 	
 	suggestBar->Bind(wxEVT_LEFT_DOWN, &SearchMenu::skip, this);
-	button->Bind(wxEVT_BUTTON, &SearchMenu::OnSearchButton, this);
-	searchBar->Bind(wxEVT_TEXT, &SearchMenu::OnSearchAndSuggestHandler, this);
-	suggestBar->Bind(wxEVT_LISTBOX, &SearchMenu::OnViewWord, this);
+	button->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+		OnSearchButton(evt, dict);
+	});
+	searchBar->Bind(wxEVT_TEXT, [this, dict](wxCommandEvent& evt) {
+		OnSearchAndSuggestHandler(evt, dict);
+	});
+	//searchBar->Bind(wxEVT_BUTTON, bind(&SearchMenu::OnSearchAndSuggestHandler, this, placeholders::_1, ref(dict)));
+	suggestBar->Bind(wxEVT_LISTBOX, [this, dict](wxCommandEvent& evt) {
+		OnViewWord(evt, dict);
+	});
 	//rd_button->Bind(wxEVT_BUTTON, &SearchMenu::OnRandomClicked, this);
+
+	wxProgressDialog progressDialog("Please Wait", "Performing a long task...", 100, this,
+		wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
+
+	dict->runSearchDefinitionEngine();
+
+	wxLogMessage("Task completed!");
 }
 
 SearchMenu::~SearchMenu() {
@@ -109,9 +131,9 @@ void SearchMenu::skip(wxMouseEvent& evt) {
 	evt.Skip();
 }
 
-void SearchMenu::OnSearchButton(wxCommandEvent& evt) {
+void SearchMenu::OnSearchButton(wxCommandEvent& evt, Dictionary* dict) {
 	//#case 1: search by definition, press the button will list out
-	if (dict.isSearchingDefinition) {
+	if (dict->isSearchingDefinition) {
 		wxString wunicode = searchBar->GetValue();
 
 		string word = string(wunicode.mb_str(wxConvUTF8));
@@ -125,7 +147,7 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt) {
 		suggestBar->Clear();
 
 		//recommend 20 words with defs
-		vector<Word> ans = dict.searchDefToWord(word, 20);
+		vector<Word> ans = dict->searchDefToWord(word, 20);
 
 		for (auto& w : ans) {
 			string def = w.getStringDefinitions().back();
@@ -158,18 +180,18 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt) {
 
 		//do not clear search bar, since it will terminate our data
 
-		Word word = dict.searchWordMatching(key);
+		Word word = dict->searchWordMatching(key);
 
 		wordView->processWord(word);
 
-		Word* ptr = dict.getWordPtr(key);
+		Word* ptr = dict->getWordPtr(key);
 		wordView->setWord(ptr);
 		wordView->setActiveDataset(datasetCbb->GetStringSelection().ToStdString());
 	}
 }
 
-void SearchMenu::OnViewWord(wxCommandEvent& evt) {
-	if (!dict.isSearchingDefinition) { //word->def
+void SearchMenu::OnViewWord(wxCommandEvent& evt, Dictionary* dict) {
+	if (!dict->isSearchingDefinition) { //word->def
 		int selected = suggestBar->GetSelection();
 		wxString keyuni = suggestBar->GetString(selected);
 		string key = (string)keyuni.mb_str(wxConvUTF8);
@@ -186,11 +208,11 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt) {
 		//do not clear search bar, since it will terminate our data
 
 		//we need to search for that word & all its definitions
-		Word word = dict.searchWordMatching(key);
+		Word word = dict->searchWordMatching(key);
 
 		wordView->processWord(word);
 
-		Word* ptr = dict.getWordPtr(key);
+		Word* ptr = dict->getWordPtr(key);
 		wordView->setWord(ptr);
 		wordView->setActiveDataset(datasetCbb->GetStringSelection().ToStdString());
 
@@ -200,7 +222,7 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt) {
 		SearchedWord SW(key);
 		SW.setTime();
 		SW.setDate();
-		dict.getHistory().saveToFile(SW);
+		dict->getHistory().saveToFile(SW);
 
 
 
@@ -227,7 +249,7 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt) {
 	def = key.substr(i, (int)key.length());
 
 	//we want other definitions as well, not just "def" alone.
-	Word mainWord = dict.searchWordMatching(word);
+	Word mainWord = dict->searchWordMatching(word);
 
 	//clear the suggest bar
 
@@ -244,25 +266,25 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt) {
 	//wordView->Enable();
 }
 
-void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt) {
+void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict) {
 	//avoiding overlapping panels
 	//wordView->Disable();
 	//only for #case2, search by word
-	if (!dict.isSearchingDefinition) {
+	if (!(dict->isSearchingDefinition)) {
 		wxString s = evt.GetString();
 
 		string word = string(s.mb_str(wxConvUTF8));
 
-		dict.chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
+		dict->chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
 
-		dict.runSearchEngine(word, false);
+		dict->runSearchEngine(word, false);
 
 		suggestBar->Clear();
 
 		vector<Word> listWord;
 
 		//search for 20 related words
-		listWord = dict.searchRelatedWords(word, 20);
+		listWord = dict->searchRelatedWords(word, 20);
 
 		for (auto& w : listWord) {
 			suggestBar->AppendString(wxString::FromUTF8(w.getWord()));
@@ -295,16 +317,15 @@ void SearchMenu::adjustSuggestBar(int maxHeight, int maxItem) {
 }
 
 
-void SearchMenu::OnLoadTool(wxCommandEvent& evt) {
-	dict.chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
-	if (!dict.isSearchingDefinition) dict.runSearchDefinitionEngine();
+void SearchMenu::OnSearchingByDef(wxCommandEvent& evt, Dictionary* dict) {
+	dict->isSearchingDefinition = true;
 }
 
-void SearchMenu::OnUnLoadTool(wxCommandEvent& evt) {
-	dict.turnOffSearchDefinitionEngine();
+void SearchMenu::OnSearchingByWord(wxCommandEvent& evt, Dictionary* dict) {
+	dict->isSearchingDefinition = false;
 }
 
-void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt) {
+void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt, Dictionary* dict) {
 	string curDataset = datasetCbb->GetStringSelection().ToStdString();
 
 	wxMessageDialog* ask = new wxMessageDialog(this,

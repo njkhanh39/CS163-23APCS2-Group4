@@ -4,6 +4,7 @@
 #include <wx/wx.h>
 #include <wx/simplebook.h>
 #include <wx/spinctrl.h>
+#include <wx/progdlg.h>
 #include <iostream>
 #include <string.h>
 #include <cstring>
@@ -16,11 +17,11 @@
 class SearchMenu : public wxPanel {
 public:
 	wxButton* back_to_home;
-	SearchMenu(wxWindow* parent);
+	SearchMenu(wxWindow* parent, Dictionary*& dict);
 	~SearchMenu();
 
 private:
-	Dictionary dict;
+	//Dictionary dict;
 	//History hist;
 	wxButton * resetbutton ,* button,  *deleteword, *rd_button;
 	wxBitmapButton* searchByDef, * searchByWord ;
@@ -35,19 +36,19 @@ private:
 	void adjustSuggestBar(int maxHeight, int maxItem);
 
 	//word view
-	void OnViewWord(wxCommandEvent& evt);
+	void OnViewWord(wxCommandEvent& evt, Dictionary* dict);
 
 	//searchBar
-	void OnSearchAndSuggestHandler(wxCommandEvent& evt);
+	void OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict);
 
 	//microscope button
 
-	void OnSearchButton(wxCommandEvent& evt);
+	void OnSearchButton(wxCommandEvent& evt, Dictionary* dict);
 
-	void OnLoadTool(wxCommandEvent& evt);
+	void OnSearchingByDef(wxCommandEvent& evt, Dictionary* dict);
 
-	void OnUnLoadTool(wxCommandEvent& evt);
+	void OnSearchingByWord(wxCommandEvent& evt, Dictionary* dict);
 
-	void OnResetButtonClicked(wxCommandEvent& evt);
+	void OnResetButtonClicked(wxCommandEvent& evt, Dictionary* dict);
 
 };

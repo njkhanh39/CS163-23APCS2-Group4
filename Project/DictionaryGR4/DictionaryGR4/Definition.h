@@ -21,6 +21,28 @@ public:
 		owner = nullptr;
 	}
 
+	// Equality operator
+	bool operator==(const Definition& other) const {
+		return text == other.text;
+	}
+
+	// Inequality operator
+	bool operator!=(const Definition& other) const {
+		return !(*this == other);
+	}
+
+	// Less than operator
+	bool operator<(const Definition& other) const {
+		if (text < other.text) return true;
+		return false;
+	}
+
+	// Greater than operator
+	bool operator>(const Definition& other) const {
+		if (text > other.text) return true;
+		return false;
+	}
+
 	string getStringDefinition();
 };
 

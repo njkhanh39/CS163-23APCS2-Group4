@@ -6,6 +6,11 @@ using namespace std;
 bool Dictionary::chooseLanguage(string t) {
 	if (t != EngEng && t != EngVie && t != VieEng) return false;
 	activeDataSet = t;
+	
+	if (t == EngEng) activeSearcher = &toolEngEng;
+	if (t == EngVie) activeSearcher = &toolEngVie;
+	if (t == VieEng) activeSearcher = &toolVieEng;
+
 	hist.setMode(activeDataSet);
 	return true;
 }
@@ -17,14 +22,18 @@ void Dictionary::runSearchEngine(string word, bool yesLogMessage) {
 
 //after calling, searchDefinitions function is ready.Turning off will disable that function.
 void Dictionary::runSearchDefinitionEngine() {
-	if (activeDataSet == EngEng) tool.load("Eng-Eng");
-	if (activeDataSet == EngVie) tool.load("Eng-Vie");
-	if (activeDataSet == VieEng) tool.load("Vie-Eng");
-	isSearchingDefinition = true;
+	if (!isSearchingDefinition) {
+		toolEngEng.load("Eng-Eng");
+		toolEngVie.load("Eng-Vie");
+		toolVieEng.load("Vie-Eng");
+		isSearchingDefinition = true;
+	}
 }
 
 void Dictionary::turnOffSearchDefinitionEngine() {
-	tool.unload();
+	toolEngEng.unload();
+	toolEngVie.unload();
+	toolVieEng.unload();
 	isSearchingDefinition = false;
 }
 
@@ -35,7 +44,7 @@ Word Dictionary::searchWordMatching(string word) {
 	for (auto& x : word) x = tolower(x);
 
 	
-	if (w.empty() && isSearchingDefinition) w = tool.searchWord(word);
+	if (w.empty() && isSearchingDefinition) w = activeSearcher->searchWord(word);
 	else w = myTrie.getWordMatching(word);
 	
 	//since some of w's definitions may be deleted by user, we have to check.
@@ -56,18 +65,32 @@ Word* Dictionary::getWordPtr(string word) {
 vector<Definition> Dictionary::searchDefinitions(string word) {
 	//format word
 	for (auto& x : word) x = tolower(x);
-	return myTrie.getDefinitions(word);
-	vector<Definition> ans;
-	return ans;
+	vector<Definition> ans = myTrie.getDefinitions(word);
+
+	Word newWord;
+	newWord.setWord(word);
+	for (auto& s : ans) newWord.addDefinition(s);
+
+	//trim out all deleted definitions in deleted.txt
+	getAvailableWords(newWord);
+
+	return newWord.getDefinitions();
 }
 
 //return definitions of keyword as strings
 vector<string> Dictionary::searchStringDefinitions(string word) {
 	//format word
 	for (auto& x : word) x = tolower(x);
-	return myTrie.getStringDefinitions(word);
-	vector<string> ans;
-	return ans;
+	vector<string> ans = myTrie.getStringDefinitions(word);
+
+	Word newWord;
+	newWord.setWord(word);
+	for (auto& s : ans) newWord.addDefinition(s);
+
+	//trim out all deleted definitions in deleted.txt
+	getAvailableWords(newWord);
+
+	return newWord.getStringDefinitions();
 }
 
 //search for words with same prefix + limit number of words
@@ -78,6 +101,7 @@ vector<Word> Dictionary::searchRelatedWords(string word, int limit) {
 
 	ans = myTrie.getWordsWithPrefix(word, limit);
 
+	//trim out deleted words in deleted.txt
 	for (int i = 0; i < (int)ans.size(); ++i) {
 		getAvailableWords(ans[i]);
 		if (ans[i].empty()) {
@@ -93,8 +117,9 @@ vector<Word> Dictionary::searchRelatedWords(string word, int limit) {
 vector<Word> Dictionary::searchDefToWord(string& keyword, int limit) {
 	vector<string> subkeys = transformSentence(keyword);
 	vector<Word> ans;
-	ans = tool.searchDefinitionsToWord(subkeys, limit);
+	ans = activeSearcher->searchDefinitionsToWord(subkeys, limit);
 
+	//trim out deleted words in deleted.txt
 	for (int i = 0; i < (int)ans.size(); ++i) {
 		getAvailableWords(ans[i]);
 		if (ans[i].empty()) {
@@ -139,6 +164,8 @@ bool Dictionary::getAvailableWords(Word& w) {
 	}
 
 	fin.close();
+
+	if (w.getNumberOfDefinitions() == 0) w.clear();
 
 	return true;
 }
@@ -198,28 +225,28 @@ string Dictionary::mapStringToFile(string word) {
 	if (39 <= tmp && tmp <= 105) {
 		//vie chars
 
-		int idx = tool.getIndex(c);
-		if (idx < tool.getIndex('b')) {
+		int idx = activeSearcher->getIndex(c);
+		if (idx < activeSearcher->getIndex('b')) {
 			//variations of 'a'
 			num = 1;
 		}
-		else if (idx < tool.getIndex('e')) {
+		else if (idx < activeSearcher->getIndex('e')) {
 			// variations of 'd'
 			num = 4;
 		}
-		else if (idx < tool.getIndex('f')) {
+		else if (idx < activeSearcher->getIndex('f')) {
 			//variations of 'e'
 			num = 5;
 		}
-		else if (idx < tool.getIndex('j')) {
+		else if (idx < activeSearcher->getIndex('j')) {
 			//variations of 'i'
 			num = 9;
 		}
-		else if (idx < tool.getIndex('p')) {
+		else if (idx < activeSearcher->getIndex('p')) {
 			//variations of 'o'
 			num = 15;
 		}
-		else if (idx < tool.getIndex('v')) {
+		else if (idx < activeSearcher->getIndex('v')) {
 			//variations of 'u'
 			num = 21;
 		}

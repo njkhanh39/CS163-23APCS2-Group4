@@ -443,7 +443,7 @@ bool Trie::loadData(string file,string file2, string dataset) {
     
     fin.close();
 
-    //added words
+    //added words by user
     fin.open(file2);
     if (fin.is_open()) {
         string line;

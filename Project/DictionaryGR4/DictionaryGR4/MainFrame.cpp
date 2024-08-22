@@ -1,8 +1,8 @@
 #include "MainFrame.h"
 
-MainFrame::MainFrame(const wxString& Title, wxSize FrameSize) : wxFrame(NULL, wxID_ANY, Title, wxDefaultPosition, FrameSize) {
+MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize) : wxFrame(NULL, wxID_ANY, Title, wxDefaultPosition, FrameSize) {
 	simpleBook = new wxSimplebook(this, wxID_ANY);
-
+    
 
     NavPane = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 80), wxBORDER_NONE);
     NavPane->SetBackgroundColour(purple);
@@ -26,10 +26,11 @@ MainFrame::MainFrame(const wxString& Title, wxSize FrameSize) : wxFrame(NULL, wx
     favpane = new wxButton(NavPane, wxID_ANY, "FAVOURITE", wxPoint(1064, 18), wxSize(147, 44), wxBORDER_NONE);
     favpane->SetBackgroundColour(purple);
     favpane->SetForegroundColour(white);
-	
+
+
 	
     //MainMenu* mainMenu = new MainMenu(simpleBook);
-	SearchMenu* searchMenu = new SearchMenu(simpleBook);
+	SearchMenu* searchMenu = new SearchMenu(simpleBook, dict);
     QuizMenu* quizMenu = new QuizMenu(simpleBook);
     AddWordMenu* addMenu = new AddWordMenu(simpleBook);
     
@@ -81,7 +82,7 @@ MainFrame::MainFrame(const wxString& Title, wxSize FrameSize) : wxFrame(NULL, wx
     frameSizer->Add(simpleBook, 5, wxEXPAND | wxALL, 0);
 
     SetSizerAndFit(frameSizer);
-
+    
 }
 
 void MainFrame::OnPreviousPage(wxCommandEvent& event)
