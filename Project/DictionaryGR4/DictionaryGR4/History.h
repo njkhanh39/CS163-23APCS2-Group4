@@ -9,7 +9,7 @@
 
 class History {
 private:
-	list<SearchedWord> searchList;
+	list<SearchedWord> searchList;  // for loading
 	string mode;
 public:
 	History() {}

@@ -36,6 +36,14 @@ vector<string> Word::getStringDefinitions() {
 	return ans;
 }
 
+bool Word::getFavourite() {
+	return isFavourite;
+}
+
+string Word::getDataset() {
+	return dataset;
+}
+
 //adders and setters
 
 void Word::addDefinition(string& def) {
@@ -54,6 +62,14 @@ void Word::setWord(string word) {
 void Word::clear() {
 	text = "";
 	defList.clear();
+}
+
+void Word::setFavourite(bool state) {
+	isFavourite = state;
+}
+
+void Word::setDataset(string dataset) {
+	this->dataset = dataset;
 }
 
 //adjust-er

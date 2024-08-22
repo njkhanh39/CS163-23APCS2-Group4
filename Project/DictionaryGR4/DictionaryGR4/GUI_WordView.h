@@ -2,6 +2,7 @@
 #include <codecvt>
 #include "Dictionary.h"
 
+
 class WordView {
 private:
 

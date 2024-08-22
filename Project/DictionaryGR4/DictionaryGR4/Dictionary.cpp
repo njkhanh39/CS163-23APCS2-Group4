@@ -335,6 +335,7 @@ History Dictionary::getHistory() {
 	return hist;
 }
 
+<<<<<<< Updated upstream
 void Dictionary::editDefinition(string text, string def, int index) {
 	string dir = mapStringToFile(text);
 	ifstream fin;
@@ -371,3 +372,17 @@ void Dictionary::editDefinition(string text, string def, int index) {
 		fout.close();
 	}
 }
+=======
+list<string> Dictionary::getFavList() {
+	return favList;
+}
+
+
+void Dictionary::addToFavourite(Word word) {
+	ofstream out;
+	out.open("Favourite\\" + word.getDataset() + "\\fav.txt", ios::app);
+	if (!out.is_open()) return;
+	out << word.getWord() << endl;
+	out.close();
+}
+>>>>>>> Stashed changes
