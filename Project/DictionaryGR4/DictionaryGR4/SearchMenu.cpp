@@ -134,12 +134,12 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 		OnResetButtonClicked(evt, dict);
 	});
 
-	/*wxProgressDialog progressDialog("Please Wait", "Performing a long task...", 100, this,
+	wxProgressDialog progressDialog("Please Wait", "Performing a long task...", 100, this,
 		wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
 
 	dict->runSearchDefinitionEngine();
 
-	wxLogMessage("Task completed!");*/
+	wxLogMessage("Task completed!");
 }
 
 SearchMenu::~SearchMenu() {
