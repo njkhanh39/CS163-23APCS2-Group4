@@ -6,6 +6,11 @@ using namespace std;
 bool Dictionary::chooseLanguage(string t) {
 	if (t != EngEng && t != EngVie && t != VieEng) return false;
 	activeDataSet = t;
+	
+	if (t == EngEng) activeSearcher = &toolEngEng;
+	if (t == EngVie) activeSearcher = &toolEngVie;
+	if (t == VieEng) activeSearcher = &toolVieEng;
+
 	hist.setMode(activeDataSet);
 	return true;
 }
@@ -17,14 +22,18 @@ void Dictionary::runSearchEngine(string word, bool yesLogMessage) {
 
 //after calling, searchDefinitions function is ready.Turning off will disable that function.
 void Dictionary::runSearchDefinitionEngine() {
-	if (activeDataSet == EngEng) tool.load("Eng-Eng");
-	if (activeDataSet == EngVie) tool.load("Eng-Vie");
-	if (activeDataSet == VieEng) tool.load("Vie-Eng");
-	isSearchingDefinition = true;
+	if (!isSearchingDefinition) {
+		toolEngEng.load("Eng-Eng");
+		toolEngVie.load("Eng-Vie");
+		toolVieEng.load("Vie-Eng");
+		isSearchingDefinition = true;
+	}
 }
 
 void Dictionary::turnOffSearchDefinitionEngine() {
-	tool.unload();
+	toolEngEng.unload();
+	toolEngVie.unload();
+	toolVieEng.unload();
 	isSearchingDefinition = false;
 }
 
@@ -35,9 +44,11 @@ Word Dictionary::searchWordMatching(string word) {
 	for (auto& x : word) x = tolower(x);
 
 	
-	if (w.empty() && isSearchingDefinition) return tool.searchWord(word);
+	if (w.empty() && isSearchingDefinition) w = activeSearcher->searchWord(word);
 	else w = myTrie.getWordMatching(word);
 	
+	//since some of w's definitions may be deleted by user, we have to check.
+	getAvailableWords(w);
 
 	return w;
 }
@@ -82,18 +93,32 @@ Word Dictionary::getRandomWord(string& wordText) {
 vector<Definition> Dictionary::searchDefinitions(string word) {
 	//format word
 	for (auto& x : word) x = tolower(x);
-	return myTrie.getDefinitions(word);
-	vector<Definition> ans;
-	return ans;
+	vector<Definition> ans = myTrie.getDefinitions(word);
+
+	Word newWord;
+	newWord.setWord(word);
+	for (auto& s : ans) newWord.addDefinition(s);
+
+	//trim out all deleted definitions in deleted.txt
+	getAvailableWords(newWord);
+
+	return newWord.getDefinitions();
 }
 
 //return definitions of keyword as strings
 vector<string> Dictionary::searchStringDefinitions(string word) {
 	//format word
 	for (auto& x : word) x = tolower(x);
-	return myTrie.getStringDefinitions(word);
-	vector<string> ans;
-	return ans;
+	vector<string> ans = myTrie.getStringDefinitions(word);
+
+	Word newWord;
+	newWord.setWord(word);
+	for (auto& s : ans) newWord.addDefinition(s);
+
+	//trim out all deleted definitions in deleted.txt
+	getAvailableWords(newWord);
+
+	return newWord.getStringDefinitions();
 }
 
 //search for words with same prefix + limit number of words
@@ -102,17 +127,76 @@ vector<Word> Dictionary::searchRelatedWords(string word, int limit) {
 	//format word
 	for (auto& x : word) x = tolower(x);
 
-	return myTrie.getWordsWithPrefix(word, limit);
+	ans = myTrie.getWordsWithPrefix(word, limit);
+
+	//trim out deleted words in deleted.txt
+	for (int i = 0; i < (int)ans.size(); ++i) {
+		getAvailableWords(ans[i]);
+		if (ans[i].empty()) {
+			swap(ans[i], ans.back());
+			ans.pop_back();
+		}
+	}
+
 	return ans;
 }
 
 //this one needs runSearchDefinitionsEngine
 vector<Word> Dictionary::searchDefToWord(string& keyword, int limit) {
 	vector<string> subkeys = transformSentence(keyword);
-	return tool.searchDefinitionsToWord(subkeys, limit);
+	vector<Word> ans;
+	ans = activeSearcher->searchDefinitionsToWord(subkeys, limit);
+
+	//trim out deleted words in deleted.txt
+	for (int i = 0; i < (int)ans.size(); ++i) {
+		getAvailableWords(ans[i]);
+		if (ans[i].empty()) {
+			swap(ans[i], ans.back());
+			ans.pop_back();
+		}
+	}
+
+	return ans;
 }
 
 //helpers
+
+bool Dictionary::getAvailableWords(Word& w) {
+	string file = "DataSet\\" + activeDataSet + "\\deletedWords.txt";
+
+	ifstream fin;
+	fin.open(file);
+
+	string line;
+	while (getline(fin, line)) {
+		int i = 0;
+		string comp;
+		while (line[i] != '\t') {
+			comp.push_back(line[i]);
+			++i;
+		}
+		++i;
+
+		//match
+		if (comp == w.getWord()) {
+			char check = line[i];
+			if (check == '*') {
+				w.clear();
+				break;
+			}
+
+			string def = line.substr(i);
+
+			w.removeDefinition(def);
+		}
+	}
+
+	fin.close();
+
+	if (w.getNumberOfDefinitions() == 0) w.clear();
+
+	return true;
+}
 
 vector<string> Dictionary::transformSentence(string& input) {
 	string intermediate;
@@ -169,28 +253,28 @@ string Dictionary::mapStringToFile(string word) {
 	if (39 <= tmp && tmp <= 105) {
 		//vie chars
 
-		int idx = tool.getIndex(c);
-		if (idx < tool.getIndex('b')) {
+		int idx = activeSearcher->getIndex(c);
+		if (idx < activeSearcher->getIndex('b')) {
 			//variations of 'a'
 			num = 1;
 		}
-		else if (idx < tool.getIndex('e')) {
+		else if (idx < activeSearcher->getIndex('e')) {
 			// variations of 'd'
 			num = 4;
 		}
-		else if (idx < tool.getIndex('f')) {
+		else if (idx < activeSearcher->getIndex('f')) {
 			//variations of 'e'
 			num = 5;
 		}
-		else if (idx < tool.getIndex('j')) {
+		else if (idx < activeSearcher->getIndex('j')) {
 			//variations of 'i'
 			num = 9;
 		}
-		else if (idx < tool.getIndex('p')) {
+		else if (idx < activeSearcher->getIndex('p')) {
 			//variations of 'o'
 			num = 15;
 		}
-		else if (idx < tool.getIndex('v')) {
+		else if (idx < activeSearcher->getIndex('v')) {
 			//variations of 'u'
 			num = 21;
 		}
@@ -234,6 +318,8 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 	//get word's first character for loading
 
 	string file; //load using this one
+
+	string file2 = "DataSet\\" + activeDataSet + "\\addedWords.txt";
 
 	//crucial
 	if (!word.empty()) {
