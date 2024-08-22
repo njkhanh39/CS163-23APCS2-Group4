@@ -234,7 +234,7 @@ Word* Trie::getWordPointer(string s)
     return ans;
 }
 
-Word* Trie::getRandomWord(string& wordText, string activeDataset) {
+Word* Trie::getRandomWord(string& wordText, string activeDataset, string filename) {
     int n = -1;
 
     if (activeDataset == "Eng-Eng" or activeDataset == "Eng-Vie")
@@ -244,25 +244,28 @@ Word* Trie::getRandomWord(string& wordText, string activeDataset) {
 
     wordText = "";
     Node* cur = root;
+    int cnt = 0;
 
     while (true) {
         if (!cur->hasChild()) {
-            cur = root;
-            wordText = "";
+            //cur = root;
+            //wordText = "";
+            //cnt = 0;
+
+            return cur->ptrToEmptyWord;
         }
 
         // iChild = 0 -> n or iChild = 106
+        srand(time(0));
         int t = rand() % (n + 1);
         int iChild = (t < n) ? t : 106;
 
         if (cur->child[iChild]) {
             cur = cur->child[iChild];
             wordText.push_back(indexToCodePoint(iChild));
-            if (cur->exist) {
-                bool take = rand() % 2;
-                if (take) {
-                    return cur->ptrToEmptyWord;
-                }
+            ++cnt;
+            if (cur->exist and rand() % 15 + 1 < cnt) {
+                return cur->ptrToEmptyWord;
             }
         }
     }
@@ -412,6 +415,8 @@ int Trie::getSize() {
 }
 
 bool Trie::loadData(string file, string dataset) {
+    string file2 = "DataSet\\" + dataset + "\\addedWords.txt";
+
     ifstream fin;
     fin.open(file);
     if (fin.is_open()) {
@@ -433,7 +438,40 @@ bool Trie::loadData(string file, string dataset) {
             //cout << s << '\n';
         }
     }
-    else return false;
+    else {
+        fin.close();
+        return false;
+    }
+    
+    fin.close();
+
+    //added words by user
+    fin.open(file2);
+    if (fin.is_open()) {
+        string line;
+        while (getline(fin, line)) {
+            if (line.empty()) continue;
+            string s, t;
+            int i = 0;
+            while (line[i] != '\t') {
+                s.push_back(line[i]);
+                ++i;
+            }
+
+            ++i;
+
+            t = line.substr(i, (int)line.length());
+
+            addWord(s, t);
+            //cout << s << '\n';
+        }
+    }
+    else {
+        fin.close();
+        return false;
+    }
+
+    fin.close();
 
     return true;
 }
@@ -506,6 +544,45 @@ void WordFinder::load(string dataset) {
     fin.close();
     size = curbucket;
 
+    //read from user-added file
+
+
+    fin.open("DataSet\\" + dataset + "\\sortedAddedWords.txt");
+    while (getline(fin, line)) {
+        if (line.empty()) continue;
+        string s;
+        int i = 0;
+        while (line[i] != '\t') {
+            s.push_back(line[i]);
+            ++i;
+        }
+
+        ++i;
+
+        string cur = "";
+        for (int j = i; j < (int)line.length(); ++j) {
+            if (line[j] == ' ') {
+                if (cur != "") addSubDef(cur, size+numWordsAdded);
+                cur = "";
+            }
+            else cur.push_back(line[j]);
+        }
+
+        if (cur != "") addSubDef(cur, size+numWordsAdded);
+
+
+        //no need sorting
+        //slots[curbucket].arrange();
+
+        ++numWordsAdded;
+    }
+
+
+    fin.close();
+
+
+    //get actual words
+
     int cur = 0;
     for (int file = 1; file <= 28; ++file) {
         ifstream fin;
@@ -534,6 +611,32 @@ void WordFinder::load(string dataset) {
 
         fin.close();
     }
+
+    //get actual words from user-added file
+
+    fin.open("DataSet\\" + dataset + "\\addedWords.txt");
+
+    cur = 0;
+
+    while (getline(fin, line)) {
+        string word = "";
+        int j = 0;
+        while (line[j] != '\t') {
+            word.push_back(line[j]);
+            ++j;
+        }
+
+        ++j;
+        string def = line.substr(j, (int)line.length());
+
+        slots[size+cur].setWord(word, def);
+        cur++;
+    }
+
+    fin.close();
+
+
+    fin.close();
 }
 
 void WordFinder::unload() {
@@ -621,6 +724,10 @@ Word WordFinder::searchWord(string text) {
     }
 
     return ans;
+}
+
+Word WordFinder::getWord(int index) {
+    return slots[index].word;
 }
 
 vector<Word> WordFinder::searchDefinitionsToWord(vector<string>& subkey, int limit) {

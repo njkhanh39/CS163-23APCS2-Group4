@@ -4,6 +4,7 @@
 
 class App : public wxApp {
 public:
+	Dictionary dictionary;
 	App() {
 
 	}

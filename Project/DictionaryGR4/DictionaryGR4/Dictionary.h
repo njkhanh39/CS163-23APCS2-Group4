@@ -1,6 +1,8 @@
 #pragma once
 
 #include <wx/wx.h>
+#include <chrono>
+#include <random>
 
 #include "SearchTree.h"
 #include "History.h"
@@ -8,8 +10,11 @@
 
 class Dictionary {
 private:
-	WordFinder tool; //for def -> word in all datasets
+	WordFinder* activeSearcher = nullptr; //for def -> word in all datasets
+	WordFinder toolEngEng, toolEngVie, toolVieEng;
+
 	Trie myTrie; //for word -> def in Eng-Eng & Eng-Vie
+
 	const string EngEng = "Eng-Eng", EngVie = "Eng-Vie", VieEng = "Vie-Eng"; //datasets
 	string activeDataSet = EngEng; //changeable
 	History hist;
@@ -18,7 +23,7 @@ private:
 public:
 	bool isSearchingDefinition = false;
 	Dictionary() {
-		//tool.load(EngEng);
+		activeSearcher = &toolEngEng;
 	}
 
 	//"Eng-Eng", "Eng-Vie", "Vie-Eng"
@@ -32,12 +37,17 @@ public:
 
 	void turnOffSearchDefinitionEngine();
 
+	//user may delete words, those which are saved in a file, we will ignore these
+	bool getAvailableWords(Word& w);
+
+	string getActiveDataset();
+
 	//get a "Word" object that matches a string
 	Word searchWordMatching(string word);
 
 	Word* getWordPtr(string word);
 
-	Word* getRandomWord(string& wordText, string activeDataset);
+	Word getRandomWord(string& wordText);
 
 	//return definitions of keyword
 	vector<Definition> searchDefinitions(string word);
@@ -56,60 +66,22 @@ public:
 
 
 
-
-	void resetDictionary();
 	void addToFavourite();
 
 	History getHistory();
 
 	//setters & adders
 
-	void addNewWord(string text, string def) {
-		//First, change word in file as trie is empty
-		string file = mapStringToFile(text);
+	void editDefinition(string text, string def) {
+		
+	}
 
-		u16string u16text = tool.tou16(text); u16text += (char16_t)'\t';
-		u16string u16def = tool.tou16(def);
+	void addNewWord(Word& newWord) {
 
-		u16string u16word = u16text + u16def;
+	}
 
-		bool added = false;
-
-		//handle in case add word to top of file
-		vector<string> alls;
-		ifstream fin; string line; u16string u16line;
-
-		fin.open(file);
-
-		while (getline(fin, line)) {
-			u16line = tool.tou16(line);
-
-			//u16word <= u16line
-			if (!tool.compare(u16word, u16line) && !added) {
-				added = true;
-				alls.push_back(text + "\t" + def);
-			}
-			alls.push_back(line);
-		}
-
-		fin.close();
-
-
-		//rewrite
-
-		ofstream fout;
-
-		fout.open(file);
-
-		for (auto& str : alls) {
-			fout << str << '\n';
-		}
-
-		fout.close();
-
-		//then, change in active wordfinder, when program ends, remember to save back to file
-
-		tool.addWord(text, def);
+	void addNewWordOneDef(string& text, string& def) {
+		
 	}
 
 	//helpers

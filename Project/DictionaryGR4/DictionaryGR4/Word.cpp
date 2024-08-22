@@ -58,10 +58,24 @@ void Word::clear() {
 
 //adjust-er
 
+void Word::sortDefinitions() {
+	int n = getNumberOfDefinitions();
+	mergeSort(defList, 0, n - 1, n);
+}
+
 void Word::modifyDefinition(string def, int index) {
 	defList[index] = Definition(def, this);
 }
 
 void Word::removeDefinition(int index) {
 	defList.erase(defList.begin() + index);
+}
+
+void Word::removeDefinition(string& def) {
+	for (auto it = defList.begin(); it != defList.end(); ++it) {
+		if (it->getStringDefinition() == def) {
+			defList.erase(it);
+			return;
+		}
+	}
 }
