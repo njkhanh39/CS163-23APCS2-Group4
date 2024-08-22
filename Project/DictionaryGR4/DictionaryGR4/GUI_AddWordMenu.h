@@ -14,7 +14,7 @@
 class AddWordMenu : public wxPanel {
 public:
 	wxButton* back_to_home;
-	AddWordMenu(wxWindow* parent);
+	AddWordMenu(wxWindow* parent, Dictionary*& dict);
 	~AddWordMenu();
 
 private:

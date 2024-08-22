@@ -25,6 +25,9 @@ public:
 	Dictionary() {
 		activeSearcher = &toolEngEng;
 	}
+	~Dictionary() {
+		//saveToFile();
+	}
 
 	//"Eng-Eng", "Eng-Vie", "Vie-Eng"
 	bool chooseLanguage(string t);
@@ -36,6 +39,9 @@ public:
 	void runSearchDefinitionEngine();
 
 	void turnOffSearchDefinitionEngine();
+
+	//save changed features. Automatically call when ending program
+	void saveToFile();
 
 	//user may delete words, those which are saved in a file, we will ignore these
 	bool getAvailableWords(Word& w);
@@ -70,17 +76,64 @@ public:
 
 	History getHistory();
 
-	//setters & adders
-
-	void editDefinition(string text, string def, int index);
-
-	void addNewWord(Word& newWord) {
-
+	void deleteWord(Word& word) {
+		string text = word.getWord();
+		auto v = word.getDefinitions();
+		for (auto& defs : v) {
+			string def = defs.getStringDefinition();
+			deleteWordOneDef(text, def);
+		}
 	}
 
-	void addNewWordOneDef(string& text, string& def) {
+	int	deleteWordOneDef(string& text, string& def) {
+		//check if word exists
+		Word match = searchWordMatching(text);
+		if (match.findDefinition(def) == -1) {
+			return -1; //word does not exist 
+		}
+
+		ifstream fin; bool appear = false;
+		string line;
 		
+		//check if it has been deleted already
+		fin.open("DataSet\\" + activeDataSet + "\\deletedWords.txt");
+
+		while (getline(fin, line)) {
+			string lineText, lineDef;
+			int i = 0;
+			while (line[i] != '\t') {
+				lineText.push_back(line[i]);
+				++i;
+			}
+			++i;
+
+			if (lineText != text) continue;
+
+			if (lineDef == def) {
+				fin.close();
+				return 0; //word was deleted before
+			}
+		}
+
+		fin.close();
+
+		//adding it to deleted file
+
+		ofstream fout;
+
+		fout.open("DataSet\\" + activeDataSet + "\\deletedWords.txt", ios::app);
+
+		fout << text << '\t' << def << '\n';
+
+		fout.close();
+
+		return 1; //word deleted successfully
 	}
+
+	void addNewWord(Word& newWord);
+
+	//return true if add word successfully
+	bool addNewWordOneDef(string& text, string& def);
 
 	//helpers
 
@@ -90,6 +143,14 @@ public:
 
 	string mapStringToFile(string word);
 
+	void sortVectorString(vector<string>& vec) {
+		int n = vec.size();
+		mergeSort(vec, 0, n - 1, n);
+	}
+
+	void merge(vector<string>& a, int l, int r, int mid);
+
+	void mergeSort(vector<string>& a, int l, int r, int n);
 
 	//vector<Word> helperDefToWordENGENG(string keyword, int limit){
 	//	//format word
