@@ -37,6 +37,12 @@ void Dictionary::turnOffSearchDefinitionEngine() {
 	isSearchingDefinition = false;
 }
 
+void Dictionary::saveToFile() {
+	toolEngEng.saveToFile("Eng-Eng");
+	toolEngVie.saveToFile("Eng-Vie");
+	toolVieEng.saveToFile("Vie-Eng");
+}
+
 //get a "Word" object that matches a string
 Word Dictionary::searchWordMatching(string word) {
 	Word w;
@@ -44,8 +50,12 @@ Word Dictionary::searchWordMatching(string word) {
 	for (auto& x : word) x = tolower(x);
 
 	
-	if (w.empty() && isSearchingDefinition) w = activeSearcher->searchWord(word);
-	else w = myTrie.getWordMatching(word);
+	if (!myTrie.empty()) {
+		w = myTrie.getWordMatching(word);
+		if(w.empty()) w = activeSearcher->searchWord(word);
+	}
+	else w = activeSearcher->searchWord(word);
+	 
 	
 	//since some of w's definitions may be deleted by user, we have to check.
 	getAvailableWords(w);

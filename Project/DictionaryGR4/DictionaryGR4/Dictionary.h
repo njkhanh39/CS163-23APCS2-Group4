@@ -23,6 +23,9 @@ public:
 	Dictionary() {
 		activeSearcher = &toolEngEng;
 	}
+	~Dictionary() {
+		//saveToFile();
+	}
 
 	//"Eng-Eng", "Eng-Vie", "Vie-Eng"
 	bool chooseLanguage(string t);
@@ -34,6 +37,9 @@ public:
 	void runSearchDefinitionEngine();
 
 	void turnOffSearchDefinitionEngine();
+
+	//save changed features. Automatically call when ending program
+	void saveToFile();
 
 	//user may delete words, those which are saved in a file, we will ignore these
 	bool getAvailableWords(Word& w);
@@ -75,11 +81,98 @@ public:
 	}
 
 	void addNewWord(Word& newWord) {
-
+		string text = newWord.getWord();
+		for (auto& def : newWord.getDefinitions()) {
+			string defStr = def.getStringDefinition();
+			addNewWordOneDef(text, defStr);
+		}
 	}
 
-	void addNewWordOneDef(string& text, string& def) {
+	bool addNewWordOneDef(string& text, string& def) {
+		//find and delete in deleted.txt
 		
+		ifstream fin;
+		vector<string> deletedFile; string line; bool found = false;
+		fin.open("DataSet\\" + activeDataSet + "\\deletedWords.txt");
+
+		while (getline(fin, line)) {
+			string lineText, lineDef;
+			int i = 0;
+			while (line[i] != '\t') {
+				lineText.push_back(line[i]);
+				++i;
+			}
+			++i;
+			
+			lineDef = line.substr(i);
+
+			//found the word in deleted.txt
+			if (lineText == text && lineDef == def) {
+				found = true;
+				continue;
+			}
+
+			deletedFile.push_back(line);
+		}
+
+		fin.close();
+
+		if (found == true) { //remove the found line in deletedWords.txt
+			ofstream fout;
+			fout.open("DataSet\\" + activeDataSet + "\\deletedWords.txt");
+
+			for (auto& str : deletedFile) {
+				fout << str << '\n';
+			}
+
+			fout.close();
+
+			return true; //success adding
+		}
+
+		//check if word already existed
+
+		Word match = searchWordMatching(text);
+
+		if (match.findDefinition(def) != -1) {
+			return false; //word already exists
+		}
+
+		//couldnt find word, now we add it to wordfinder
+
+		activeSearcher->addNewWord(text, def);
+
+
+		//append the word to addedwords.txt and addsorted.txt
+
+		ofstream fout;
+
+		fout.open("DataSet\\" + activeDataSet + "\\addedWords.txt", ios::app);
+
+		fout << text << '\t' << def << '\n';
+
+		fout.close();
+
+		vector<string> sortedDef = transformSentence(def);
+
+		//remember to sort
+		sortVectorString(sortedDef);
+		
+
+		fout.open("DataSet\\" + activeDataSet + "\\sortedAddedWords.txt", ios::app);
+
+		fout << text << '\t';
+		for (int i = 0; i < (int)sortedDef.size(); ++i) {
+			fout << sortedDef[i];
+			if (i + 1 == (int)sortedDef.size()) {
+				fout << '\n';
+			}
+			else fout << ' ';
+		}
+
+		fout.close();
+
+		return true;
 	}
 
 	//helpers
@@ -90,6 +183,39 @@ public:
 
 	string mapStringToFile(string word);
 
+	void sortVectorString(vector<string>& vec) {
+		int n = vec.size();
+		mergeSort(vec, 0, n - 1, n);
+	}
+
+	void merge(vector<string>& a, int l, int r, int mid) {
+		vector<string> temp(r - l + 1);
+
+		int ptr1 = l, ptr2 = mid + 1, cur = 0;
+
+		while (ptr1 <= mid && ptr2 <= r) {
+			if (a[ptr1] < a[ptr2])
+				temp[cur++] = a[ptr1++];
+			else
+				temp[cur++] = a[ptr2++];
+		}
+
+		while (ptr1 <= mid) temp[cur++] = a[ptr1++];
+		while (ptr2 <= r) temp[cur++] = a[ptr2++];
+
+		for (int i = l, cnt = 0; i <= r; ++i) a[i] = temp[cnt++];
+	}
+
+	void mergeSort(vector<string>& a, int l, int r, int n) {
+		if (l > r || l == r) return;
+
+		int mid = l + (r - l) / 2;
+
+		mergeSort(a, l, mid, n);
+		mergeSort(a, mid + 1, r, n);
+
+		merge(a, l, r, mid);
+	}
 
 	//vector<Word> helperDefToWordENGENG(string keyword, int limit){
 	//	//format word

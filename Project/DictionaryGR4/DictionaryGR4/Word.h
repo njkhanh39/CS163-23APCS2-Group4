@@ -59,6 +59,15 @@ public:
 	//check for emptiness
 	bool empty();
 
+	int findDefinition(string& def) {
+		for (int i = 0; i < (defList).size(); ++i) {
+			if (defList[i].getStringDefinition() == def) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
 	//getters
 
 	string getWord();
@@ -91,33 +100,11 @@ public:
 
 	void removeDefinition(string& def);
 
-	void merge(vector<Definition>& a, int l, int r, int mid) {
-		vector<Definition> temp(r - l + 1);
+	//helpers
 
-		int ptr1 = l, ptr2 = mid + 1, cur = 0;
+	void merge(vector<Definition>& a, int l, int r, int mid);
 
-		while (ptr1 <= mid && ptr2 <= r) {
-			if (a[ptr1] < a[ptr2])
-				temp[cur++] = a[ptr1++];
-			else
-				temp[cur++] = a[ptr2++];
-		}
-
-		while (ptr1 <= mid) temp[cur++] = a[ptr1++];
-		while (ptr2 <= r) temp[cur++] = a[ptr2++];
-
-		for (int i = l, cnt = 0; i <= r; ++i) a[i] = temp[cnt++];
-	}
-
-	void mergeSort(vector<Definition>& a, int l, int r, int n) {
-		if (l > r || l==r) return;
-
-		int mid = l + (r - l) / 2;
-
-		mergeSort(a, l, mid, n);
-		mergeSort(a, mid + 1, r, n);
-
-		merge(a, l, r, mid);
-	}
+	void mergeSort(vector<Definition>& a, int l, int r, int n);
+	
 
 };
