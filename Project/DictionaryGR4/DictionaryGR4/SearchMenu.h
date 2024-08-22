@@ -51,6 +51,6 @@ private:
 
 	void OnResetButtonClicked(wxCommandEvent& evt, Dictionary* dict);
 
-	void OnRandomClicked(wxCommandEvent& evt);
+	void OnRandomClicked(wxCommandEvent& evt, Dictionary* dict);
 
 };

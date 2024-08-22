@@ -411,7 +411,9 @@ int Trie::getSize() {
     return size;
 }
 
-bool Trie::loadData(string file,string file2, string dataset) {
+bool Trie::loadData(string file, string dataset) {
+    string file2 = "DataSet\\" + dataset + "\\addedWords.txt";
+
     ifstream fin;
     fin.open(file);
     if (fin.is_open()) {

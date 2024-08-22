@@ -319,7 +319,7 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 	
 
 	if (realLength == 1 && myTrie.empty()) {
-		myTrie.loadData(file,file2,activeDataSet);
+		myTrie.loadData(file,activeDataSet);
 		wxLogStatus("Loading data...");
 	}
 	else if (realLength == 0) {

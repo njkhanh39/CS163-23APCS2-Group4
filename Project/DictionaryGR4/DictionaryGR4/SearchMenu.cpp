@@ -30,6 +30,7 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	rd_button->SetBackgroundColour(purple);
 	rd_button->SetForegroundColour(white);
 
+
 	wxBitmap bitmaphexa(wxT("IMG/Hexagon.png"), wxBITMAP_TYPE_PNG);
 
 	searchByDef = new wxBitmapButton(this, wxID_ANY, bitmaphexa, wxPoint(40,123), wxSize(181,181), wxBORDER_NONE);
@@ -337,11 +338,11 @@ void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt, Dictionary* dict) {
 	}
 }
 
-void SearchMenu::OnRandomClicked(wxCommandEvent& evt) {
+void SearchMenu::OnRandomClicked(wxCommandEvent& evt, Dictionary* dict) {
 	string activeDataset = datasetCbb->GetStringSelection().ToStdString();
 
 	string wordText;
-	Word* onlyDefWord = dict.getRandomWord(wordText, activeDataset);
+	Word* onlyDefWord = dict->getRandomWord(wordText, activeDataset);
 
 	Word withTextWord = *onlyDefWord;
 	withTextWord.setWord(wordText);

@@ -97,7 +97,7 @@ public:
 
     //load
 
-    bool loadData(string file,string file2, string dataset);
+    bool loadData(string file, string dataset);
 
 private:
     //helpers
