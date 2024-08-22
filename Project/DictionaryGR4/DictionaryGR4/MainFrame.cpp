@@ -32,7 +32,7 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
     //MainMenu* mainMenu = new MainMenu(simpleBook);
 	SearchMenu* searchMenu = new SearchMenu(simpleBook, dict);
     QuizMenu* quizMenu = new QuizMenu(simpleBook);
-    AddWordMenu* addMenu = new AddWordMenu(simpleBook);
+    AddWordMenu* addMenu = new AddWordMenu(simpleBook, dict);
     
     simpleBook->AddPage(addMenu, "Add Menu", true); //selection = 0
     simpleBook->AddPage(quizMenu, "Quiz Menu", true); //selection = 1

@@ -1,1 +1,4 @@
-doraemon	a blue cat
+doraemon	() a blue cat
+pija	(n) a special cuisine of Tay Bac
+vietnam	A country in South East Asia, people there are really nice.
+tank	(n.) A war vehicle armed with cannon and run on tracks

@@ -17,7 +17,7 @@ private:
 	vector<string> defs;
 	vector<string> wordtype;
 
-	Word* word;
+	Word* word = nullptr;
 	string activeDataset;
 
 	int cur = 0;
@@ -29,7 +29,7 @@ public:
 
 	}
 
-	WordView(wxWindow* parent, wxPoint pos, wxSize size) {
+	WordView(wxWindow* parent, wxPoint pos, wxSize size, Dictionary* dict) {
 		wxFont font(12, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 		wxFont largerFont(16, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 		largerFont.MakeBold();
@@ -89,7 +89,9 @@ public:
 		editDef->Bind(wxEVT_BUTTON, &WordView::OnEditDefClicked, this);
 		confirmEdit->Bind(wxEVT_BUTTON, &WordView::OnConfirmEditClicked, this);
 		cancelEdit->Bind(wxEVT_BUTTON, &WordView::OnCancelEditClicked, this);
-		delDef->Bind(wxEVT_BUTTON, &WordView::OnRemoveDefClicked, this);
+		delDef->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+			OnRemoveDefClicked(evt, dict);
+		});
 		favDef->Bind(wxEVT_BUTTON, &WordView::OnAddFavourite, this);
 		parentWindow = parent;
 	}
@@ -129,18 +131,51 @@ public:
 		panel->SetBackgroundColour(clr);
 	}
 
-	void processWord(Word& word) {
+	void SetBackDefault() {
+		cur = 0;
+		pages = 0;
+		defs.clear();
+		wordtype.clear();
+
+		pageText->SetLabel("0/0");
+		text->SetLabel("hello");
+		wordTypeText->SetLabel("wordtype");
+		defText->SetLabel("def");
+	}
+
+	Word getShowingWord() {
+		Word ans;
+		if (pageText->GetLabel() == "0/0") return ans;
+
+		ans.setWord((string)text->GetLabel());
+
+		for (int i = 0; i < (int)defs.size(); ++i) {
+			string defstr;
+			if (wordtype[i] == "") {
+				defstr = defs[i];
+			}
+			else {
+				defstr = wordtype[i] + " " + defs[i];
+			}
+
+			ans.addDefinition(defstr);
+		}
+
+		return ans;
+	}
+
+	void processWord(Word& processWord) {
 		//careful with this, must set cur = 0 when loading new word
-		if (word.empty()) return;
+		if (processWord.empty()) return;
 
 		cur = 0;
-		pages = word.getNumberOfDefinitions();
+		pages = processWord.getNumberOfDefinitions();
 		defs.clear(); wordtype.clear();
 		defs.assign(pages, "");
 		wordtype.assign(pages, "");
 
 		for (int i = 0; i < pages; ++i) {
-			string str = word.getDefinitionAt(i).getStringDefinition();
+			string str = processWord.getDefinitionAt(i).getStringDefinition();
 
 			int j = 0;
 			if (str[j] == '(') {
@@ -164,7 +199,7 @@ public:
 			//	}
 			//}
 		}
-		wxString unicodestr = wxString::FromUTF8(word.getWord());
+		wxString unicodestr = wxString::FromUTF8(processWord.getWord());
 		if (text) text->SetLabel(unicodestr);
 		if (wordTypeText) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
 		if (defText) defText->SetLabel(wxString::FromUTF8(defs[cur]));
@@ -230,6 +265,8 @@ public:
 		wxString page = pageText->GetLabelText();
 		int curIndex = wxAtoi(page.Left(page.First('/'))) - 1;
 
+		cur = curIndex;
+
 		wxMessageDialog* ask = new wxMessageDialog(parentWindow,
 			"Are you sure to modify this definition?",
 			"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
@@ -245,6 +282,7 @@ public:
 		defText->SetEditable(0);
 		confirmEdit->Hide();
 		cancelEdit->Hide();
+		cur = curIndex;
 	}
 
 	void OnCancelEditClicked(wxCommandEvent& evt) {
@@ -261,8 +299,22 @@ public:
 		cancelEdit->Hide();
 	}
 
-	void OnRemoveDefClicked(wxCommandEvent& evt) {
+	void OnRemoveDefClicked(wxCommandEvent& evt, Dictionary* dict) {
+
+		if (pages == 0) return;
+
 		int curIndex = getCurrentPage();
+		
+		string wordText = (string)text->GetLabel();
+
+		string defstr;
+
+		if (wordtype[curIndex] == "") {
+			defstr = defs[curIndex];
+		}
+		else {
+			defstr = wordtype[curIndex] + " " + defs[curIndex];
+		}
 
 		wxMessageDialog* ask = new wxMessageDialog(parentWindow,
 			"Are you sure to remove this definition?",
@@ -277,8 +329,10 @@ public:
 			pageText->SetLabel(to_string(curIndex + 1) + "/" + to_string(pages));
 			wordTypeText->SetLabel(wxString::FromUTF8(wordtype[curIndex]));
 			defText->SetLabel(wxString::FromUTF8(defs[curIndex]));
-			
-			word->removeDefinition(curIndex);
+		
+			cur = getCurrentPage();
+
+			dict->deleteWordOneDef(wordText, defstr);
 		}
 	}
 

@@ -84,7 +84,7 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 
 
 	//word view appears first
-	wordView = new WordView(this, wxPoint(234, 133), wxSize(979, 460));
+	wordView = new WordView(this, wxPoint(234, 133), wxSize(979, 460), dict);
 	wordView->SetColor(white);
 
 	//init height = 0
@@ -102,6 +102,12 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 
 	//events
 	
+	deleteword->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+		Word get = wordView->getShowingWord();
+		if (get.empty()) return;
+		dict->deleteWord(get);
+		wordView->SetBackDefault();
+	});
 	
 	suggestBar->Bind(wxEVT_LEFT_DOWN, &SearchMenu::skip, this);
 	button->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {

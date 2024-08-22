@@ -63,36 +63,32 @@ public:
 	//this one needs runSearchDefinitionsEngine
 	vector<Word> searchDefToWord(string& keyword, int limit);
 
-
-
-
-
-
-
 	void resetDictionary();
+
 	void addToFavourite();
 
 	History getHistory();
 
-	//setters & adders
-
-	void editDefinition(string text, string def) {
-		
-	}
-
-	void addNewWord(Word& newWord) {
-		string text = newWord.getWord();
-		for (auto& def : newWord.getDefinitions()) {
-			string defStr = def.getStringDefinition();
-			addNewWordOneDef(text, defStr);
+	void deleteWord(Word& word) {
+		string text = word.getWord();
+		auto v = word.getDefinitions();
+		for (auto& defs : v) {
+			string def = defs.getStringDefinition();
+			deleteWordOneDef(text, def);
 		}
 	}
 
-	bool addNewWordOneDef(string& text, string& def) {
-		//find and delete in deleted.txt
+	int	deleteWordOneDef(string& text, string& def) {
+		//check if word exists
+		Word match = searchWordMatching(text);
+		if (match.findDefinition(def) == -1) {
+			return -1; //word does not exist 
+		}
+
+		ifstream fin; bool appear = false;
+		string line;
 		
-		ifstream fin;
-		vector<string> deletedFile; string line; bool found = false;
+		//check if it has been deleted already
 		fin.open("DataSet\\" + activeDataSet + "\\deletedWords.txt");
 
 		while (getline(fin, line)) {
@@ -103,77 +99,34 @@ public:
 				++i;
 			}
 			++i;
-			
-			lineDef = line.substr(i);
 
-			//found the word in deleted.txt
-			if (lineText == text && lineDef == def) {
-				found = true;
-				continue;
+			if (lineText != text) continue;
+
+			if (lineDef == def) {
+				fin.close();
+				return 0; //word was deleted before
 			}
-
-			deletedFile.push_back(line);
 		}
 
 		fin.close();
 
-		if (found == true) { //remove the found line in deletedWords.txt
-			ofstream fout;
-			fout.open("DataSet\\" + activeDataSet + "\\deletedWords.txt");
-
-			for (auto& str : deletedFile) {
-				fout << str << '\n';
-			}
-
-			fout.close();
-
-			return true; //success adding
-		}
-
-		//check if word already existed
-
-		Word match = searchWordMatching(text);
-
-		if (match.findDefinition(def) != -1) {
-			return false; //word already exists
-		}
-
-		//couldnt find word, now we add it to wordfinder
-
-		activeSearcher->addNewWord(text, def);
-
-
-		//append the word to addedwords.txt and addsorted.txt
+		//adding it to deleted file
 
 		ofstream fout;
 
-		fout.open("DataSet\\" + activeDataSet + "\\addedWords.txt", ios::app);
+		fout.open("DataSet\\" + activeDataSet + "\\deletedWords.txt", ios::app);
 
 		fout << text << '\t' << def << '\n';
 
 		fout.close();
 
-		vector<string> sortedDef = transformSentence(def);
-
-		//remember to sort
-		sortVectorString(sortedDef);
-		
-
-		fout.open("DataSet\\" + activeDataSet + "\\sortedAddedWords.txt", ios::app);
-
-		fout << text << '\t';
-		for (int i = 0; i < (int)sortedDef.size(); ++i) {
-			fout << sortedDef[i];
-			if (i + 1 == (int)sortedDef.size()) {
-				fout << '\n';
-			}
-			else fout << ' ';
-		}
-
-		fout.close();
-
-		return true;
+		return 1; //word deleted successfully
 	}
+
+	void addNewWord(Word& newWord);
+
+	//return true if add word successfully
+	bool addNewWordOneDef(string& text, string& def);
 
 	//helpers
 
@@ -188,34 +141,9 @@ public:
 		mergeSort(vec, 0, n - 1, n);
 	}
 
-	void merge(vector<string>& a, int l, int r, int mid) {
-		vector<string> temp(r - l + 1);
+	void merge(vector<string>& a, int l, int r, int mid);
 
-		int ptr1 = l, ptr2 = mid + 1, cur = 0;
-
-		while (ptr1 <= mid && ptr2 <= r) {
-			if (a[ptr1] < a[ptr2])
-				temp[cur++] = a[ptr1++];
-			else
-				temp[cur++] = a[ptr2++];
-		}
-
-		while (ptr1 <= mid) temp[cur++] = a[ptr1++];
-		while (ptr2 <= r) temp[cur++] = a[ptr2++];
-
-		for (int i = l, cnt = 0; i <= r; ++i) a[i] = temp[cnt++];
-	}
-
-	void mergeSort(vector<string>& a, int l, int r, int n) {
-		if (l > r || l == r) return;
-
-		int mid = l + (r - l) / 2;
-
-		mergeSort(a, l, mid, n);
-		mergeSort(a, mid + 1, r, n);
-
-		merge(a, l, r, mid);
-	}
+	void mergeSort(vector<string>& a, int l, int r, int n);
 
 	//vector<Word> helperDefToWordENGENG(string keyword, int limit){
 	//	//format word
