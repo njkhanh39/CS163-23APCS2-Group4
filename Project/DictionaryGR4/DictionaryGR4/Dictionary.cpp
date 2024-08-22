@@ -46,9 +46,28 @@ Word* Dictionary::getWordPtr(string word) {
 	return myTrie.getWordPointer(word);
 }
 
-//Word* Dictionary::getRandomWord(string& wordText, string activeDataset) {
-//	string dir;
-//}
+Word* Dictionary::getRandomWord(string& wordText, string dataset) {
+	string dir, temp;
+	if (dataset == "Eng-Eng")
+		temp = to_string(rand() % 28 + 1);
+
+	else if (dataset == "Eng-Vie") {
+		int t = rand() % 29 + 1;
+		if (t == 29)
+			temp = "number";
+		else
+			temp = to_string(t);
+	}
+
+	else if (dataset == "Vie-Eng")
+		temp = to_string(rand() % 25 + 1);
+
+	dir = "DataSet\\" + dataset + "\\" + temp + ".txt";
+
+	myTrie.loadData(dir, dataset);
+
+	return myTrie.getRandomWord(wordText, dataset);
+}
 
 //return definitions of keyword
 vector<Definition> Dictionary::searchDefinitions(string word) {

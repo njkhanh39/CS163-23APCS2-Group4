@@ -50,4 +50,6 @@ private:
 
 	void OnResetButtonClicked(wxCommandEvent& evt);
 
+	void OnRandomClicked(wxCommandEvent& evt);
+
 };
