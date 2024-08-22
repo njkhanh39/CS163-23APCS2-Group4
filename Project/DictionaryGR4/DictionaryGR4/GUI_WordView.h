@@ -278,7 +278,7 @@ public:
 			string newDef = defText->GetValue().ToStdString();
 			defs[curIndex] = newDef;
 			word->modifyDefinition(newDef, curIndex);
-			dict->editDefinition(text->GetLabel().ToStdString(), newDef, curIndex);
+			//dict->editDefinition(text->GetLabel().ToStdString(), newDef, curIndex);
 		}
 
 		defText->SetEditable(0);
