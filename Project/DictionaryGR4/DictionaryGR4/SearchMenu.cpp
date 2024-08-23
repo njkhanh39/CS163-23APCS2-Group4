@@ -1,7 +1,7 @@
 #include "SearchMenu.h"
 
 using namespace std;
-namespace fs = experimental::filesystem;
+namespace fs = std::experimental::filesystem;
 
 SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10001, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
 	
@@ -26,7 +26,11 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	searchBar = new wxTextCtrl(this, wxID_ANY, "", wxPoint(234, 41), wxSize(776, 60));
 	searchBar->SetFont(fontCB);
 
-	rd_button = new wxButton(this, wxID_ANY, "Random", wxPoint(1097, 41), wxSize(116, 60), wxBORDER_NONE);
+	rd_button = new wxButton(this, wxID_ANY, "RANDOM", wxPoint(1097, 41), wxSize(116, 60), wxBORDER_NONE);
+	auto fnt = rd_button->GetFont();
+	fnt.SetPointSize(16);
+
+	rd_button->SetFont(fnt);
 	rd_button->SetBackgroundColour(purple);
 	rd_button->SetForegroundColour(white);
 
@@ -84,24 +88,32 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 
 
 	//word view appears first
-	wordView = new WordView(this, wxPoint(234, 133), wxSize(979, 460));
+	wordView = new WordView(this, wxPoint(234, 133), wxSize(979, 460), dict);
 	wordView->SetColor(white);
 
 	//init height = 0
 	suggestBar = new wxListBox(this, wxID_ANY, wxPoint(357, 100), wxSize(450, 0));
 	suggestBar->SetFont(font);
 
-	deleteword = new wxButton(this, wxID_ANY, "Delete Word", wxPoint(1042, 610), wxSize(172, 60));
+	deleteword = new wxButton(this, wxID_ANY, "DELETE WORD", wxPoint(1042, 610), wxSize(172, 60));
+	deleteword->SetFont(fnt);
 	deleteword->SetBackgroundColour(red);
 	deleteword->SetForegroundColour(white);
 
-	resetbutton = new wxButton(this, wxID_ANY, "RESET", wxPoint(53, 495), wxSize(154, 98), wxBORDER_NONE);
+	resetbutton = new wxButton(this, wxID_ANY, "RESET", wxPoint(53, 495), wxSize(154, 98)/*, wxBORDER_NONE*/);
+	resetbutton->SetFont(fnt);
 	resetbutton->SetBackgroundColour(red);
 	resetbutton->SetForegroundColour(white);
 
 
 	//events
 	
+	deleteword->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+		Word get = wordView->getShowingWord();
+		if (get.empty()) return;
+		dict->deleteWord(get);
+		wordView->SetBackDefault();
+	});
 	
 	suggestBar->Bind(wxEVT_LEFT_DOWN, &SearchMenu::skip, this);
 	button->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
@@ -116,6 +128,10 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	});
 	rd_button->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		OnRandomClicked(evt, dict);
+	});
+
+	resetbutton->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+		OnResetButtonClicked(evt, dict);
 	});
 
 	wxProgressDialog progressDialog("Please Wait", "Performing a long task...", 100, this,
@@ -336,7 +352,7 @@ void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt, Dictionary* dict) {
 		"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
 
 	if (ask->ShowModal() == wxID_YES) {
-		fs::copy("DataSet - Backup\\" + curDataset, "DataSet\\" + curDataset);
+		fs::copy("DataSet - Backup\\" + curDataset, "DataSet\\" + curDataset, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
 	}
 }
 

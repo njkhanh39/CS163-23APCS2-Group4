@@ -477,7 +477,7 @@ bool Trie::loadData(string file, string dataset) {
 }
 
 
-void WordFinder::addWord(string s, string def) {
+void WordFinder::addNewWord(string s, string def) {
     slots[size + numWordsAdded].setWord(s, def);
     //remember to sort the subdef
 
@@ -512,27 +512,15 @@ void WordFinder::load(string dataset) {
     }
 
     string line; //1 line = 1 bucket
-    while (getline(fin, line)) {
+    while (getline(fin, line, '\t')) {
         if (line.empty()) continue;
-        string s;
-        int i = 0;
-        while (line[i] != '\t') {
-            s.push_back(line[i]);
-            ++i;
-        }
+        
+        getline(fin, line, '\n');
 
-        ++i;
+        stringstream iss(line);
+        string cur;
 
-        string cur = "";
-        for (int j = i; j < (int)line.length(); ++j) {
-            if (line[j] == ' ') {
-                if (cur != "") addSubDef(cur, curbucket);
-                cur = "";
-            }
-            else cur.push_back(line[j]);
-        }
-
-        if (cur != "") addSubDef(cur, curbucket);
+        while(iss >> cur) addSubDef(cur, curbucket);
 
 
         //no need sorting
@@ -594,18 +582,12 @@ void WordFinder::load(string dataset) {
         }
 
         string line;
-        while (getline(fin, line)) {
-            string word = "";
-            int j = 0;
-            while (line[j] != '\t') {
-                word.push_back(line[j]);
-                ++j;
-            }
+        while (getline(fin, line,'\t')) {
+            string def;
 
-            ++j;
-            string def = line.substr(j, (int)line.length());
+            getline(fin, def, '\n');
 
-            slots[cur].setWord(word, def);
+            slots[cur].setWord(line, def);
             ++cur;
         }
 
@@ -645,8 +627,11 @@ void WordFinder::unload() {
     }
 }
 
-//save to sorted data.txt
-void WordFinder::saveToFile(string& file) {
+//save to sorteddata.txt & addedSorted
+void WordFinder::saveToFile(string dataset) {
+
+    string file = "DataSet\\" + dataset + "\\sortedData.txt";
+
     ofstream fout;
     fout.open(file);
 
@@ -654,14 +639,29 @@ void WordFinder::saveToFile(string& file) {
         fout.close();
         return;
     }
-
+    //remember only write from 0->size, from size->size+numAdded is for added dataset
     for (int i = 0; i < size; ++i) {
         fout << slots[i].word.getWord() << '\t';
         for (int j = 0; j < (int)slots[i].subdef.size(); ++j) {
             fout << slots[i].subdef[j];
             if (j + 1 != (int)slots[i].subdef.size()) fout << ' ';
         }
-        if (i != size - 1) fout << '\n';
+        fout << '\n';
+    }
+
+    fout.close();
+
+    string fileAdd = "DataSet\\" + dataset + "\\sortedAddedWords.txt";
+
+    fout.open(fileAdd);
+
+    for (int i = size; i < size + numWordsAdded; ++i) {
+        fout << slots[i].word.getWord() << '\t';
+        for (int j = 0; j < (int)slots[i].subdef.size(); ++j) {
+            fout << slots[i].subdef[j];
+            if (j + 1 != (int)slots[i].subdef.size()) fout << ' ';
+        }
+        fout << '\n';
     }
 
     fout.close();

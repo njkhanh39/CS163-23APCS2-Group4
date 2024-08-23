@@ -2,10 +2,10 @@
 
 using namespace std;
 
-AddWordMenu::AddWordMenu(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
+AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
 
 	//font
-	wxFont font(14, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+	wxFont font(16, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	wxFont fontTitle(18, wxFONTFAMILY_MODERN, wxFONTSTYLE_MAX, wxFONTWEIGHT_NORMAL);
 	wxFont fontCB(22, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	fontTitle.MakeBold();
@@ -24,36 +24,58 @@ AddWordMenu::AddWordMenu(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDefault
 	/*wxStaticText* title = new wxStaticText(titleBar, wxID_ANY, "Dictionary", wxPoint(30, 30));
 	title->SetFont(fontTitle);*/
 
-	wordText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(114, 161), wxSize(635, 60));
-	wordText->SetFont(fontCB);
+	wordText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(114, 101), wxSize(635, 60));
+	wordText->SetFont(font);
 
 	wxArrayString datasets = { "Eng-Eng", "Eng-Vie", "Vie-Eng" };
-	datasetCbb = new wxComboBox(this, wxID_ANY, "", wxPoint(773, 161), wxSize(210, 60), datasets, wxCB_READONLY);	
+	datasetCbb = new wxComboBox(this, wxID_ANY, "Eng-Eng", wxPoint(773, 101), wxSize(154,-1), datasets, wxCB_READONLY);	
 	datasetCbb->SetFont(fontCB);
 	datasetCbb->SetSize(154, 60);
+	datasetCbb->Refresh();
 
-	partCbb = new wxComboBox(this, wxID_ANY, "", wxPoint(1007, 161), wxSize(154, 60));
-
-	defText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(110, 300), wxSize(700, 300));
-		
-	submit = new wxButton(this, wxID_ANY, "Submit", wxPoint(1000, 800), wxDefaultSize);
+	/*wxArrayString wordTypes = { "(n.)", "(v.)", "(adj.)", "(adv.)" };
+	partCbb = new wxComboBox(this, wxID_ANY, "", wxPoint(951, 101), wxSize(154, -1), wordTypes);
+	partCbb->SetFont(fontCB);
+	partCbb->SetSize(154, 60);
+	partCbb->Refresh();*/
 	
-	//back button
-	//back_to_home = new wxButton(titleBar, wxID_ANY, "Home", wxPoint(0, 0), wxSize(100, 50));
-	//back_to_home->SetFont(font);
 
+	defText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(110, 240), wxSize(1000, 300));
+	defText->SetFont(font);
+		
+	submit = new wxButton(this, wxID_ANY, "ADD", wxPoint(951, 600), wxSize(154,60));
+	auto fntSubmit = submit->GetFont();
+	fntSubmit.SetPointSize(16);
+	submit->SetFont(fntSubmit);
+	submit->SetForegroundColour(white);
+	submit->SetBackgroundColour(green);
 
-	//sizer
-	//wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+	wxStaticText* wordBarText = new wxStaticText(this, wxID_ANY, "WORD", wxPoint(114, 60), wxSize(100, 20));
+	auto fnt = wordBarText->GetFont();
+	fnt.SetPointSize(16);
+	wordBarText->SetFont(fnt);
+	wordBarText->SetBackgroundColour(black);
+	wordBarText->SetForegroundColour(white);
 
-	//sizer->Add(titleBar, 1, wxEXPAND | wxLEFT | wxUP | wxRIGHT, 0);
-	//sizer->Add(mainPanel, 5, wxEXPAND | wxALL, 0);
+	wxStaticText* dataSetBarText = new wxStaticText(this, wxID_ANY, "DATASET", wxPoint(773, 60), wxSize(100, 20));
+	dataSetBarText->SetFont(fnt);
+	dataSetBarText->SetBackgroundColour(black);
+	dataSetBarText->SetForegroundColour(white);
 
-	//this->SetSizerAndFit(sizer);
+	datasetCbb->Bind(wxEVT_COMBOBOX, [this, dict](wxCommandEvent& evt) {
+		dict->chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
+	});
 
-	//events
-
+	submit->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+		string text = (string)wordText->GetValue();
+		string def = (string)defText->GetValue();
+		dict->addNewWordOneDef(text, def);
+	});
+	
+	
 }
+
+
 
 AddWordMenu::~AddWordMenu() {
 

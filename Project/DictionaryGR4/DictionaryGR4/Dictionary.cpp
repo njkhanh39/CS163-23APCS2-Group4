@@ -223,7 +223,7 @@ string Dictionary::mapStringToFile(string word) {
 	//handling the char
 
 	if (codepoint == 39) {
-		num = 1; //1.txt = '
+		num = 1; //1.txt = ' 
 	}
 	if (codepoint == 45) {
 		num = 2; //2.txt = "-"
@@ -333,4 +333,15 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 
 History Dictionary::getHistory() {
 	return hist;
+}
+
+
+
+void Dictionary::addToFavourite(Word& word) {
+	ofstream out;
+	out.open("Favourite\\" + activeDataSet + "\\favList.txt", ios::app);
+	if (!out.is_open()) return;
+	out << word.getWord() << endl;
+	out.close();
+	word.markFavourite();
 }
