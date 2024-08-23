@@ -527,7 +527,7 @@ void Dictionary::mergeSort(vector<string>& a, int l, int r, int n) {
 History Dictionary::getHistory() {
 	return hist;
 }
-
+//
 void Dictionary::editDefinition(string text, string def, int index) {
 	string dir = mapStringToFile(text);
 	ifstream fin;
