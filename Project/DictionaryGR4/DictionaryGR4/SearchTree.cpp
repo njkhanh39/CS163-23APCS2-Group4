@@ -512,27 +512,15 @@ void WordFinder::load(string dataset) {
     }
 
     string line; //1 line = 1 bucket
-    while (getline(fin, line)) {
+    while (getline(fin, line, '\t')) {
         if (line.empty()) continue;
-        string s;
-        int i = 0;
-        while (line[i] != '\t') {
-            s.push_back(line[i]);
-            ++i;
-        }
+        
+        getline(fin, line, '\n');
 
-        ++i;
+        stringstream iss(line);
+        string cur;
 
-        string cur = "";
-        for (int j = i; j < (int)line.length(); ++j) {
-            if (line[j] == ' ') {
-                if (cur != "") addSubDef(cur, curbucket);
-                cur = "";
-            }
-            else cur.push_back(line[j]);
-        }
-
-        if (cur != "") addSubDef(cur, curbucket);
+        while(iss >> cur) addSubDef(cur, curbucket);
 
 
         //no need sorting
@@ -594,18 +582,12 @@ void WordFinder::load(string dataset) {
         }
 
         string line;
-        while (getline(fin, line)) {
-            string word = "";
-            int j = 0;
-            while (line[j] != '\t') {
-                word.push_back(line[j]);
-                ++j;
-            }
+        while (getline(fin, line,'\t')) {
+            string def;
 
-            ++j;
-            string def = line.substr(j, (int)line.length());
+            getline(fin, def, '\n');
 
-            slots[cur].setWord(word, def);
+            slots[cur].setWord(line, def);
             ++cur;
         }
 
