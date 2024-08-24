@@ -54,3 +54,8 @@ void History::clearHistory() {
 void History::remove(string word) {
 
 }
+
+
+void History::saveDevToWord() {
+
+}
