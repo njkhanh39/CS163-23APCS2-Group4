@@ -21,6 +21,19 @@ QuizMenu::QuizMenu(wxWindow* parent) : wxSimplebook(parent, wxID_ANY, wxDefaultP
 
 	GuessWord = new wxButton(gamevar, wxID_ANY, "GUESS WORD", wxPoint(238, 140), wxSize(402, 70));
 	GuessDef = new wxButton(gamevar, wxID_ANY, "GUESS DEFINITION", wxPoint(640, 140), wxSize(402, 70));
+
+	GuessWord->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+		gametype = 0;
+		GuessWord->SetBackgroundColour(wxColour(101, 86, 142));
+		GuessDef->SetBackgroundColour(wxColour(255, 255, 255));
+		});
+
+	GuessDef->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+		gametype = 1;
+		GuessDef->SetBackgroundColour(wxColour(101, 86, 142));
+		GuessWord->SetBackgroundColour(wxColour(255, 255, 255));
+		});
+
 	/**/
 
 	/*QUESTION*/
