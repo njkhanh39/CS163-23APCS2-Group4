@@ -641,7 +641,7 @@ void WordFinder::saveToFile(string dataset) {
     }
     //remember only write from 0->size, from size->size+numAdded is for added dataset
     for (int i = 0; i < size; ++i) {
-        fout << slots[i].word.getWord() << '\t';
+        fout << slots[i].word.getText() << '\t';
         for (int j = 0; j < (int)slots[i].subdef.size(); ++j) {
             fout << slots[i].subdef[j];
             if (j + 1 != (int)slots[i].subdef.size()) fout << ' ';
@@ -656,7 +656,7 @@ void WordFinder::saveToFile(string dataset) {
     fout.open(fileAdd);
 
     for (int i = size; i < size + numWordsAdded; ++i) {
-        fout << slots[i].word.getWord() << '\t';
+        fout << slots[i].word.getText() << '\t';
         for (int j = 0; j < (int)slots[i].subdef.size(); ++j) {
             fout << slots[i].subdef[j];
             if (j + 1 != (int)slots[i].subdef.size()) fout << ' ';
@@ -680,7 +680,7 @@ Word WordFinder::searchWord(string text) {
     //bin search for left most word matches text
     while (left <= right) {
         int mid = left + (right - left) / 2;
-        string cur = slots[mid].word.getWord();
+        string cur = slots[mid].word.getText();
 
         u16string midstr = tou16(cur);
 
@@ -698,7 +698,7 @@ Word WordFinder::searchWord(string text) {
 
     if (j != -1) { //move up to find same word, different def
         for (int i = j; i < size; ++i) {
-            if (slots[i].word.getWord() != text) break;
+            if (slots[i].word.getText() != text) break;
 
             if (!yes) {
                 ans.setWord(text);
@@ -712,7 +712,7 @@ Word WordFinder::searchWord(string text) {
 
     //find possibly user-added word
     for (int i = size + numWordsAdded - 1; i >= size; --i) {
-        string cur = slots[i].word.getWord();
+        string cur = slots[i].word.getText();
         u16string u16cur = tou16(cur);
         if (u16cur == wxtest) {
             if (!yes) {
@@ -726,8 +726,40 @@ Word WordFinder::searchWord(string text) {
     return ans;
 }
 
+int WordFinder::searchWordIndex(string text) {
+    int left = 0, right = size - 1;
+    int mid = left + (right - left) / 2;
+
+    while (left <= right) {
+        if (text.compare(slots[mid].word.getText()) < 0) {
+            right = mid;
+            mid = left + (right - left) / 2;
+        }
+        else if (text.compare(slots[mid].word.getText()) > 0) {
+            left = mid;
+            mid = left + (right - left) / 2;
+        }
+        else
+            return mid;
+    }
+
+    return -1;
+}
+
 Word WordFinder::getWord(int index) {
     return slots[index].word;
+}
+
+vector<string>* WordFinder::getSubDef(int index) {
+    return &(slots[index].subdef);
+}
+
+int WordFinder::getSize() {
+    return size;
+}
+
+int WordFinder::getNumAdded() {
+    return numWordsAdded;
 }
 
 vector<Word> WordFinder::searchDefinitionsToWord(vector<string>& subkey, int limit) {

@@ -69,11 +69,17 @@ public:
 
 
 
-	void addToFavourite();
+	void addToFavourite(Word& word);
 
 	History getHistory();
 
-	void editDefinition(string text, string def, int index);
+	//setters & adders
+
+	bool editDefInFile(string text, string olddef, string newdef, string dir);
+
+	void editDefOnWordFinder(string text, string olddef, string newdef);
+
+	void editDefinition(string text, string olddef, string newdef);
 
 	void deleteWord(Word& word);
 

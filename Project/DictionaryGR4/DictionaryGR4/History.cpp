@@ -13,7 +13,7 @@ void History::saveToFile(SearchedWord w) {
 	ofstream out;
 	out.open("History\\" + mode + "\\history.csv", ios::app);
 	if (!out.is_open()) return;
-	out << w.getWord() << "," << w.getTime() << "," << w.getDate() << endl;
+	out << w.getText() << "," << w.getTime() << "," << w.getDate() << endl;
 	out.close();
 }
 

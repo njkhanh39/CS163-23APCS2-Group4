@@ -2,6 +2,7 @@
 #include <codecvt>
 #include "Dictionary.h"
 
+
 class WordView {
 private:
 
@@ -9,8 +10,8 @@ private:
 	wxPanel* panel;
 	wxBoxSizer* frame;
 	
-	wxStaticText* text, *wordTypeText, *pageText;
-	wxTextCtrl* defText;
+	wxStaticText* text, *wordTypeText;
+	wxTextCtrl* defText, *pageText;
 	wxButton* fav, *confirmEdit, *cancelEdit;
 	wxBitmapButton* back, * next, *editDef, *delDef, *favDef;
 		
@@ -59,7 +60,7 @@ public:
 		back = new wxBitmapButton(panel, 10016, bitmapback, wxPoint(0, 194), wxSize(53, 53));
 		next = new wxBitmapButton(panel, 10017, bitmapnext, wxPoint(926, 194), wxSize(53, 53));
 		
-		pageText = new wxStaticText(panel, wxID_ANY, "0/0", wxPoint(6*size.x / 10, 0), wxDefaultSize);
+		pageText = new wxTextCtrl(panel, wxID_ANY, "0/0", wxPoint(6*size.x / 10, 0), wxDefaultSize, wxTE_CENTRE | wxTE_PROCESS_ENTER);
 		pageText->SetFont(font);
 
 		wxBitmap bitmapdel(wxT("IMG/delbutton.png"), wxBITMAP_TYPE_PNG);
@@ -95,7 +96,9 @@ public:
 			OnRemoveDefClicked(evt, dict);
 		});
 		favDef->Bind(wxEVT_BUTTON, &WordView::OnAddFavourite, this);
+		defText->Bind(wxEVT_SET_FOCUS, &WordView::OnTextFocus, this);
 		defText->Bind(wxEVT_KILL_FOCUS, &WordView::OnDefTextKillFocus, this);
+		pageText->Bind(wxEVT_TEXT_ENTER, &WordView::OnPageTextChanged, this);
 
 		parentWindow = parent;
 	}
@@ -141,7 +144,7 @@ public:
 		defs.clear();
 		wordtype.clear();
 
-		pageText->SetLabel("0/0");
+		pageText->SetValue("0/0");
 		text->SetLabel("hello");
 		wordTypeText->SetLabel("wordtype");
 		defText->SetLabel("def");
@@ -149,7 +152,7 @@ public:
 
 	Word getShowingWord() {
 		Word ans;
-		if (pageText->GetLabel() == "0/0") return ans;
+		if (pageText->GetValue().ToStdString() == "0/0") return ans;
 
 		ans.setWord((string)text->GetLabel());
 
@@ -203,13 +206,13 @@ public:
 			//	}
 			//}
 		}
-		wxString unicodestr = wxString::FromUTF8(processWord.getWord());
+		wxString unicodestr = wxString::FromUTF8(processWord.getText());
 		if (text) text->SetLabel(unicodestr);
 		if (wordTypeText) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
 		if (defText) defText->SetLabel(wxString::FromUTF8(defs[cur]));
 		if (pageText) {
 			string show = to_string(cur + 1) + "/" + to_string(pages);
-			pageText->SetLabel(show);
+			pageText->SetValue(show);
 		}
 
 		// Update the layout to reflect the new size
@@ -231,7 +234,7 @@ public:
 		if (defText) defText->SetLabel(wxString::FromUTF8(defs[cur]));
 		if (pageText) {
 			string show = to_string(cur + 1) + "/" + to_string(pages);
-			pageText->SetLabel(show);
+			pageText->SetValue(show);
 		}
 
 	}
@@ -244,7 +247,7 @@ public:
 				if (defText) defText->SetLabel(wxString::FromUTF8(defs[cur]));
 				if (pageText) {
 					string show = to_string(cur + 1) + "/" + to_string(pages);
-					pageText->SetLabel(show);
+					pageText->SetValue(show);
 				}
 				break;
 			}
@@ -252,7 +255,7 @@ public:
 	}
 
 	int getCurrentPage() {
-		wxString page = pageText->GetLabelText();
+		wxString page = pageText->GetValue();
 		return wxAtoi(page.Left(page.First('/'))) - 1;
 	}
 
@@ -276,9 +279,9 @@ public:
 
 		if (ask->ShowModal() == wxID_YES and curIndex >= 0) {
 			string newDef = defText->GetValue().ToStdString();
+			dict->editDefinition(text->GetLabel().ToStdString(), defs[curIndex], newDef);
 			defs[curIndex] = newDef;
 			word->modifyDefinition(newDef, curIndex);
-			//dict->editDefinition(text->GetLabel().ToStdString(), newDef, curIndex);
 		}
 
 		defText->SetEditable(0);
@@ -301,6 +304,10 @@ public:
 		cancelEdit->Hide();
 	}
 
+	void OnTextFocus(wxFocusEvent& evt) {
+		evt.Skip();
+	}
+
 	void OnDefTextKillFocus(wxFocusEvent& evt) {
 		wxWindow* curFocus = wxWindow::FindFocus();
 
@@ -314,7 +321,7 @@ public:
 				defText->SetInsertionPointEnd();
 			}
 
-			if (ask->ShowModal() == wxID_NO) {
+			else {
 				defText->SetEditable(0);
 
 				int curIndex = getCurrentPage();
@@ -328,6 +335,7 @@ public:
 				cancelEdit->Hide();
 			}
 		}
+		evt.Skip();
 	}
 
 	void OnRemoveDefClicked(wxCommandEvent& evt, Dictionary* dict) {
@@ -357,7 +365,7 @@ public:
 			--pages;
 			if (curIndex == pages)
 				--curIndex;
-			pageText->SetLabel(to_string(curIndex + 1) + "/" + to_string(pages));
+			pageText->SetValue(to_string(curIndex + 1) + "/" + to_string(pages));
 			wordTypeText->SetLabel(wxString::FromUTF8(wordtype[curIndex]));
 			defText->SetLabel(wxString::FromUTF8(defs[curIndex]));
 		
@@ -368,7 +376,31 @@ public:
 	}
 
 	void OnAddFavourite(wxCommandEvent& evt) {
+		ofstream out;
+		out.open("Favourite\\" + activeDataset + "\\favList.txt", ios::app);
+		if (!out.is_open()) return;
+		out << getShowingWord().getText()  << endl;
+		out.close();
+		getShowingWord().markFavourite();
+	}
 
+	void OnPageTextChanged(wxCommandEvent& evt) {
+		wxString page = pageText->GetValue();
+		int enteredPage = wxAtoi(page.Left(page.First('/')));
+		
+		if (enteredPage > pages)
+			cur = pages - 1;
+		else if (enteredPage <= 0)
+			cur = 0;
+		else
+			cur = enteredPage - 1;
+
+		if (pages) {
+			wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
+			defText->SetLabel(wxString::FromUTF8(defs[cur]));
+			string show = to_string(cur + 1) + "/" + to_string(pages);
+			pageText->SetValue(show);
+		}
 	}
 
 };

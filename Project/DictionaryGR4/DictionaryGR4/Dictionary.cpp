@@ -50,12 +50,8 @@ Word Dictionary::searchWordMatching(string word) {
 	for (auto& x : word) x = tolower(x);
 
 	
-	if (!myTrie.empty()) {
-		w = myTrie.getWordMatching(word);
-		if(w.empty()) w = activeSearcher->searchWord(word);
-	}
-	else w = activeSearcher->searchWord(word);
-	 
+	if (w.empty() && isSearchingDefinition) w = activeSearcher->searchWord(word);
+	else w = myTrie.getWordMatching(word);
 	
 	//since some of w's definitions may be deleted by user, we have to check.
 	getAvailableWords(w);
@@ -78,7 +74,7 @@ Word Dictionary::getRandomWord(string& wordText) {
 	string text;
 	while (text.empty()) {
 		int r = RandInt(0, 200000);
-		text = activeSearcher->getWord(r).getWord();
+		text = activeSearcher->getWord(r).getText();
 	}
 
 	return activeSearcher->searchWord(text);
@@ -153,8 +149,9 @@ vector<Word> Dictionary::searchDefToWord(string& keyword, int limit) {
 
 	return ans;
 }
+
 void Dictionary::addNewWord(Word& newWord) {
-	string text = newWord.getWord();
+	string text = newWord.getText();
 	auto v = newWord.getDefinitions();
 	for (auto& def : v) {
 		string defStr = def.getStringDefinition();
@@ -255,7 +252,7 @@ bool Dictionary::addNewWordOneDef(string& text, string& def) {
 }
 
 void Dictionary::deleteWord(Word& word) {
-	string text = word.getWord();
+	string text = word.getText();
 	auto v = word.getDefinitions();
 	for (auto& defs : v) {
 		string def = defs.getStringDefinition();
@@ -327,7 +324,7 @@ bool Dictionary::getAvailableWords(Word& w) {
 		++i;
 
 		//match
-		if (comp == w.getWord()) {
+		if (comp == w.getText()) {
 			char check = line[i];
 			if (check == '*') {
 				w.clear();
@@ -387,7 +384,7 @@ string Dictionary::mapStringToFile(string word) {
 	//handling the char
 
 	if (codepoint == 39) {
-		num = 1; //1.txt = '
+		num = 1; //1.txt = ' 
 	}
 	if (codepoint == 45) {
 		num = 2; //2.txt = "-"
@@ -495,6 +492,141 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 	}
 }
 
+History Dictionary::getHistory() {
+	return hist;
+}
+
+bool Dictionary::editDefInFile(string text, string olddef, string newdef, string dir) {
+	ifstream fin;
+	fin.open(dir);
+
+	string prev, after;
+	string word, line;
+
+	if (fin.is_open()) {
+		if (!getline(fin, line))
+			return 0;
+		word = line.substr(0, line.find("\t"));
+		while (word != text) {
+			prev += line + "\n";
+			if (!getline(fin, line))
+				return 0;
+			word = line.substr(0, line.find("\t"));
+		}
+
+		int i = line.find(")") + 2;
+		string curdef = line.substr(i, line.length() - i);
+		while (curdef.compare(olddef)) {
+			prev += line + "\n";
+			getline(fin, line);
+			word = line.substr(0, line.find("\t"));
+			if (word != text)
+				return 0;
+			i = line.find(")") + 2;
+			curdef = line.substr(i, line.length() - i);
+		}
+
+		prev += line.substr(0, line.find(")") + 2);
+
+		string temp;
+		while (getline(fin, temp))
+			after += temp + "\n";
+		fin.close();
+	}
+
+	ofstream fout;
+	fout.open(dir);
+	if (fout.is_open()) {
+		fout << prev << newdef << "\n" << after;
+		fout.close();
+		return 1;
+	}
+}
+
+void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef) {
+	int size = activeSearcher->getSize();
+	int added = activeSearcher->getNumAdded();
+
+	vector<string> sortedOlddef = transformSentence(olddef);
+	sortVectorString(sortedOlddef);
+
+	vector<string> sortedNewdef = transformSentence(newdef);
+	sortVectorString(sortedNewdef);
+
+	bool done = 0;
+
+	for (int i = size; i < size + added; ++i)
+		if (activeSearcher->getWord(i).getText() == text and *(activeSearcher->getSubDef(i)) == sortedOlddef) {
+			*(activeSearcher->getSubDef(i)) = sortedNewdef;
+			done = 1;
+			break;
+		}
+
+	if (!done) {
+		int i = activeSearcher->searchWordIndex(text);
+		int t = i;
+
+		bool doneUpper = 0;
+		while (*(activeSearcher->getSubDef(t)) != sortedOlddef) {
+			if (!doneUpper)
+				--t;
+			else
+				++t;
+
+			if (activeSearcher->getWord(t).getText() != text) {
+				t = i;
+				doneUpper = 1;
+			}
+		}
+
+		*(activeSearcher->getSubDef(i)) = sortedNewdef;
+
+		ifstream fin;
+		string prev, after;
+
+		fin.open("DataSet\\" + activeDataSet + "\\sortedData.txt");
+		if (fin.is_open()) {
+			string line;
+			for (int j = 0; j < i; ++j) {
+				getline(fin, line);
+				prev += line + "\n";
+			}
+			getline(fin, line);
+			prev += line.substr(0, line.find(")") + 2);
+			while (getline(fin, line))
+				after += line + "\n";
+			fin.close();
+		}
+
+		ofstream fout;
+		fout.open("DataSet\\" + activeDataSet + "\\sortedData.txt");
+		fout << prev;
+		for (int j = 0; j < sortedNewdef.size() - 1; ++j)
+			fout << sortedNewdef[j] << " ";
+		fout << sortedNewdef[sortedNewdef.size() - 1] << "\n" << after;
+		fout.close();
+	}
+
+}
+
+void Dictionary::editDefinition(string text, string olddef, string newdef) {
+	string dir = mapStringToFile(text);
+
+	if (!editDefInFile(text, olddef, newdef, "DataSet\\" + activeDataSet + "\\addedWords.txt"))
+		editDefInFile(text, olddef, newdef, dir);
+
+	editDefOnWordFinder(text, olddef, newdef);
+}
+
+void Dictionary::addToFavourite(Word& word) {
+	ofstream out;
+	out.open("Favourite\\" + activeDataSet + "\\favList.txt", ios::app);
+	if (!out.is_open()) return;
+	out << word.getText() << endl;
+	out.close();
+	word.markFavourite();
+}
+
 void Dictionary::merge(vector<string>& a, int l, int r, int mid) {
 	vector<string> temp(r - l + 1);
 
@@ -522,45 +654,4 @@ void Dictionary::mergeSort(vector<string>& a, int l, int r, int n) {
 	mergeSort(a, mid + 1, r, n);
 
 	merge(a, l, r, mid);
-}
-
-History Dictionary::getHistory() {
-	return hist;
-}
-//
-void Dictionary::editDefinition(string text, string def, int index) {
-	string dir = mapStringToFile(text);
-	ifstream fin;
-	fin.open(dir);
-
-	string prev, after;
-	string word, line;
-
-	if (fin.is_open()) {
-		getline(fin, line);
-		word = line.substr(0, line.find("\t"));
-		while (word != text) {
-			prev += line + "\n";
-			getline(fin, line);
-			word = line.substr(0, line.find("\t"));
-		}
-		for (int i = 0; i < index; ++i) {
-			prev += line + "\n";
-			getline(fin, line);
-			word = line.substr(0, line.find("\t"));
-		}
-		prev += line.substr(0, line.find(")") + 2);
-
-		string temp;
-		while (getline(fin, temp))
-			after += temp + "\n";
-		fin.close();
-	}
-
-	ofstream fout;
-	fout.open(dir);
-	if (fout.is_open()) {
-		fout << prev << def << "\n" << after;
-		fout.close();
-	}
 }

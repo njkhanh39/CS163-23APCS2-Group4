@@ -18,19 +18,24 @@ class Word {
 private:
 	string text;
 	vector<Definition> defList;
+	bool isFavourite;
+	string dataset;
 
 public:
 	Word() {
 		text = "";
+		isFavourite = false;
 	}
 
 	Word(string word) {
 		text = word;
+		isFavourite = false;
 	}
 
 	Word(string word, string def) {
 		text = word;
 		addDefinition(def);
+		isFavourite = false;
 	}
 
 
@@ -70,7 +75,7 @@ public:
 
 	//getters
 
-	string getWord();
+	string getText();
 
 	int getNumberOfDefinitions();
 
@@ -80,6 +85,10 @@ public:
 
 	vector<string> getStringDefinitions();
 
+	void markFavourite();
+
+	string getDataset();
+
 	//adders and setters
 
 	void addDefinition(string& def);
@@ -88,6 +97,9 @@ public:
 
 	void setWord(string word);
 
+	void setFavourite(bool state);
+
+	void setDataset(string dataset);
 	void clear();
 
 	//adjust-er
