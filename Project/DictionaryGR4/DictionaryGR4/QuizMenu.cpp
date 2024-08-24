@@ -11,26 +11,73 @@ QuizMenu::QuizMenu(wxWindow* parent) : wxSimplebook(parent, wxID_ANY, wxDefaultP
 	gamevar->SetBackgroundColour(black);
 
 
-	game = new wxStaticText(gamevar, wxID_ANY,"Choose Game Type", wxPoint(601,100));
-	datachose = new wxStaticText(gamevar, wxID_ANY, "Choose Dataset", wxPoint(562, 280));
-	numberques = new wxStaticText(gamevar, wxID_ANY, "Choose Number of Questions", wxPoint(100, 300));
+	game = new wxStaticText(gamevar, wxID_ANY,"GAMETYPE", wxPoint(601,66));
+	datachose = new wxStaticText(gamevar, wxID_ANY, "DATASET", wxPoint(601, 211));
+	numberques = new wxStaticText(gamevar, wxID_ANY, "NUMBER OF QUESTIONS", wxPoint(562, 347)) ;
 
 	game->SetForegroundColour(white);
 	datachose->SetForegroundColour(white);
 	numberques->SetForegroundColour(white);
 
-	GuessWord = new wxButton(gamevar, wxID_ANY, "GUESS WORD", wxPoint(238, 140), wxSize(402, 70));
-	GuessDef = new wxButton(gamevar, wxID_ANY, "GUESS DEFINITION", wxPoint(640, 140), wxSize(402, 70));
+	GuessWord = new wxButton(gamevar, wxID_ANY, "GUESS WORD", wxPoint(238, 110), wxSize(402, 65));
+	GuessWord->SetBackgroundColour(green);
+	GuessDef = new wxButton(gamevar, wxID_ANY, "GUESS DEFINITION", wxPoint(640, 110), wxSize(402, 65));
+
+	EngEng = new wxButton(gamevar, wxID_ANY, "ENG-ENG", wxPoint(238, 249), wxSize(268, 65));
+	EngEng->SetBackgroundColour(green);
+	EngVie = new wxButton(gamevar, wxID_ANY, "ENG-VIE", wxPoint(506, 249), wxSize(268, 65));
+	VieEng = new wxButton(gamevar, wxID_ANY, "VIE-ENG", wxPoint(774, 249), wxSize(268, 65));
+
+	wxBitmap bitin(wxT("IMG/Plus.png"), wxBITMAP_TYPE_PNG);
+	wxBitmap bitde(wxT("IMG/Minus.png"), wxBITMAP_TYPE_PNG);
+
+	decrease = new wxBitmapButton(gamevar, wxID_ANY, bitde, wxPoint(451, 388), wxSize(48,48), wxBORDER_NONE);
+	increase = new wxBitmapButton(gamevar, wxID_ANY, bitin, wxPoint(791, 388), wxSize(48, 48), wxBORDER_NONE);
+	increase->SetBackgroundColour(white);
+	decrease->SetBackgroundColour(white);
+	
+	increase->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+		numquest += 5;
+		displaynum->SetLabel(wxString::Format("%d", numquest));
+		});
+
+	decrease->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+		numquest -= 5;
+		displaynum->SetLabel(wxString::Format("%d", numquest));
+		});
+
+	displaynum = new wxButton(gamevar, wxID_ANY, std::to_string(numquest),wxPoint(439,380),wxSize(402,65),wxBORDER_NONE);
+
+	EngEng->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+		dataset = 0;
+		EngEng->SetBackgroundColour(wxColour(11, 199, 189));
+		EngVie->SetBackgroundColour(wxColour(255, 255, 255));
+		VieEng->SetBackgroundColour(wxColour(255, 255, 255));
+		});
+
+	EngVie->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+		dataset = 1;
+		EngVie->SetBackgroundColour(wxColour(11, 199, 189));
+		EngEng->SetBackgroundColour(wxColour(255, 255, 255));
+		VieEng->SetBackgroundColour(wxColour(255, 255, 255));
+		});
+
+	VieEng->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+		dataset = 2;
+		VieEng->SetBackgroundColour(wxColour(11, 199, 189));
+		EngVie->SetBackgroundColour(wxColour(255, 255, 255));
+		EngEng->SetBackgroundColour(wxColour(255, 255, 255));
+		});
 
 	GuessWord->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
 		gametype = 0;
-		GuessWord->SetBackgroundColour(wxColour(101, 86, 142));
+		GuessWord->SetBackgroundColour(wxColour(11, 199, 189));
 		GuessDef->SetBackgroundColour(wxColour(255, 255, 255));
 		});
 
 	GuessDef->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
 		gametype = 1;
-		GuessDef->SetBackgroundColour(wxColour(101, 86, 142));
+		GuessDef->SetBackgroundColour(wxColour(11, 199, 189));
 		GuessWord->SetBackgroundColour(wxColour(255, 255, 255));
 		});
 
@@ -63,10 +110,11 @@ QuizMenu::QuizMenu(wxWindow* parent) : wxSimplebook(parent, wxID_ANY, wxDefaultP
 
 	/**/
 
+
 	this->AddPage(question, "Question", true);
 	this->AddPage(gamevar,"Game variable", true);
 
-	this->SetSelection(0);
+	this->SetSelection(1);
 
 }
 
