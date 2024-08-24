@@ -37,6 +37,12 @@ void Dictionary::turnOffSearchDefinitionEngine() {
 	isSearchingDefinition = false;
 }
 
+void Dictionary::reloadWordFinder(string dataset) {
+	if (dataset == "Eng-Eng") toolEngEng.load(dataset);
+	else if (dataset == "Eng-Vie") toolEngVie.load(dataset);
+	else if (dataset == "Vie-Eng") toolVieEng.load(dataset);
+}
+
 void Dictionary::saveToFile() {
 	toolEngEng.saveToFile("Eng-Eng");
 	toolEngVie.saveToFile("Eng-Vie");
@@ -354,6 +360,29 @@ vector<string> Dictionary::transformSentence(string& input) {
 
 	// Transform to lowercase and remove dots, commas, and semicolons
 	for (char ch : input) {
+		if (ch != '.' && ch != ',' && ch != ';' && ch != '(' && ch != ')') {
+			intermediate += tolower(ch);
+		}
+	}
+
+	// Remove redundant spaces and split into words
+	istringstream iss(intermediate);
+	vector<string> words;
+	string word;
+
+	while (iss >> word) {
+		words.push_back(word);
+	}
+
+	return words;
+}
+
+vector<string> Dictionary::transformSentenceWithBracs(string& input) {
+	string intermediate;
+	intermediate.reserve(input.size());
+
+	// Transform to lowercase and remove dots, commas, and semicolons
+	for (char ch : input) {
 		if (ch != '.' && ch != ',' && ch != ';') {
 			intermediate += tolower(ch);
 		}
@@ -496,6 +525,7 @@ History Dictionary::getHistory() {
 	return hist;
 }
 
+// edit 1-28.txt and addedWords.txt
 bool Dictionary::editDefInFile(string text, string olddef, string newdef, string dir) {
 	ifstream fin;
 	fin.open(dir);
@@ -543,30 +573,69 @@ bool Dictionary::editDefInFile(string text, string olddef, string newdef, string
 	}
 }
 
-void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef) {
+// edit on wordFinder and in sortedData.txt, sortedAddedWords.txt
+void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef, string pop) {
 	int size = activeSearcher->getSize();
 	int added = activeSearcher->getNumAdded();
 
+	bool done = 0;
+
+	// find in the added-part of wordFinder and edit in sortedAddedWords.txt
+	olddef = pop + " " + olddef;
 	vector<string> sortedOlddef = transformSentence(olddef);
 	sortVectorString(sortedOlddef);
 
+	newdef = pop + " " + newdef;
 	vector<string> sortedNewdef = transformSentence(newdef);
 	sortVectorString(sortedNewdef);
 
-	bool done = 0;
-
-	for (int i = size; i < size + added; ++i)
+	for (int i = size; i < size + added; ++i) {
+		vector<string> test = *(activeSearcher->getSubDef(i));
 		if (activeSearcher->getWord(i).getText() == text and *(activeSearcher->getSubDef(i)) == sortedOlddef) {
 			*(activeSearcher->getSubDef(i)) = sortedNewdef;
+
+			string prev, after, line;
+
+			ifstream fin;
+			fin.open("DataSet\\" + activeDataSet + "\\sortedAddedWords.txt");
+			if (fin.is_open()) {
+				for (int j = size; j < i; ++j) {
+					getline(fin, line);
+					prev += line + "\n";
+				}
+				getline(fin, line);
+				prev += line.substr(0, line.find("\t") + 1);
+				while (getline(fin, line))
+					after += line + "\n";
+				fin.close();
+			}
+
+			ofstream fout;
+			fout.open("DataSet\\" + activeDataSet + "\\sortedAddedWords.txt");
+			fout << prev;
+			for (int j = 0; j < sortedNewdef.size() - 1; ++j)
+				fout << sortedNewdef[j] << " ";
+			fout << sortedNewdef[sortedNewdef.size() - 1] << "\n" << after;
+			fout.close();
+
 			done = 1;
 			break;
 		}
+	}
+
+	// find and edit in normal part of wordFinder
+	sortedOlddef = transformSentenceWithBracs(olddef);
+	sortVectorString(sortedOlddef);
+
+	sortedNewdef = transformSentenceWithBracs(newdef);
+	sortVectorString(sortedNewdef);
 
 	if (!done) {
 		int i = activeSearcher->searchWordIndex(text);
 		int t = i;
 
 		bool doneUpper = 0;
+		vector<string> test = *(activeSearcher->getSubDef(t));
 		while (*(activeSearcher->getSubDef(t)) != sortedOlddef) {
 			if (!doneUpper)
 				--t;
@@ -579,7 +648,7 @@ void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef) 
 			}
 		}
 
-		*(activeSearcher->getSubDef(i)) = sortedNewdef;
+		*(activeSearcher->getSubDef(t)) = sortedNewdef;
 
 		ifstream fin;
 		string prev, after;
@@ -587,12 +656,12 @@ void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef) 
 		fin.open("DataSet\\" + activeDataSet + "\\sortedData.txt");
 		if (fin.is_open()) {
 			string line;
-			for (int j = 0; j < i; ++j) {
+			for (int j = 0; j < t; ++j) {
 				getline(fin, line);
 				prev += line + "\n";
 			}
 			getline(fin, line);
-			prev += line.substr(0, line.find(")") + 2);
+			prev += line.substr(0, line.find("\t") + 1);
 			while (getline(fin, line))
 				after += line + "\n";
 			fin.close();
@@ -609,13 +678,13 @@ void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef) 
 
 }
 
-void Dictionary::editDefinition(string text, string olddef, string newdef) {
+void Dictionary::editDefinition(string text, string olddef, string newdef, string pop) {
 	string dir = mapStringToFile(text);
 
 	if (!editDefInFile(text, olddef, newdef, "DataSet\\" + activeDataSet + "\\addedWords.txt"))
 		editDefInFile(text, olddef, newdef, dir);
 
-	editDefOnWordFinder(text, olddef, newdef);
+	editDefOnWordFinder(text, olddef, newdef, pop);
 }
 
 void Dictionary::addToFavourite(Word& word) {

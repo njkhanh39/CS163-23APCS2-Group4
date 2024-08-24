@@ -41,7 +41,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 
 	partCbb->Refresh();*/
 	
 
-	defText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(110, 240), wxSize(1000, 300));
+	defText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(110, 240), wxSize(1000, 300), wxTE_MULTILINE);
 	defText->SetFont(font);
 
 	wordTypeText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(951, 101), wxSize(154, 60));
