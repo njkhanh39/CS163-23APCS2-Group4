@@ -14,7 +14,9 @@ public:
 	QuizMenu(wxWindow* parent);
 
 private:
-	  
+	void OnUpdateNumber(wxTimerEvent& event);
+	wxTimer timer;
+
 	/*==============GAME_VARIABLE==============*/
 	int current_question = 0, score = 0, numquest = 30;
 	int gametype = 0; //0: Guess Def; 1: GuessWord
@@ -25,7 +27,7 @@ private:
 
 	wxPanel* gamevar;
 	wxStaticText* game, * datachose, * numberques;
-	wxButton* GuessWord, * GuessDef, * EngEng, * EngVie, * VieEng, *start, *endlessmode;
+	wxButton* GuessWord, * GuessDef, * EngEng, * EngVie, * VieEng, *start, *endlessmode, *displaynum;
 	wxBitmapButton* increase, * decrease;
 
 	/*=================QUESTION================*/
