@@ -1,18 +1,44 @@
 #include "MainFrame.h"
 #include "QuizMenu.h"
 
-QuizMenu::QuizMenu(wxWindow* parent) : wxSimplebook(parent, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
+QuizMenu::QuizMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(parent, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
 
 	
 	//SetBackgroundColour(black);
 
 	/*GAME MODE*/
-	displayGameMode();
+	displayGameMode(dict);
+	start->Bind(wxEVT_BUTTON, [this,dict](wxCommandEvent& evt) {
+		is_endless = false;
+		this->SetSelection(0);
+		processQuestion(dict);
+		});
+	endlessmode->Bind(wxEVT_BUTTON, [this,dict](wxCommandEvent& evt) {
+		is_endless = true;
+		this->SetSelection(0);
+		});
 	/**/
 
 	/*QUESTION*/
 
-	displayQuestion();
+	question = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE);
+	question->SetBackgroundColour(black);
+
+	chosen_box = new wxStaticBox(question, wxID_ANY, "", boxPosition, boxSize, wxBORDER_NONE);
+	chosen_box->SetBackgroundColour(white);
+
+	chosen_quest = new wxStaticText(chosen_box, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+
+	wxBitmap bitnext(wxT("IMG/nextdef.png"), wxBITMAP_TYPE_PNG);
+	nextquest = new wxBitmapButton(question, wxID_ANY, bitnext, wxPoint(1218, 333), wxSize(53, 53), wxBORDER_NONE);
+
+	for (int i = 0; i < 4; ++i)
+	{
+		options[i] = new wxButton(question, wxID_ANY, "", optPosition[i], optSize, wxBORDER_NONE);
+		options[i]->SetBackgroundColour(purple);
+	}
+
+	modeQuestion(boxSize);
 
 	/**/
 
@@ -20,15 +46,14 @@ QuizMenu::QuizMenu(wxWindow* parent) : wxSimplebook(parent, wxID_ANY, wxDefaultP
 
 	/**/
 
-
 	this->AddPage(question, "Question", true);
-	this->AddPage(gamevar,"Game variable", true);
+	this->AddPage(gamevar, "Game variable", true);
 
 	this->SetSelection(1);
 
 }
 
-void QuizMenu::displayGameMode()
+void QuizMenu::displayGameMode(Dictionary* dict)
 {
 	gamevar = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE);
 	gamevar->SetBackgroundColour(black);
@@ -71,22 +96,35 @@ void QuizMenu::displayGameMode()
 
 	displaynum = new wxButton(gamevar, wxID_ANY, std::to_string(numquest), wxPoint(439, 380), wxSize(402, 65), wxBORDER_NONE);
 
-	EngEng->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+	wxBitmap bitendless(wxT("IMG/endless.png"), wxBITMAP_TYPE_PNG);
+	wxBitmap bitstart(wxT("IMG/start.png"), wxBITMAP_TYPE_PNG);
+
+	start = new wxBitmapButton(gamevar, wxID_ANY, bitstart, wxPoint(238, 500), wxSize(296, 78), wxBORDER_NONE);
+	endlessmode = new wxBitmapButton(gamevar, wxID_ANY, bitendless, wxPoint(640, 500), wxSize(296, 78), wxBORDER_NONE);
+	start->SetBackgroundColour(black);
+	endlessmode->SetBackgroundColour(black);
+
+	dict->activeSearcher = &dict->toolEngEng;
+
+	EngEng->Bind(wxEVT_BUTTON, [this,dict](wxCommandEvent& evt) {
 		dataset = 0;
+		dict->activeSearcher = &dict->toolEngEng;
 		EngEng->SetBackgroundColour(wxColour(11, 199, 189));
 		EngVie->SetBackgroundColour(wxColour(255, 255, 255));
 		VieEng->SetBackgroundColour(wxColour(255, 255, 255));
 		});
 
-	EngVie->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+	EngVie->Bind(wxEVT_BUTTON, [this,dict](wxCommandEvent& evt) {
 		dataset = 1;
+		dict->activeSearcher = &dict->toolEngVie;
 		EngVie->SetBackgroundColour(wxColour(11, 199, 189));
 		EngEng->SetBackgroundColour(wxColour(255, 255, 255));
 		VieEng->SetBackgroundColour(wxColour(255, 255, 255));
 		});
 
-	VieEng->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+	VieEng->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		dataset = 2;
+		dict->activeSearcher = &dict->toolVieEng;
 		VieEng->SetBackgroundColour(wxColour(11, 199, 189));
 		EngVie->SetBackgroundColour(wxColour(255, 255, 255));
 		EngEng->SetBackgroundColour(wxColour(255, 255, 255));
@@ -96,30 +134,98 @@ void QuizMenu::displayGameMode()
 		gametype = 0;
 		GuessWord->SetBackgroundColour(wxColour(11, 199, 189));
 		GuessDef->SetBackgroundColour(wxColour(255, 255, 255));
+		boxSize = wxSize(1124, 292);
+		optSize = wxSize(554, 130);
+		optPosition[0] = wxPoint(78, 348);
+		optPosition[1] = wxPoint(648, 348);
+		optPosition[2] = wxPoint(78, 494);
+		optPosition[3] = wxPoint(648, 494);
+		modeQuestion(boxSize);
 		});
 
 	GuessDef->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
 		gametype = 1;
 		GuessDef->SetBackgroundColour(wxColour(11, 199, 189));
 		GuessWord->SetBackgroundColour(wxColour(255, 255, 255));
+		boxSize = wxSize(1124, 118);
+		optSize = wxSize(554, 190);
+		optPosition[0] = wxPoint(78, 182);
+		optPosition[1] = wxPoint(648, 182);
+		optPosition[2] = wxPoint(78, 388);
+		optPosition[3] = wxPoint(648, 388);
+		modeQuestion(boxSize);
 		});
-
 }
 
-void QuizMenu::displayQuestion()
+void QuizMenu::modeQuestion(wxSize boxSize)
 {
-	question = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE);
-	question->SetBackgroundColour(black);
+	chosen_box->SetSize(boxSize);
+	
+	for (int i = 0; i < 4; ++i)
+	{
+		options[i]->SetPosition(optPosition[i]);
+		options[i]->SetSize(optSize);
+	}
+}
 
-	wxPoint boxPosition(78, 80);
-	wxSize boxSize;
-	if (gametype == 0) boxSize = wxSize(1124, 290);
-	else wxSize boxSize = wxSize(1124, 118);
+void QuizMenu::processQuestion(Dictionary* dict)
+{
+	if (current_question < numquest)
+	{
+		string quest; 
+		vector<string> opt = GenQuest(dict, pos_correct, quest);
+		for (int i = 0; i < 4; ++i)
+			options[i]->Enable();
 
-	chosen_box = new wxStaticBox(question, wxID_ANY, "", boxPosition, boxSize, wxBORDER_NONE);
-	chosen_box->SetBackgroundColour(white);
+		chosen_quest->SetLabel(quest);
+		chosen_quest->Wrap(1100);
 
-	chosen_quest = new wxStaticText(chosen_box, wxID_ANY, "Example");
+		// Calculate center position within the static box
+		int textWidth = chosen_quest->GetBestSize().GetWidth();
+		int textHeight = chosen_quest->GetBestSize().GetHeight();
+		int centerX = (boxSize.GetWidth() - textWidth) / 2;
+		int centerY = (boxSize.GetHeight() - textHeight) / 2;
+
+		// Position the wxStaticText manually to be centered
+		chosen_quest->SetPosition(wxPoint(centerX, centerY));
+
+		for (int i = 0; i < 4; ++i)
+			options[i]->SetLabel(opt[i]);
+	}
+}
+
+void QuizMenu::OnOptionSelected(wxCommandEvent& event, Dictionary* dict) {
+	wxButton* selectedButton = dynamic_cast<wxButton*>(event.GetEventObject());
+	int selectedIndex = -1;
+
+	// Find the index of the selected button
+	for (int i = 0; i < 4; ++i) {
+		if (options[i] == selectedButton) {
+			selectedIndex = i;
+			break;
+		}
+	}
+
+	if (selectedIndex != -1) {
+		if (selectedIndex == pos_correct) {
+			wxMessageBox("Correct!", "Result", wxOK | wxICON_INFORMATION);
+		}
+		else {
+			wxMessageBox("Wrong answer!", "Result", wxOK | wxICON_ERROR);
+		}
+
+		current_question++;
+		processQuestion(dict);
+	}
+}
+
+/*void QuizMenu::displayQuestion(Dictionary* dict, string quest, vector<string> opt)
+{
+	for (int i = 0; i < 4; ++i)
+		options[i]->Enable();
+
+	chosen_quest->SetLabel(quest);
+	chosen_quest->Wrap(1100);
 
 	// Calculate center position within the static box
 	int textWidth = chosen_quest->GetBestSize().GetWidth();
@@ -129,7 +235,69 @@ void QuizMenu::displayQuestion()
 
 	// Position the wxStaticText manually to be centered
 	chosen_quest->SetPosition(wxPoint(centerX, centerY));
-}
+
+	for (int i = 0; i < 4; ++i)
+		options[i]->SetLabel(opt[i]);
+	
+	options[0]->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+		if (pos_correct == 0) {
+			options[0]->SetBackgroundColour(green);
+			score++;
+		}
+		else
+		{
+			options[0]->SetBackgroundColour(red);
+			options[pos_correct]->SetBackgroundColour(green);
+		}
+		for (int i = 0; i < 4; ++i)
+			options[i]->Disable();
+		});
+
+	options[1]->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+		if (pos_correct == 0)
+		{
+			options[1]->SetBackgroundColour(green);
+			score++;
+		}
+		else
+		{
+			options[1]->SetBackgroundColour(red);
+			options[pos_correct]->SetBackgroundColour(green);
+		}
+		for (int i = 0; i < 4; ++i)
+			options[i]->Disable();
+		});
+
+	options[2]->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+		if (pos_correct == 0)
+		{
+			options[2]->SetBackgroundColour(green);
+			score++;
+		}
+		else
+		{
+			options[2]->SetBackgroundColour(red);
+			options[pos_correct]->SetBackgroundColour(green);
+		}
+		for (int i = 0; i < 4; ++i)
+			options[i]->Disable();
+		});
+
+	options[3]->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+		if (pos_correct == 0)
+		{
+			options[3]->SetBackgroundColour(green);
+			score++;
+		}
+		else
+		{
+			options[3]->SetBackgroundColour(red);
+			options[pos_correct]->SetBackgroundColour(green);
+		}
+		for (int i = 0; i < 4; ++i)
+			options[i]->Disable();
+		});
+}*/
 
 void QuizMenu::DefaultSetting()
 {
@@ -149,20 +317,29 @@ string QuizMenu::GetWordType(Word word, string& def)
 		}
 	}
 
-	while (j < str.length())
-		def += str[j];
+	while (j < str.length()) { def += str[j]; ++j; }
 
 	return wordtype;
 }
 
-//std::mt19937 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+Word QuizMenu::RandomWord(string& wordText, Dictionary * dict) {
+	srand(time(NULL));
 
-vector<string> QuizMenu::GenQuest(wxCommandEvent& evt, Dictionary* dict, int& correctans, string& quest)
+	string text;
+	while (text.empty()) {
+		int r = RandInt(0, 200000);
+		text = dict->activeSearcher->getWord(r).getText();
+	}
+
+	return dict->activeSearcher->searchWord(text);
+}
+
+vector<string> QuizMenu::GenQuest( Dictionary* dict, int& correctans, string& quest)
 {
 	string wordText, ans_def;
-	Word chosen_word = dict->getRandomWord(wordText);
+	Word chosen_word = RandomWord(wordText,dict);
 	string ans_type = GetWordType(chosen_word, ans_def);
-	correctans = rng() % (3 + 1);;
+	correctans = RandInt(0,3);
 
 	vector <string> opt_list;
 	opt_list.resize(4);
@@ -177,7 +354,6 @@ vector<string> QuizMenu::GenQuest(wxCommandEvent& evt, Dictionary* dict, int& co
 		quest = ans_def;
 		opt_list[correctans] = wordText;
 	}
-	
 
 	int j = 0;
 	while (j < 4)
@@ -185,7 +361,7 @@ vector<string> QuizMenu::GenQuest(wxCommandEvent& evt, Dictionary* dict, int& co
 		if (j != correctans)
 		{
 			string tmp, tmp_type, tmp_def;
-			Word tmp_word = dict->getRandomWord(tmp);
+			Word tmp_word = RandomWord(tmp,dict);
 			if (tmp_word != chosen_word)
 			{
 				tmp_type = GetWordType(tmp_word, tmp_def);

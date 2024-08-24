@@ -69,10 +69,6 @@ Word* Dictionary::getWordPtr(string word) {
 	return myTrie.getWordPointer(word);
 }
 
-int RandInt(int l, int r)
-{
-	return l + rng() % (r - l + 1);
-}
 
 Word Dictionary::getRandomWord(string& wordText) {
 	srand(time(NULL));

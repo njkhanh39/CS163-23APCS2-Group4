@@ -3,6 +3,7 @@
 #include "wx/wx.h"
 #include <wx/simplebook.h>
 #include <wx/spinctrl.h>
+#include <wx/stattext.h>
 #include <iostream>
 #include <string.h>
 #include <cstring>
@@ -11,25 +12,38 @@
 #include "Dictionary.h"
 #include "GUI_WordView.h"
 #include "Word.h"
+#include "randomfunc.h"
+#include "App.h"
 
 class QuizMenu : public wxSimplebook {
 public:
 
-	QuizMenu(wxWindow* parent);
+	QuizMenu(wxWindow* parent, Dictionary*& dict);
 
 private:
 	
-	vector<string> GenQuest(wxCommandEvent& evt, Dictionary* dict, int& correctans, string& quest);
+	vector<string> GenQuest(Dictionary* dict, int& correctans, string& quest);
 
 	wxColour purple = wxColour(101, 86, 142), red = wxColour(184, 89, 89), green = wxColour(11, 199, 189), white = wxColour(255, 255, 255), black = wxColour(34, 36, 40);
 
-	void displayGameMode();
+	Word RandomWord(string& wordText, Dictionary* dict);
+
+	void displayGameMode(Dictionary* dict);
 	
-	void displayQuestion();
+	void modeQuestion(wxSize boxSize);
+
+	void displayQuestion(Dictionary* dict, string quest, vector<string> opt);
+
+	void OnOptionSelected(wxCommandEvent& event, Dictionary* dict);
+
+	void processQuestion(Dictionary* dict);
 
 	string GetWordType(Word word, string& str);
 
 	wxTimer timer;
+
+	wxPoint boxPosition = wxPoint(78, 40), optPosition[4] =  {wxPoint(78, 348),wxPoint(648, 348),wxPoint(78, 494) ,wxPoint(648, 494) };
+	wxSize boxSize = wxSize(1124, 292), optSize = wxSize(554,130);
 
 	/*==============GAME_VARIABLE==============*/
 	int current_question = 0, score = 0, numquest = 30;
@@ -45,10 +59,12 @@ private:
 	wxBitmapButton* increase, * decrease;
 
 	/*=================QUESTION================*/
+	int pos_correct;
 	wxPanel* question;
 	wxStaticBox* chosen_box;
 	wxStaticText* chosen_quest;
 	wxButton* options[4], exit;
+	wxBitmapButton* nextquest;
 	/*=========================================*/
 
 	/*=================SCORE===================*/
@@ -56,5 +72,7 @@ private:
 	wxStaticText* announce;
 	wxButton* restart;
 	/*=========================================*/
+
+
 };
 #endif

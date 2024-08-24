@@ -54,6 +54,12 @@
     <ClCompile Include="GUI_AddWordMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="QuizMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="randomfunc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -90,6 +96,12 @@
       <Filter>BackEnd Header</Filter>
     </ClInclude>
     <ClInclude Include="GUI_AddWordMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QuizMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="randomfunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
