@@ -27,6 +27,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 
 	wordText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(114, 101), wxSize(635, 60));
 	wordText->SetFont(font);
 
+
 	wxArrayString datasets = { "Eng-Eng", "Eng-Vie", "Vie-Eng" };
 	datasetCbb = new wxComboBox(this, wxID_ANY, "Eng-Eng", wxPoint(773, 101), wxSize(154,-1), datasets, wxCB_READONLY);	
 	datasetCbb->SetFont(fontCB);
@@ -40,8 +41,11 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 
 	partCbb->Refresh();*/
 	
 
-	defText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(110, 240), wxSize(1000, 300));
+	defText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(110, 240), wxSize(1000, 300), wxTE_MULTILINE);
 	defText->SetFont(font);
+
+	wordTypeText = new wxTextCtrl(this, wxID_ANY, "", wxPoint(951, 101), wxSize(154, 60));
+	wordTypeText->SetFont(fontCB);
 		
 	submit = new wxButton(this, wxID_ANY, "ADD", wxPoint(951, 600), wxSize(154,60));
 	auto fntSubmit = submit->GetFont();
@@ -49,6 +53,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 
 	submit->SetFont(fntSubmit);
 	submit->SetForegroundColour(white);
 	submit->SetBackgroundColour(green);
+
 
 	wxStaticText* wordBarText = new wxStaticText(this, wxID_ANY, "WORD", wxPoint(114, 60), wxSize(100, 20));
 	auto fnt = wordBarText->GetFont();
@@ -62,14 +67,56 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 
 	dataSetBarText->SetBackgroundColour(black);
 	dataSetBarText->SetForegroundColour(white);
 
+	wxStaticText* defBarText = new wxStaticText(this, wxID_ANY, "DEFINITION", wxPoint(110, 189), wxSize(100, 20));
+	defBarText->SetFont(fnt);
+	defBarText->SetBackgroundColour(black);
+	defBarText->SetForegroundColour(white);
+
+	wxStaticText* wordTypeBarText = new wxStaticText(this, wxID_ANY, "WORDTYPE", wxPoint(951, 60), wxSize(100, 20));
+	wordTypeBarText->SetFont(fnt);
+	wordTypeBarText->SetBackgroundColour(black);
+	wordTypeBarText->SetForegroundColour(white);
+
+
+
 	datasetCbb->Bind(wxEVT_COMBOBOX, [this, dict](wxCommandEvent& evt) {
 		dict->chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
 	});
 
 	submit->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
-		string text = (string)wordText->GetValue();
-		string def = (string)defText->GetValue();
-		dict->addNewWordOneDef(text, def);
+		wxString typeunicode = wordTypeText->GetValue();
+		string type = string(typeunicode.mb_str(wxConvUTF8));
+
+		wxString wunicode = wordText->GetValue();
+		string text = string(wunicode.mb_str(wxConvUTF8));
+
+		wxString defunicode = defText->GetValue();
+		string def = string(defunicode.mb_str(wxConvUTF8));
+
+		//normalize
+		for (auto& c : text) c = tolower(c);
+
+		while (!def.empty() && def.back() == '\n') def.pop_back();
+
+		if (!type.empty()) {
+			if (type.back() != ')') {
+				type.push_back(')');
+			}
+
+			if (type[0] != '(') {
+				reverse(type.begin(), type.end());
+				type.push_back(')');
+				reverse(type.begin(), type.end());
+			}
+
+			def = type + " " + def;
+		}
+
+		wxMessageDialog* ask = new wxMessageDialog(this,
+			"Are you sure to add word \"" + text + "\"?",
+			"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+
+		if(ask->ShowModal() == wxID_YES) dict->addNewWordOneDef(text, def);
 	});
 	
 	

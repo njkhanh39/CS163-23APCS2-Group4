@@ -520,7 +520,9 @@ void WordFinder::load(string dataset) {
         stringstream iss(line);
         string cur;
 
-        while(iss >> cur) addSubDef(cur, curbucket);
+        while (iss >> cur) {
+            addSubDef(cur, curbucket);
+        }
 
 
         //no need sorting

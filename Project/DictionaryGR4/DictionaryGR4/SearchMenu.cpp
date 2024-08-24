@@ -163,6 +163,8 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt, Dictionary* dict) {
 			return;
 		}
 
+		
+
 		suggestBar->Clear();
 
 		//recommend 20 words with defs
@@ -361,6 +363,8 @@ void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt, Dictionary* dict) {
 	if (ask->ShowModal() == wxID_YES) {
 		fs::copy("DataSet - Backup\\" + curDataset, "DataSet\\" + curDataset, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
 	}
+
+	dict->reloadWordFinder(curDataset);
 }
 
 void SearchMenu::OnRandomClicked(wxCommandEvent& evt, Dictionary* dict) {

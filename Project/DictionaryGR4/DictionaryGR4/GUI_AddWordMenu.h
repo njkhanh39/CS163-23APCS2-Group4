@@ -20,8 +20,8 @@ public:
 private:
 	Dictionary dict;
 	wxPanel* titleBar, * mainPanel;
-	wxTextCtrl* wordText, * defText;
-	wxComboBox* partCbb, * datasetCbb;
+	wxTextCtrl* wordText, * defText, *wordTypeText;
+	wxComboBox* datasetCbb;
 	wxButton* submit;
 
 	void OnDatasetChosen(wxCommandEvent& evt);
