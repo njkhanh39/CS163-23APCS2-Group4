@@ -21,6 +21,7 @@ private:
 	list<string> favList;
 	
 public:
+
 	bool isSearchingDefinition = false;
 	Dictionary() {
 		activeSearcher = &toolEngEng;

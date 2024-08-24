@@ -63,7 +63,6 @@ Word* Dictionary::getWordPtr(string word) {
 	return myTrie.getWordPointer(word);
 }
 
-std::mt19937 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 int RandInt(int l, int r)
 {
 	return l + rng() % (r - l + 1);
