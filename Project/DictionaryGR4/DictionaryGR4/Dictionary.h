@@ -75,7 +75,9 @@ public:
 
 	//setters & adders
 
-	bool editDefInSpecificFile(string text, string olddef, string newdef, string dir);
+	bool editDefInFile(string text, string olddef, string newdef, string dir);
+
+	void editDefOnWordFinder(string text, string olddef, string newdef);
 
 	void editDefinition(string text, string olddef, string newdef);
 

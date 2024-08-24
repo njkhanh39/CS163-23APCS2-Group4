@@ -37,6 +37,12 @@ void Dictionary::turnOffSearchDefinitionEngine() {
 	isSearchingDefinition = false;
 }
 
+void Dictionary::saveToFile() {
+	toolEngEng.saveToFile("Eng-Eng");
+	toolEngVie.saveToFile("Eng-Vie");
+	toolVieEng.saveToFile("Vie-Eng");
+}
+
 //get a "Word" object that matches a string
 Word Dictionary::searchWordMatching(string word) {
 	Word w;
@@ -68,7 +74,7 @@ Word Dictionary::getRandomWord(string& wordText) {
 	string text;
 	while (text.empty()) {
 		int r = RandInt(0, 200000);
-		text = activeSearcher->getWord(r).getWord();
+		text = activeSearcher->getWord(r).getText();
 	}
 
 	return activeSearcher->searchWord(text);
@@ -144,6 +150,161 @@ vector<Word> Dictionary::searchDefToWord(string& keyword, int limit) {
 	return ans;
 }
 
+void Dictionary::addNewWord(Word& newWord) {
+	string text = newWord.getText();
+	auto v = newWord.getDefinitions();
+	for (auto& def : v) {
+		string defStr = def.getStringDefinition();
+		addNewWordOneDef(text, defStr);
+	}
+}
+
+bool Dictionary::addNewWordOneDef(string& text, string& def) {
+	//find and delete in deleted.txt
+
+	ifstream fin;
+	vector<string> deletedFile; string line; bool found = false;
+	fin.open("DataSet\\" + activeDataSet + "\\deletedWords.txt");
+
+	while (getline(fin, line)) {
+		string lineText, lineDef;
+		int i = 0;
+		while (line[i] != '\t') {
+			lineText.push_back(line[i]);
+			++i;
+		}
+		++i;
+
+		if (lineText != text) {
+			deletedFile.push_back(line);
+			continue;
+		}
+
+		lineDef = line.substr(i);
+
+		//found the word in deleted.txt
+		if (lineText == text && lineDef == def) {
+			found = true;
+			continue;
+		}
+
+		deletedFile.push_back(line);
+	}
+
+	fin.close();
+
+	if (found == true) { //remove the found line in deletedWords.txt
+		ofstream fout;
+		fout.open("DataSet\\" + activeDataSet + "\\deletedWords.txt");
+
+		for (auto& str : deletedFile) {
+			fout << str << '\n';
+		}
+
+		fout.close();
+
+		return true; //success adding
+	}
+
+	//check if word already existed
+
+	Word match = searchWordMatching(text);
+
+	if (match.findDefinition(def) != -1) {
+		return false; //word already exists
+	}
+
+	//couldnt find word, now we add it to wordfinder
+
+	activeSearcher->addNewWord(text, def);
+
+
+	//append the word to addedwords.txt and addsorted.txt
+
+	ofstream fout;
+
+	fout.open("DataSet\\" + activeDataSet + "\\addedWords.txt", ios::app);
+
+	fout << text << '\t' << def << '\n';
+
+	fout.close();
+
+	vector<string> sortedDef = transformSentence(def);
+
+	//remember to sort
+	sortVectorString(sortedDef);
+
+
+	fout.open("DataSet\\" + activeDataSet + "\\sortedAddedWords.txt", ios::app);
+
+	fout << text << '\t';
+	for (int i = 0; i < (int)sortedDef.size(); ++i) {
+		fout << sortedDef[i];
+		if (i + 1 == (int)sortedDef.size()) {
+			fout << '\n';
+		}
+		else fout << ' ';
+	}
+
+	fout.close();
+
+	return true;
+}
+
+void Dictionary::deleteWord(Word& word) {
+	string text = word.getText();
+	auto v = word.getDefinitions();
+	for (auto& defs : v) {
+		string def = defs.getStringDefinition();
+		deleteWordOneDef(text, def);
+	}
+}
+
+int	Dictionary::deleteWordOneDef(string& text, string& def) {
+	//check if word exists
+	Word match = searchWordMatching(text);
+	if (match.findDefinition(def) == -1) {
+		return -1; //word does not exist 
+	}
+
+	ifstream fin; bool appear = false;
+	string line;
+
+	//check if it has been deleted already
+	fin.open("DataSet\\" + activeDataSet + "\\deletedWords.txt");
+
+	while (getline(fin, line)) {
+		string lineText, lineDef;
+		int i = 0;
+		while (line[i] != '\t') {
+			lineText.push_back(line[i]);
+			++i;
+		}
+		++i;
+
+		if (lineText != text) continue;
+
+		if (lineDef == def) {
+			fin.close();
+			return 0; //word was deleted before
+		}
+	}
+
+	fin.close();
+
+	//adding it to deleted file
+
+	ofstream fout;
+
+	fout.open("DataSet\\" + activeDataSet + "\\deletedWords.txt", ios::app);
+
+	fout << text << '\t' << def << '\n';
+
+	fout.close();
+
+	return 1; //word deleted successfully
+}
+
 //helpers
 
 bool Dictionary::getAvailableWords(Word& w) {
@@ -163,7 +324,7 @@ bool Dictionary::getAvailableWords(Word& w) {
 		++i;
 
 		//match
-		if (comp == w.getWord()) {
+		if (comp == w.getText()) {
 			char check = line[i];
 			if (check == '*') {
 				w.clear();
@@ -335,13 +496,162 @@ History Dictionary::getHistory() {
 	return hist;
 }
 
+bool Dictionary::editDefInFile(string text, string olddef, string newdef, string dir) {
+	ifstream fin;
+	fin.open(dir);
 
+	string prev, after;
+	string word, line;
+
+	if (fin.is_open()) {
+		if (!getline(fin, line))
+			return 0;
+		word = line.substr(0, line.find("\t"));
+		while (word != text) {
+			prev += line + "\n";
+			if (!getline(fin, line))
+				return 0;
+			word = line.substr(0, line.find("\t"));
+		}
+
+		int i = line.find(")") + 2;
+		string curdef = line.substr(i, line.length() - i);
+		while (curdef.compare(olddef)) {
+			prev += line + "\n";
+			getline(fin, line);
+			word = line.substr(0, line.find("\t"));
+			if (word != text)
+				return 0;
+			i = line.find(")") + 2;
+			curdef = line.substr(i, line.length() - i);
+		}
+
+		prev += line.substr(0, line.find(")") + 2);
+
+		string temp;
+		while (getline(fin, temp))
+			after += temp + "\n";
+		fin.close();
+	}
+
+	ofstream fout;
+	fout.open(dir);
+	if (fout.is_open()) {
+		fout << prev << newdef << "\n" << after;
+		fout.close();
+		return 1;
+	}
+}
+
+void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef) {
+	int size = activeSearcher->getSize();
+	int added = activeSearcher->getNumAdded();
+
+	vector<string> sortedOlddef = transformSentence(olddef);
+	sortVectorString(sortedOlddef);
+
+	vector<string> sortedNewdef = transformSentence(newdef);
+	sortVectorString(sortedNewdef);
+
+	bool done = 0;
+
+	for (int i = size; i < size + added; ++i)
+		if (activeSearcher->getWord(i).getText() == text and *(activeSearcher->getSubDef(i)) == sortedOlddef) {
+			*(activeSearcher->getSubDef(i)) = sortedNewdef;
+			done = 1;
+			break;
+		}
+
+	if (!done) {
+		int i = activeSearcher->searchWordIndex(text);
+		int t = i;
+
+		bool doneUpper = 0;
+		while (*(activeSearcher->getSubDef(t)) != sortedOlddef) {
+			if (!doneUpper)
+				--t;
+			else
+				++t;
+
+			if (activeSearcher->getWord(t).getText() != text) {
+				t = i;
+				doneUpper = 1;
+			}
+		}
+
+		*(activeSearcher->getSubDef(i)) = sortedNewdef;
+
+		ifstream fin;
+		string prev, after;
+
+		fin.open("DataSet\\" + activeDataSet + "\\sortedData.txt");
+		if (fin.is_open()) {
+			string line;
+			for (int j = 0; j < i; ++j) {
+				getline(fin, line);
+				prev += line + "\n";
+			}
+			getline(fin, line);
+			prev += line.substr(0, line.find(")") + 2);
+			while (getline(fin, line))
+				after += line + "\n";
+			fin.close();
+		}
+
+		ofstream fout;
+		fout.open("DataSet\\" + activeDataSet + "\\sortedData.txt");
+		fout << prev;
+		for (int j = 0; j < sortedNewdef.size() - 1; ++j)
+			fout << sortedNewdef[j] << " ";
+		fout << sortedNewdef[sortedNewdef.size() - 1] << "\n" << after;
+		fout.close();
+	}
+
+}
+
+void Dictionary::editDefinition(string text, string olddef, string newdef) {
+	string dir = mapStringToFile(text);
+
+	if (!editDefInFile(text, olddef, newdef, "DataSet\\" + activeDataSet + "\\addedWords.txt"))
+		editDefInFile(text, olddef, newdef, dir);
+
+	editDefOnWordFinder(text, olddef, newdef);
+}
 
 void Dictionary::addToFavourite(Word& word) {
 	ofstream out;
 	out.open("Favourite\\" + activeDataSet + "\\favList.txt", ios::app);
 	if (!out.is_open()) return;
-	out << word.getWord() << endl;
+	out << word.getText() << endl;
 	out.close();
 	word.markFavourite();
+}
+
+void Dictionary::merge(vector<string>& a, int l, int r, int mid) {
+	vector<string> temp(r - l + 1);
+
+	int ptr1 = l, ptr2 = mid + 1, cur = 0;
+
+	while (ptr1 <= mid && ptr2 <= r) {
+		if (a[ptr1] < a[ptr2])
+			temp[cur++] = a[ptr1++];
+		else
+			temp[cur++] = a[ptr2++];
+	}
+
+	while (ptr1 <= mid) temp[cur++] = a[ptr1++];
+	while (ptr2 <= r) temp[cur++] = a[ptr2++];
+
+	for (int i = l, cnt = 0; i <= r; ++i) a[i] = temp[cnt++];
+}
+
+void Dictionary::mergeSort(vector<string>& a, int l, int r, int n) {
+	if (l > r || l == r) return;
+
+	int mid = l + (r - l) / 2;
+
+	mergeSort(a, l, mid, n);
+	mergeSort(a, mid + 1, r, n);
+
+	merge(a, l, r, mid);
 }

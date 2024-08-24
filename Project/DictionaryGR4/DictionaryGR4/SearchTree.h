@@ -168,12 +168,21 @@ public:
     void load(string dataset);
 
     void unload();
+
     //save to sorteddata.txt & addedSorted, do this when ending program
     void saveToFile(string dataset);
 
     Word searchWord(string text);
 
+    int searchWordIndex(string text);
+
     Word getWord(int index);
+
+    vector<string>* getSubDef(int index);
+
+    int getSize();
+
+    int getNumAdded();
 
     vector<Word> searchDefinitionsToWord(vector<string>& subkey, int limit);
 
@@ -282,7 +291,7 @@ public:
 //
 //     string line;
 //     for (int i = 0; i < size; ++i) {
-//         fout << slots[i].word.getWord() << '\t';
+//         fout << slots[i].word.getText() << '\t';
 //         for (int j = 0; j < (int)slots[i].subdef.size(); ++j) {
 //             fout << slots[i].subdef[j];
 //             if (j + 1 == (int)slots[i].subdef.size()) fout << '\n';
@@ -298,7 +307,7 @@ public:
      fout.open(filename);
      if (fout.is_open()) {
          for (int i = 0; i < size; ++i) {
-             fout << slots[i].word.getWord() << '\t';
+             fout << slots[i].word.getText() << '\t';
              for (int j = 0; j < (int)slots[i].subdef.size(); ++j) {
                  fout << slots[i].subdef[j];
                  if (j + 1 != (int)slots[i].subdef.size()) fout << ' ';
