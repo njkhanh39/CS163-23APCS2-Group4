@@ -107,6 +107,13 @@ public:
 
 	void mergeSort(vector<string>& a, int l, int r, int n);
 
+	bool isUnwantedPunctuation(char c);
+
+	// Helper function to transform a single character
+	char transformChar(char c);
+
+	string normalizeString(string& sentence);
+
 	//vector<Word> helperDefToWordENGENG(string keyword, int limit){
 	//	//format word
 	//	string word;

@@ -163,6 +163,8 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt, Dictionary* dict) {
 			return;
 		}
 
+		
+
 		suggestBar->Clear();
 
 		//recommend 20 words with defs
