@@ -283,6 +283,13 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt, Dictionary* dict) {
 
 	//avoiding overlapping panels
 	//wordView->Enable();
+	SearchedWord SW(word);
+
+
+
+	SW.setTime();
+	SW.setDate();
+	dict->getHistory().saveDevToWord(SW, def);
 }
 
 void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict) {
