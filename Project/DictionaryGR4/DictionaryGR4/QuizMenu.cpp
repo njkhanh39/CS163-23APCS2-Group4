@@ -122,3 +122,60 @@ void QuizMenu::DefaultSetting()
 {
 	current_question = 0; score = 0; numquest = 30, gametype = 0, dataset = 0;
 }
+
+string QuizMenu::GetWordType(Word word, string& def)
+{
+	string str = word.getDefinitionAt(0).getStringDefinition();
+	string wordtype = "";
+
+	int j = 0;
+	if (str[j] == '(') {
+		while (j < (int)str.length() && (j == 0 || str[j - 1] != ')')) {
+			wordtype += str[j];
+			++j;
+		}
+	}
+
+	while (j < str.length())
+		def += str[j];
+
+	return wordtype;
+}
+
+std::mt19937 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+int RandInt(int l, int r)
+{
+	return l + rng() % (r - l + 1);
+}
+
+void QuizMenu::GenQuest(wxCommandEvent& evt, Dictionary* dict)
+{
+	string wordText;
+	Word chosen_word = dict->getRandomWord(wordText);
+	int ans_locate = RandInt(0, 3);
+
+	vector <string> opt_list;
+	opt_list.resize(4);
+
+	if (gametype == 0)
+	{
+		int j = 0;
+		while (j < 4)
+		{
+			if (j != ans_locate)
+			{
+				string tmp, tmp_type, tmp_def;
+				Word tmp_word = dict->getRandomWord(tmp);
+				tmp_type = GetWordType(tmp_word, tmp_def);
+				opt_list[j] = tmp_def;
+			}
+			else
+			{
+				string tmp_def, tmp_type;
+				tmp_type = GetWordType(chosen_word, tmp_def);
+				opt_list[j] = tmp_def;
+			}
+		}
+	}
+
+}
