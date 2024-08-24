@@ -98,6 +98,8 @@ public:
 		favDef->Bind(wxEVT_BUTTON, &WordView::OnAddFavourite, this);
 		defText->Bind(wxEVT_SET_FOCUS, &WordView::OnTextFocus, this);
 		defText->Bind(wxEVT_KILL_FOCUS, &WordView::OnDefTextKillFocus, this);
+
+		pageText->Bind(wxEVT_SET_FOCUS, &WordView::OnPageTextFocus, this);
 		pageText->Bind(wxEVT_TEXT_ENTER, &WordView::OnPageTextChanged, this);
 
 		parentWindow = parent;
@@ -279,7 +281,7 @@ public:
 
 		if (ask->ShowModal() == wxID_YES and curIndex >= 0) {
 			string newDef = defText->GetValue().ToStdString();
-			dict->editDefinition(text->GetLabel().ToStdString(), defs[curIndex], newDef);
+			dict->editDefinition(text->GetLabel().ToStdString(), defs[curIndex], newDef, wordTypeText->GetLabel().ToStdString());
 			defs[curIndex] = newDef;
 			word->modifyDefinition(newDef, curIndex);
 		}
@@ -382,6 +384,11 @@ public:
 		out << getShowingWord().getText()  << endl;
 		out.close();
 		getShowingWord().markFavourite();
+	}
+
+	void OnPageTextFocus(wxFocusEvent& evt) {		
+		pageText->SelectAll();
+		//evt.Skip();
 	}
 
 	void OnPageTextChanged(wxCommandEvent& evt) {

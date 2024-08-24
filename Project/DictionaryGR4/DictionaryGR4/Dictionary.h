@@ -40,6 +40,8 @@ public:
 
 	void turnOffSearchDefinitionEngine();
 
+	void reloadWordFinder(string dataset);
+
 	//save changed features. Automatically call when ending program
 	void saveToFile();
 
@@ -77,9 +79,9 @@ public:
 
 	bool editDefInFile(string text, string olddef, string newdef, string dir);
 
-	void editDefOnWordFinder(string text, string olddef, string newdef);
+	void editDefOnWordFinder(string text, string olddef, string newdef, string pop);
 
-	void editDefinition(string text, string olddef, string newdef);
+	void editDefinition(string text, string olddef, string newdef, string pop);
 
 	void deleteWord(Word& word);
 
@@ -93,6 +95,8 @@ public:
 	//helpers
 
 	vector<string> transformSentence(string& input);
+
+	vector<string> transformSentenceWithBracs(string& input);
 	
 	void EngineHelper(string keyword, bool yesLogMessage);
 
