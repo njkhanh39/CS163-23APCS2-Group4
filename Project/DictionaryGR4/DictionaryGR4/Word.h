@@ -20,7 +20,6 @@ private:
 	vector<Definition> defList;
 	bool isFavourite;
 	string dataset;
-
 public:
 	Word() {
 		text = "";

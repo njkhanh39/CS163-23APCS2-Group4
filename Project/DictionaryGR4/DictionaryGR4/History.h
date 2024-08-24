@@ -23,7 +23,7 @@ public:
 	void addToHistory(SearchedWord w);
 	void loadFromFile();
 	void saveToFile(SearchedWord w); // for saving word -> def
-	void saveDevToWord();
+	void saveDevToWord(SearchedWord w, string def);
 	void clearHistory();
 	void remove(string word);  // for removing a word
 

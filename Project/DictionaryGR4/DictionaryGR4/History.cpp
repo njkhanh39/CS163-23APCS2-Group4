@@ -56,6 +56,12 @@ void History::remove(string word) {
 }
 
 
-void History::saveDevToWord() {
+void History::saveDevToWord(SearchedWord w, string def) {
+	ofstream out;
+	out.open("History\\" + mode + "\\histDevWord.csv",ios::app);
+	if (!out.is_open()) return;
+	out << w.getText() << "," << def << "," << w.getTime() << "," << w.getDate() << endl;
+	out.close();
+
 
 }
