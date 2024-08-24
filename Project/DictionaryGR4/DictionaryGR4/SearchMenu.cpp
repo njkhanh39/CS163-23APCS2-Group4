@@ -170,7 +170,7 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt, Dictionary* dict) {
 
 		for (auto& w : ans) {
 			string def = w.getStringDefinitions().back();
-			string ww = w.getWord();
+			string ww = w.getText();
 			suggestBar->Append(wxString::FromUTF8(ww + "\t" + def));
 		}
 		adjustSuggestBar(300, 14);
@@ -306,7 +306,7 @@ void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict
 		listWord = dict->searchRelatedWords(word, 20);
 
 		for (auto& w : listWord) {
-			suggestBar->AppendString(wxString::FromUTF8(w.getWord()));
+			suggestBar->AppendString(wxString::FromUTF8(w.getText()));
 		}
 
 		adjustSuggestBar(300, 14);
@@ -362,7 +362,7 @@ void SearchMenu::OnRandomClicked(wxCommandEvent& evt, Dictionary* dict) {
 
 	wordView->processWord(word);
 
-	Word* ptr = dict->getWordPtr(word.getWord());
+	Word* ptr = dict->getWordPtr(word.getText());
 	wordView->setWord(ptr);
 	wordView->setActiveDataset(dict->getActiveDataset());
 }

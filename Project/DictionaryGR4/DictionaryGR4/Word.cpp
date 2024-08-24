@@ -9,7 +9,7 @@ bool Word::empty() {
 
 //getters
 
-string Word::getWord() {
+string Word::getText() {
 	return text;
 }
 

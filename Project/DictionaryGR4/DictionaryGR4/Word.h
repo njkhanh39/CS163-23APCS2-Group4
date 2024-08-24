@@ -75,7 +75,7 @@ public:
 
 	//getters
 
-	string getWord();
+	string getText();
 
 	int getNumberOfDefinitions();
 
