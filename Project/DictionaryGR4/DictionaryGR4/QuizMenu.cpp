@@ -74,9 +74,11 @@ QuizMenu::QuizMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(parent, w
 		options[i] = new wxButton(question, 1000+i, "", optPosition[i], optSize, wxBORDER_NONE);
 		options[i]->SetBackgroundColour(purple);
 		options[i]->Bind(wxEVT_BUTTON, &QuizMenu::OnOptionSelected, this);
+		//options_label[i] = new ClickThroughStaticText(question, 2000 + i, "", wxDefaultPosition, wxDefaultSize);
 	}
 
 	exit = new wxButton(question, wxID_ANY, "END QUIZ", wxPoint(906, 640), wxSize(296, 51), wxBORDER_NONE);
+	exit->SetBackgroundColour(green);
 	exit->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
 		this->SetSelection(0);
 		displayscore();
@@ -118,6 +120,9 @@ QuizMenu::QuizMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(parent, w
 void QuizMenu::displayscore()
 {
 	announce->SetLabel("Your score: " + std::to_string(score) + "/" + std::to_string(current_question));
+	int X = 640 - announce->GetSize().GetWidth() / 2;
+	announce->SetPosition(wxPoint(X, 244));
+	announce->SetForegroundColour(white);
 }
 
 void QuizMenu::displayGameMode(Dictionary* dict)
@@ -185,11 +190,11 @@ void QuizMenu::displayGameMode(Dictionary* dict)
 		GuessDef->SetBackgroundColour(wxColour(11, 199, 189));
 		GuessWord->SetBackgroundColour(wxColour(255, 255, 255));
 		boxSize = wxSize(1124, 118);
-		optSize = wxSize(554, 190);
+		optSize = wxSize(554, 215);
 		optPosition[0] = wxPoint(78, 182);
 		optPosition[1] = wxPoint(648, 182);
-		optPosition[2] = wxPoint(78, 388);
-		optPosition[3] = wxPoint(648, 388);
+		optPosition[2] = wxPoint(78, 413);
+		optPosition[3] = wxPoint(648, 413);
 		modeQuestion(boxSize);
 		});
 }
@@ -230,7 +235,10 @@ void QuizMenu::processQuestion(Dictionary* dict)
 		chosen_quest->SetPosition(wxPoint(centerX, centerY));
 
 		for (int i = 0; i < 4; ++i)
+		{
 			options[i]->SetLabel(wxString::FromUTF8(opt[i]));
+			options[i]->SetLabel(getlabelLineBreak(options[i]));
+		}
 	}
 
 	else
@@ -238,6 +246,27 @@ void QuizMenu::processQuestion(Dictionary* dict)
 		displayscore();
 		this->SetSelection(0);
 	}
+}
+
+wxString QuizMenu::getlabelLineBreak(wxButton* opt)
+{
+	wxString newdef;
+	int cnt = 1;
+	wxString mau = opt->GetLabel();
+	for (int i = 0; i < mau.size(); ++i)
+	{
+		if (cnt >= 30 && mau[i] == ' ')
+		{
+			newdef += "\n";
+			cnt = 0;
+		}
+		else
+		{
+			newdef += mau[i];
+			++cnt;
+		}
+	}
+	return newdef;
 }
 
 void QuizMenu::OnOptionSelected(wxCommandEvent& event) {
@@ -256,17 +285,17 @@ void QuizMenu::OnOptionSelected(wxCommandEvent& event) {
 		for (int i = 0; i < 4; ++i)
 			options[i]->Disable();
 	}
+	++current_question;
 }
 
 void QuizMenu::OnNextQuestion(Dictionary* dict)
 {
-	++current_question;
 	processQuestion(dict);
 }
 
 void QuizMenu::DefaultSetting(Dictionary* dict)
 {
-	current_question = 0; score = 0; numquest = 30, gametype = 0, dataset = 0;
+	current_question = 0; score = 0; numquest = 30;
 	displayGameMode(dict);
 }
 

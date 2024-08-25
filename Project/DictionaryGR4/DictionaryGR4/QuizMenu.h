@@ -14,6 +14,10 @@
 #include "Word.h"
 #include "randomfunc.h"
 #include "App.h"
+#include <wx/dcclient.h>
+#include <wx/dcbuffer.h>
+#include <wx/tokenzr.h>
+
 
 class QuizMenu : public wxSimplebook {
 public:
@@ -38,6 +42,8 @@ private:
 	void OnNextQuestion(Dictionary* dict);
 
 	void processQuestion(Dictionary* dict);
+
+	wxString getlabelLineBreak(wxButton* opt);
 
 	string GetWordType(Word word, string& str);
 
@@ -64,7 +70,7 @@ private:
 	wxPanel* question;
 	wxStaticBox* chosen_box;
 	wxStaticText* chosen_quest;
-	wxButton* options[4],* exit;
+	wxButton* exit, *options[4];
 	wxBitmapButton* nextquest;
 	/*=========================================*/
 
@@ -76,4 +82,5 @@ private:
 
 
 };
+
 #endif
