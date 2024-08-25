@@ -21,9 +21,9 @@ private:
 	
 public:
 
-	//WordFinder* activeSearcher = nullptr; //for def -> word in all datasets
+	WordFinder* activeSearcher = nullptr; //for def -> word in all datasets
 	WordFinder toolEngEng, toolEngVie, toolVieEng;
-	WordFinder* activeSearcher = &toolEngEng; //for def -> word in all datasets
+	//WordFinder* activeSearcher = &toolEngEng; //for def -> word in all datasets
 
 	bool isSearchingDefinition = false;
 	Dictionary() {
