@@ -21,6 +21,7 @@ private:
 	list<string> favList;
 	
 public:
+
 	bool isSearchingDefinition = false;
 	Dictionary() {
 		activeSearcher = &toolEngEng;
@@ -39,6 +40,8 @@ public:
 	void runSearchDefinitionEngine();
 
 	void turnOffSearchDefinitionEngine();
+
+	void reloadWordFinder(string dataset);
 
 	//save changed features. Automatically call when ending program
 	void saveToFile();
@@ -77,9 +80,9 @@ public:
 
 	bool editDefInFile(string text, string olddef, string newdef, string dir);
 
-	void editDefOnWordFinder(string text, string olddef, string newdef);
+	void editDefOnWordFinder(string text, string olddef, string newdef, string pop);
 
-	void editDefinition(string text, string olddef, string newdef);
+	void editDefinition(string text, string olddef, string newdef, string pop);
 
 	void deleteWord(Word& word);
 
@@ -93,6 +96,8 @@ public:
 	//helpers
 
 	vector<string> transformSentence(string& input);
+
+	vector<string> transformSentenceWithBracs(string& input);
 	
 	void EngineHelper(string keyword, bool yesLogMessage);
 
@@ -106,6 +111,13 @@ public:
 	void merge(vector<string>& a, int l, int r, int mid);
 
 	void mergeSort(vector<string>& a, int l, int r, int n);
+
+	bool isUnwantedPunctuation(char c);
+
+	// Helper function to transform a single character
+	char transformChar(char c);
+
+	string normalizeString(string& sentence);
 
 	//vector<Word> helperDefToWordENGENG(string keyword, int limit){
 	//	//format word
