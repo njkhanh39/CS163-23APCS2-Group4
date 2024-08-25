@@ -415,4 +415,34 @@ public:
 		}
 	}
 
+	wxButton* getEditDefButton() {
+		return editDef;
+	}
+
+	wxButton* getDelDefButton() {
+		return delDef;
+	}
+
+	wxButton* getFavDefButton() {
+		return favDef;
+	}
+
+	void Hide() {
+		text->Hide();
+		wordTypeText->Hide();
+		defText->Hide();
+		back->Hide();
+		next->Hide();
+		pageText->Hide();
+
+	}
+	void Show() {
+		text->Show();
+		wordTypeText->Show();
+		defText->Show();
+		back->Show();
+		next->Show();
+		pageText->Show();
+	}
+
 };

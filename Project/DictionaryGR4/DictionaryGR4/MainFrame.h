@@ -4,7 +4,7 @@
 #include "SearchMenu.h"
 #include "GUI_AddWordMenu.h"
 #include "QuizMenu.h"
-
+#include "HistoryMenu.h"
 class MainFrame: public wxFrame {
 private:
 	wxSimplebook* simpleBook;
