@@ -6,13 +6,12 @@
 
 #include "SearchTree.h"
 #include "History.h"
+#include "randomfunc.h"
 #include <list>
 
 class Dictionary {
 private:
-	WordFinder* activeSearcher = nullptr; //for def -> word in all datasets
-	WordFinder toolEngEng, toolEngVie, toolVieEng;
-
+	
 	Trie myTrie; //for word -> def in Eng-Eng & Eng-Vie
 
 	const string EngEng = "Eng-Eng", EngVie = "Eng-Vie", VieEng = "Vie-Eng"; //datasets
@@ -21,6 +20,10 @@ private:
 	list<string> favList;
 	
 public:
+
+	WordFinder* activeSearcher = nullptr; //for def -> word in all datasets
+	WordFinder toolEngEng, toolEngVie, toolVieEng;
+	//WordFinder* activeSearcher = &toolEngEng; //for def -> word in all datasets
 
 	bool isSearchingDefinition = false;
 	Dictionary() {
