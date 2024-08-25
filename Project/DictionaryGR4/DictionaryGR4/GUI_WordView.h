@@ -377,7 +377,7 @@ public:
 
 	void OnAddFavourite(wxCommandEvent& evt) {
 		ofstream out;
-		out.open("Favourite\\" + activeDataset + "\\favList.txt", ios::app);
+		out.open("Favourite\\" + activeDataset + "\\fav.txt", ios::app);
 		if (!out.is_open()) return;
 		out << getShowingWord().getText()  << endl;
 		out.close();
