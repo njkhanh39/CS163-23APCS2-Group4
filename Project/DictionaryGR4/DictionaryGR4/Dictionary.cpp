@@ -69,14 +69,12 @@ Word* Dictionary::getWordPtr(string word) {
 	return myTrie.getWordPointer(word);
 }
 
-std::mt19937 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-int RandInt(int l, int r)
-{
+int RandInt(int l, int r) {
+	std::mt19937 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 	return l + rng() % (r - l + 1);
 }
 
 Word Dictionary::getRandomWord(string& wordText) {
-	srand(time(NULL));
 	string text;
 	while (text.empty()) {
 		int r = RandInt(0, 200000);

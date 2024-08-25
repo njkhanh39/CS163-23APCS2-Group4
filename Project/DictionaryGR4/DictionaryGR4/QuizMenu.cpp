@@ -1,4 +1,4 @@
-#include "MainFrame.h"
+//#include "MainFrame.h"
 #include "QuizMenu.h"
 
 QuizMenu::QuizMenu(wxWindow* parent) : wxSimplebook(parent, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
@@ -142,11 +142,11 @@ string QuizMenu::GetWordType(Word word, string& def)
 	return wordtype;
 }
 
-std::mt19937 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-int RandInt(int l, int r)
-{
-	return l + rng() % (r - l + 1);
-}
+//std::mt19937 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+//int RandInt(int l, int r)
+//{
+//	return l + rng() % (r - l + 1);
+//}
 
 void QuizMenu::GenQuest(wxCommandEvent& evt, Dictionary* dict)
 {

@@ -213,3 +213,5 @@ public:
 	//	return true;
 	//}
 };
+
+int RandInt(int l, int r);

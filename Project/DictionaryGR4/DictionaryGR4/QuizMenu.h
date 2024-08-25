@@ -8,6 +8,8 @@
 #include <cstring>
 #include <algorithm>
 
+#include "Dictionary.h"
+
 class QuizMenu : public wxSimplebook {
 public:
 
@@ -42,5 +44,12 @@ private:
 	wxStaticText* announce;
 	wxButton* restart;
 	/*=========================================*/
+
+	string GetWordType(Word word, string& def);
+
+	void GenQuest(wxCommandEvent& evt, Dictionary* dict);
+
+	//int RandInt(int l, int r);
+
 };
 #endif

@@ -73,7 +73,7 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	datasetCbb->Refresh();
 
 	datasetCbb->Bind(wxEVT_COMBOBOX, [this, dict](wxCommandEvent& evt) {
-		dict->chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
+		dict->chooseLanguage(string(datasetCbb->GetStringSelection().mb_str(wxConvUTF8)));
 	});
 
 	//load
@@ -301,7 +301,7 @@ void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict
 
 		string word = string(s.mb_str(wxConvUTF8));
 
-		dict->chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
+		dict->chooseLanguage(string(datasetCbb->GetStringSelection().mb_str(wxConvUTF8)));
 
 		dict->runSearchEngine(word, false);
 
