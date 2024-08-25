@@ -29,12 +29,13 @@ private:
 	Word RandomWord(string& wordText, Dictionary* dict);
 
 	void displayGameMode(Dictionary* dict);
+
+	void displayscore();
 	
 	void modeQuestion(wxSize boxSize);
 
-	void displayQuestion(Dictionary* dict, string quest, vector<string> opt);
-
-	void OnOptionSelected(wxCommandEvent& event, Dictionary* dict);
+	void OnOptionSelected(wxCommandEvent& event);
+	void OnNextQuestion(Dictionary* dict);
 
 	void processQuestion(Dictionary* dict);
 
@@ -46,11 +47,11 @@ private:
 	wxSize boxSize = wxSize(1124, 292), optSize = wxSize(554,130);
 
 	/*==============GAME_VARIABLE==============*/
-	int current_question = 0, score = 0, numquest = 30;
+	int current_question = 0, score = 0, numquest = 30, sum_quest = 0;
 	int gametype = 0; //0: Guess Def; 1: GuessWord
 	int dataset = 0; //0: Eng-Eng, 1: Eng-Viet, 2: Viet-Eng
 	bool is_endless = false;
-	void DefaultSetting();
+	void DefaultSetting(Dictionary* dict);
 	/*=========================================*/
 
 	wxPanel* gamevar;
@@ -63,14 +64,14 @@ private:
 	wxPanel* question;
 	wxStaticBox* chosen_box;
 	wxStaticText* chosen_quest;
-	wxButton* options[4], exit;
+	wxButton* options[4],* exit;
 	wxBitmapButton* nextquest;
 	/*=========================================*/
 
 	/*=================SCORE===================*/
 	wxPanel* score_announce;
 	wxStaticText* announce;
-	wxButton* restart;
+	wxButton* restart, *backmenu;
 	/*=========================================*/
 
 
