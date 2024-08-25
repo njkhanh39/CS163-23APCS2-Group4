@@ -154,7 +154,7 @@ public:
 
 	Word getShowingWord() {
 		Word ans;
-		if (pageText->GetValue().ToStdString() == "0/0") return ans;
+		if (string(pageText->GetValue().mb_str(wxConvUTF8)) == "0/0") return ans;
 
 		wxString wxstr = text->GetLabel();
 		string str = string(wxstr.mb_str(wxConvUTF8));
@@ -278,8 +278,8 @@ public:
 			"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
 
 		if (ask->ShowModal() == wxID_YES and curIndex >= 0) {
-			string newDef = defText->GetValue().ToStdString();
-			dict->editDefinition(text->GetLabel().ToStdString(), defs[curIndex], newDef, wordTypeText->GetLabel().ToStdString());
+			string newDef = string(defText->GetValue().mb_str(wxConvUTF8));
+			dict->editDefinition(string(text->GetLabel().mb_str(wxConvUTF8)), defs[curIndex], newDef, string(wordTypeText->GetLabel().mb_str(wxConvUTF8)));
 			defs[curIndex] = newDef;
 			word->modifyDefinition(newDef, curIndex);
 		}

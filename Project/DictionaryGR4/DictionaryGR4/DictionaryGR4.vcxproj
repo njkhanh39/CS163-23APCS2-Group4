@@ -146,6 +146,7 @@
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="QuizMenu.cpp" />
+    <ClCompile Include="randomfunc.cpp" />
     <ClCompile Include="SearchedWord.cpp" />
     <ClCompile Include="SearchMenu.cpp" />
     <ClCompile Include="SearchTree.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="QuizMenu.h" />
+    <ClInclude Include="randomfunc.h" />
     <ClInclude Include="SearchedWord.h" />
     <ClInclude Include="SearchMenu.h" />
     <ClInclude Include="SearchTree.h" />
