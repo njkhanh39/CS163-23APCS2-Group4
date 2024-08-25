@@ -160,7 +160,8 @@ vector<string> QuizMenu::GenQuest(wxCommandEvent& evt, Dictionary* dict, int& co
 	string wordText, ans_def;
 	Word chosen_word = dict->getRandomWord(wordText);
 	string ans_type = GetWordType(chosen_word, ans_def);
-	correctans = rng() % (3 + 1);;
+	mt19937 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+	correctans = rng() % (3 + 1);
 
 	vector <string> opt_list;
 	opt_list.resize(4);
