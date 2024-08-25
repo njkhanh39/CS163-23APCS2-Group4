@@ -21,6 +21,7 @@ private:
 	list<string> favList;
 	
 public:
+
 	bool isSearchingDefinition = false;
 	Dictionary() {
 		activeSearcher = &toolEngEng;
@@ -110,6 +111,13 @@ public:
 	void merge(vector<string>& a, int l, int r, int mid);
 
 	void mergeSort(vector<string>& a, int l, int r, int n);
+
+	bool isUnwantedPunctuation(char c);
+
+	// Helper function to transform a single character
+	char transformChar(char c);
+
+	string normalizeString(string& sentence);
 
 	//vector<Word> helperDefToWordENGENG(string keyword, int limit){
 	//	//format word

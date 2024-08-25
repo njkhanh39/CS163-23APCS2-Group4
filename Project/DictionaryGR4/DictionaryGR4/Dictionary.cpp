@@ -722,3 +722,42 @@ void Dictionary::mergeSort(vector<string>& a, int l, int r, int n) {
 
 	merge(a, l, r, mid);
 }
+
+bool Dictionary::isUnwantedPunctuation(char c) {
+	return c == '.' || c == ',' || c == ';' || c == '(' || c == ')';
+}
+
+// Helper function to transform a single character
+char Dictionary::transformChar(char c) {
+	if (isUnwantedPunctuation(c)) {
+		return ' '; // Replace unwanted punctuation with space
+	}
+	else {
+		return std::tolower(c);
+	}
+}
+
+std::string Dictionary::normalizeString(std::string& sentence) {
+	std::string result;
+	result.reserve(sentence.size());
+
+	// Convert to lowercase and remove unwanted punctuation
+	for (char c : sentence) {
+		result.push_back(transformChar(c));
+	}
+
+	// Remove redundant spaces
+	std::istringstream iss(result);
+	std::string word;
+	result.clear();
+	bool firstWord = true;
+	while (iss >> word) {
+		if (!firstWord) {
+			result += " ";
+		}
+		result += word;
+		firstWord = false;
+	}
+
+	return result;
+}

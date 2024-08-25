@@ -9,6 +9,8 @@
 #include <algorithm>
 
 #include "Dictionary.h"
+#include "GUI_WordView.h"
+#include "Word.h"
 
 class QuizMenu : public wxSimplebook {
 public:
@@ -16,7 +18,17 @@ public:
 	QuizMenu(wxWindow* parent);
 
 private:
-	void OnUpdateNumber(wxTimerEvent& event);
+	
+	vector<string> GenQuest(wxCommandEvent& evt, Dictionary* dict, int& correctans, string& quest);
+
+	wxColour purple = wxColour(101, 86, 142), red = wxColour(184, 89, 89), green = wxColour(11, 199, 189), white = wxColour(255, 255, 255), black = wxColour(34, 36, 40);
+
+	void displayGameMode();
+	
+	void displayQuestion();
+
+	string GetWordType(Word word, string& str);
+
 	wxTimer timer;
 
 	/*==============GAME_VARIABLE==============*/
@@ -44,12 +56,5 @@ private:
 	wxStaticText* announce;
 	wxButton* restart;
 	/*=========================================*/
-
-	string GetWordType(Word word, string& def);
-
-	void GenQuest(wxCommandEvent& evt, Dictionary* dict);
-
-	//int RandInt(int l, int r);
-
 };
 #endif

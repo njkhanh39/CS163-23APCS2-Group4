@@ -156,7 +156,10 @@ public:
 		Word ans;
 		if (string(pageText->GetValue().mb_str(wxConvUTF8)) == "0/0") return ans;
 
-		ans.setWord((string)text->GetLabel());
+		wxString wxstr = text->GetLabel();
+		string str = string(wxstr.mb_str(wxConvUTF8));
+
+		ans.setWord(str);
 
 		for (int i = 0; i < (int)defs.size(); ++i) {
 			string defstr;
@@ -256,10 +259,6 @@ public:
 		}
 	}
 
-	int getCurrentPage() {
-		wxString page = pageText->GetValue();
-		return wxAtoi(page.Left(page.First('/'))) - 1;
-	}
 
 	void OnEditDefClicked(wxCommandEvent& evt) {
 		defText->SetEditable(1);
@@ -271,9 +270,8 @@ public:
 	}
 
 	void OnConfirmEditClicked(wxCommandEvent& evt, Dictionary* dict) {
-		int curIndex = getCurrentPage();
+		int curIndex = cur;
 
-		cur = curIndex;
 
 		wxMessageDialog* ask = new wxMessageDialog(parentWindow,
 			"Are you sure to modify this definition?",
@@ -295,7 +293,7 @@ public:
 	void OnCancelEditClicked(wxCommandEvent& evt) {
 		defText->SetEditable(0);
 
-		int curIndex = getCurrentPage();
+		int curIndex = cur;
 
 		if (curIndex < 0)
 			defText->SetLabel(wxString("Definition."));
@@ -326,7 +324,7 @@ public:
 			else {
 				defText->SetEditable(0);
 
-				int curIndex = getCurrentPage();
+				int curIndex = cur;
 
 				if (curIndex < 0)
 					defText->SetLabel(wxString("Definition."));
@@ -344,13 +342,14 @@ public:
 
 		if (pages == 0) return;
 
-		int curIndex = getCurrentPage();
+		int curIndex = cur;
 		
-		string wordText = (string)text->GetLabel();
+		wxString wxstr = text->GetLabel();
+		string wordText = string(wxstr.mb_str(wxConvUTF8));
 
 		string defstr;
 
-		if (wordtype[curIndex] == "") {
+		if (wordtype[curIndex].empty()) {
 			defstr = defs[curIndex];
 		}
 		else {
@@ -368,10 +367,16 @@ public:
 			if (curIndex == pages)
 				--curIndex;
 			pageText->SetValue(to_string(curIndex + 1) + "/" + to_string(pages));
-			wordTypeText->SetLabel(wxString::FromUTF8(wordtype[curIndex]));
-			defText->SetLabel(wxString::FromUTF8(defs[curIndex]));
+
+			if (!wordtype.empty()) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[curIndex]));
+			else wordTypeText->SetLabel("");
+
+			if (curIndex != -1) defText->SetLabel(wxString::FromUTF8(defs[curIndex]));
+			else defText->SetLabel("");
 		
-			cur = getCurrentPage();
+			if (curIndex == -1) text->SetLabel("");
+
+			cur = curIndex + 1;
 
 			dict->deleteWordOneDef(wordText, defstr);
 		}
