@@ -8,7 +8,7 @@
 #include "History.h"
 #include "randomfunc.h"
 #include <list>
-
+#include "MainFrame.h"
 class Dictionary {
 private:
 	
@@ -34,7 +34,7 @@ public:
 	}
 
 	//"Eng-Eng", "Eng-Vie", "Vie-Eng"
-	bool chooseLanguage(string t);
+	bool chooseLanguage(string t, MainFrame* &frame);
 
 	//Pass in search bar's current word, true/false for LogMessaging on Status Bar.
 	void runSearchEngine(string word, bool yesLogMessage);

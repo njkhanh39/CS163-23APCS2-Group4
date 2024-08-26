@@ -117,3 +117,38 @@ void HistoryMenu::OnBackButton(wxCommandEvent& evt, Dictionary* dict) {
     view->Show();
     list->Show();
 }
+
+void HistoryMenu::Refresh(Dictionary*& dict) {
+    // Clear the current list
+    list->DeleteAllItems();
+
+    // Load history from the new dataset
+    if (!dict->hist.loadFromFile(dict->getActiveDataset())) {
+        wxLogError("Can't open file: %s", dict->getActiveDataset().c_str());
+        return;
+    }
+    else {
+        wxLogMessage("File loaded successfully.");
+    }
+
+    auto searchList = dict->hist.searchList;
+    if (searchList.empty()) {
+        wxLogMessage("No items in history.");
+    }
+    else {
+        wxLogMessage("Loaded %d items.", searchList.size());
+        int index = 0;
+        for (auto& c : searchList) {
+            wxString no = wxString::Format("%d", index + 1);
+            wxString date = c.getDate();
+            wxString time = c.getTime();
+            wxString word = c.getText();
+
+            long itemIndex = list->InsertItem(index, no);
+            list->SetItem(itemIndex, 1, date);
+            list->SetItem(itemIndex, 2, time);
+            list->SetItem(itemIndex, 3, word);
+            index++;
+        }
+    }
+}

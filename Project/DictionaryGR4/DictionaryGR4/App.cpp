@@ -12,7 +12,7 @@ bool App::OnInit() {
 	
 	wxImage::AddHandler(new wxPNGHandler);
 	MainFrame* frame = new MainFrame(dict,"Dictionary", wxSize(1280,800));
-	frame->Show(true);	
+	frame->Show(true);
 	
 	return true;
 }

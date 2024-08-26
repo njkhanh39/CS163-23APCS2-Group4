@@ -18,6 +18,7 @@ class HistoryMenu : public wxPanel
 {
 public:
 	HistoryMenu(wxWindow* parent, Dictionary*& dict);
+	void Refresh(Dictionary*& dict);
 	~HistoryMenu();
 private:
 	wxTextCtrl* searchBar;
@@ -29,4 +30,5 @@ private:
 
 	void OnViewButton(wxCommandEvent& evt, Dictionary* dict);
 	void OnBackButton(wxCommandEvent& evt, Dictionary* dict);
+	
 };

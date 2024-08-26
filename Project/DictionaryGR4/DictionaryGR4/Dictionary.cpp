@@ -3,15 +3,15 @@
 using namespace std;
 
 //"Eng-Eng", "Eng-Vie", "Vie-Eng"
-bool Dictionary::chooseLanguage(string t) {
+bool Dictionary::chooseLanguage(string t, MainFrame*& frame) {
 	if (t != EngEng && t != EngVie && t != VieEng) return false;
 	activeDataSet = t;
 	
 	if (t == EngEng) activeSearcher = &toolEngEng;
 	if (t == EngVie) activeSearcher = &toolEngVie;
 	if (t == VieEng) activeSearcher = &toolVieEng;
-
-
+	frame->histMenu->Refresh();
+	
 	return true;
 }
 

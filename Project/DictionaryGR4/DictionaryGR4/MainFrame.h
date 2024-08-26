@@ -10,6 +10,7 @@ private:
 	wxSimplebook* simpleBook;
 
 public: 
+	HistoryMenu* histMenu;
 	MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize);
 
     void OnPreviousPage(wxCommandEvent& event);
