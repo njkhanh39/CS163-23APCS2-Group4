@@ -384,7 +384,7 @@ public:
 
 	void OnAddFavourite(wxCommandEvent& evt) {
 		ofstream out;
-		out.open("Favourite\\" + activeDataset + "\\favList.txt", ios::app);
+		out.open("Favourite\\" + activeDataset + "\\fav.txt", ios::app);
 		if (!out.is_open()) return;
 		out << getShowingWord().getText()  << endl;
 		out.close();
@@ -413,6 +413,36 @@ public:
 			string show = to_string(cur + 1) + "/" + to_string(pages);
 			pageText->SetValue(show);
 		}
+	}
+
+	wxButton* getEditDefButton() {
+		return editDef;
+	}
+
+	wxButton* getDelDefButton() {
+		return delDef;
+	}
+
+	wxButton* getFavDefButton() {
+		return favDef;
+	}
+
+	void Hide() {
+		text->Hide();
+		wordTypeText->Hide();
+		defText->Hide();
+		back->Hide();
+		next->Hide();
+		pageText->Hide();
+
+	}
+	void Show() {
+		text->Show();
+		wordTypeText->Show();
+		defText->Show();
+		back->Show();
+		next->Show();
+		pageText->Show();
 	}
 
 };

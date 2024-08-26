@@ -16,7 +16,6 @@
 
 class SearchMenu : public wxPanel {
 public:
-	wxButton* back_to_home;
 	SearchMenu(wxWindow* parent, Dictionary*& dict);
 	~SearchMenu();
 
