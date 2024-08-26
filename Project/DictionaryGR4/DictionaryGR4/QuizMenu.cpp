@@ -69,6 +69,9 @@ QuizMenu::QuizMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(parent, w
 		OnNextQuestion(dict);
 		});
 
+	currquestno = new wxStaticText(question, wxID_ANY, "", wxPoint(20, 10), wxDefaultSize, wxBORDER_NONE);
+	currquestno->SetForegroundColour(white);
+
 	for (int i = 0; i < 4; ++i)
 	{
 		options[i] = new wxButton(question, 1000+i, "", optPosition[i], optSize, wxBORDER_NONE);
@@ -212,6 +215,8 @@ void QuizMenu::modeQuestion(wxSize boxSize)
 
 void QuizMenu::processQuestion(Dictionary* dict)
 {
+	currquestno->SetLabel("Question " + std::to_string(current_question+1));
+
 	if (current_question < numquest || (is_endless))
 	{
 		string quest;
@@ -296,6 +301,9 @@ void QuizMenu::OnNextQuestion(Dictionary* dict)
 void QuizMenu::DefaultSetting(Dictionary* dict)
 {
 	current_question = 0; score = 0; numquest = 30;
+	EngEng->SetBackgroundColour(wxColour(11, 199, 189));
+	EngVie->SetBackgroundColour(wxColour(255, 255, 255));
+	VieEng->SetBackgroundColour(wxColour(255, 255, 255));
 	displayGameMode(dict);
 }
 
