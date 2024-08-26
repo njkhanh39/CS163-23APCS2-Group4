@@ -69,7 +69,7 @@ private:
 	int pos_correct;
 	wxPanel* question;
 	wxStaticBox* chosen_box;
-	wxStaticText* chosen_quest;
+	wxStaticText* chosen_quest,* currquestno;
 	wxButton* exit, *options[4];
 	wxBitmapButton* nextquest;
 	/*=========================================*/

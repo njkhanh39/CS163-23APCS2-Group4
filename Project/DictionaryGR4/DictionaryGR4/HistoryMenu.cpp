@@ -38,11 +38,11 @@ HistoryMenu::HistoryMenu(wxWindow* parent, Dictionary*& dict)
     view->SetFont(fontCB);
 
     // Initialize wxListCtrl for history items
-    list = new wxListCtrl(this, wxID_ANY, wxPoint(234, 50), wxSize(776, 500), wxLC_REPORT | wxLC_SINGLE_SEL);
+    list = new wxListCtrl(this, wxID_ANY, wxPoint(82, 40), wxSize(1116, 625), wxLC_REPORT | wxLC_SINGLE_SEL);
     list->InsertColumn(0, "No.", wxLIST_FORMAT_LEFT, 50);
     list->InsertColumn(1, "Date", wxLIST_FORMAT_LEFT, 150);
     list->InsertColumn(2, "Time", wxLIST_FORMAT_LEFT, 150);
-    list->InsertColumn(3, "Word", wxLIST_FORMAT_LEFT, 426);
+    list->InsertColumn(3, "Word", wxLIST_FORMAT_LEFT, 766);
 
     // Populate list with history items
     if (!dict->hist.loadFromFile(dict->getActiveDataset())) {

@@ -78,17 +78,17 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
     favpane->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
         simpleBook->SetSelection(4);
         searchpane->SetBackgroundColour(purple);
-        addpane->SetBackgroundColour(black);
+        addpane->SetBackgroundColour(purple);
         hispane->SetBackgroundColour(purple);
         quizpane->SetBackgroundColour(purple);
-        favpane->SetBackgroundColour(purple);
+        favpane->SetBackgroundColour(black);
         });
 
     hispane->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
         simpleBook->SetSelection(3);
         searchpane->SetBackgroundColour(purple);
-        addpane->SetBackgroundColour(black);
-        hispane->SetBackgroundColour(purple);
+        addpane->SetBackgroundColour(purple);
+        hispane->SetBackgroundColour(black);
         quizpane->SetBackgroundColour(purple);
         favpane->SetBackgroundColour(purple);
         });
