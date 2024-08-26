@@ -542,7 +542,12 @@ bool Dictionary::editDefInFile(string text, string olddef, string newdef, string
 			word = line.substr(0, line.find("\t"));
 		}
 
-		int i = line.find(")") + 2;
+		size_t i = line.find(")");
+		if (i == string::npos)
+			i = line.find("\t") + 1;
+		else
+			i += 2;
+
 		string curdef = line.substr(i, line.length() - i);
 		while (curdef.compare(olddef)) {
 			prev += line + "\n";
@@ -554,7 +559,7 @@ bool Dictionary::editDefInFile(string text, string olddef, string newdef, string
 			curdef = line.substr(i, line.length() - i);
 		}
 
-		prev += line.substr(0, line.find(")") + 2);
+		prev += line.substr(0, i);
 
 		string temp;
 		while (getline(fin, temp))
