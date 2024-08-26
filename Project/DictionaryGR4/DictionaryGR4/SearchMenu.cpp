@@ -162,9 +162,6 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt, Dictionary* dict) {
 			adjustSuggestBar(300, 14);
 			return;
 		}
-
-		
-
 		suggestBar->Clear();
 
 		//recommend 20 words with defs
@@ -244,8 +241,6 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt, Dictionary* dict) {
 		SW.setTime();
 		SW.setDate();
 		dict->getHistory().saveToFile(SW);
-
-
 
 		return;
 	}

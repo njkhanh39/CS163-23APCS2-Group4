@@ -713,7 +713,7 @@ Word WordFinder::searchWord(string text) {
 
 
     //find possibly user-added word
-    for (int i = size + numWordsAdded - 1; i >= size; --i) {
+    for (int i = size; i <= size+numWordsAdded-1; ++i) {
         string cur = slots[i].word.getText();
         u16string u16cur = tou16(cur);
         if (u16cur == wxtest) {

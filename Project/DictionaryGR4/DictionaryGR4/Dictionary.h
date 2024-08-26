@@ -96,6 +96,56 @@ public:
 	//return true if add word successfully
 	bool addNewWordOneDef(string& text, string& def);
 
+	vector<Word> getDeletedWords() {
+		vector<Word> ans;
+
+		string file = "DataSet\\" + activeDataSet + "\\deletedWords.txt";
+
+		vector<string> lines;
+
+		ifstream fin; fin.open(file);
+
+		string line;
+
+		while (getline(fin, line)) {
+			if (line != "") lines.push_back(line);
+		}
+
+
+		fin.close();
+
+		if ((int)lines.size() == 0) return ans;
+
+		sortVectorString(lines);
+
+		for (int i = 0; i < (int)lines.size(); ++i) {
+			string wrd, def;
+			int j = 0;
+			while (lines[i][j] != '\t') {
+				wrd.push_back(lines[i][j]);
+				++j;
+			}
+			++j;
+			def = lines[i].substr(j);
+			if (def.back() == '\n') def.pop_back();
+
+			if (ans.empty()) {
+				ans.push_back(Word(wrd, def));
+				continue;
+			}
+
+			string cmpWrd = ans.back().getText();
+			if (wrd == cmpWrd) {
+				ans.back().addDefinition(def);
+				continue;
+			}
+
+			ans.push_back(Word(wrd, def));
+		}
+
+		return ans;
+	}
+
 	//helpers
 
 	vector<string> transformSentence(string& input);
