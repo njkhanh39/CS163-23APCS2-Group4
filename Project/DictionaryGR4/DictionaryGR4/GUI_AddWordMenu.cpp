@@ -113,7 +113,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 
 		}
 
 		wxMessageDialog* ask = new wxMessageDialog(this,
-			"Are you sure to add word \"" + text + "\"?",
+			"Are you sure to add word \"" + wunicode + "\"?",
 			"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
 
 		if(ask->ShowModal() == wxID_YES) dict->addNewWordOneDef(text, def);
