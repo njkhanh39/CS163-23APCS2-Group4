@@ -376,7 +376,8 @@ public:
 		
 			if (curIndex == -1) text->SetLabel("");
 
-			cur = curIndex + 1;
+			cur = curIndex;
+			if (curIndex == -1) cur = 0;
 
 			dict->deleteWordOneDef(wordText, defstr);
 		}
