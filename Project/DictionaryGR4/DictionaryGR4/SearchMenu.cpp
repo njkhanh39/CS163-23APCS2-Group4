@@ -4,7 +4,7 @@ using namespace std;
 namespace fs = std::experimental::filesystem;
 
 SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10001, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
-	
+
 
 	auto purple = wxColour(101, 86, 142), red = wxColour(184, 89, 89), green = wxColour(11, 199, 189), white = wxColour(255, 255, 255), black = wxColour(34, 36, 40);
 
@@ -15,13 +15,13 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	fontTitle.MakeBold();
 
 	SetBackgroundColour(black);
-	 
+
 	//mainPanel->SetBackgroundColour((0xff, 0xcc, 0xcc));
 
 	wxBitmap bitmap(wxT("IMG/image.png"), wxBITMAP_TYPE_PNG);
 
 	// Create a wxBitmapButton
-	button = new wxBitmapButton(this, wxID_ANY, bitmap, wxPoint(1010, 41), wxSize(60,60));
+	button = new wxBitmapButton(this, wxID_ANY, bitmap, wxPoint(1010, 41), wxSize(60, 60));
 	//button->SetBackgroundColour(purple);
 	searchBar = new wxTextCtrl(this, wxID_ANY, "", wxPoint(234, 41), wxSize(776, 60));
 	searchBar->SetFont(fontCB);
@@ -37,7 +37,7 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 
 	wxBitmap bitmaphexa(wxT("IMG/Hexagon.png"), wxBITMAP_TYPE_PNG);
 
-	searchByDef = new wxBitmapButton(this, wxID_ANY, bitmaphexa, wxPoint(40,123), wxSize(181,181), wxBORDER_NONE);
+	searchByDef = new wxBitmapButton(this, wxID_ANY, bitmaphexa, wxPoint(40, 123), wxSize(181, 181), wxBORDER_NONE);
 
 	searchByWord = new wxBitmapButton(this, wxID_ANY, bitmaphexa, wxPoint(40, 304), wxSize(181, 181), wxBORDER_NONE);
 
@@ -49,15 +49,15 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 
 	searchByDef->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		OnSearchingByDef(evt, dict);
-	});
+		});
 	searchByWord->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		OnSearchingByWord(evt, dict);
-	});
+		});
 
 
 
 	// Create combo box to choose dataset
-	
+
 	wxArrayString languages = { "Eng-Eng", "Eng-Vie", "Vie-Eng" };
 	datasetCbb = new wxComboBox(this, wxID_ANY, "", wxPoint(53, 41), wxSize(154, -1), languages, wxCB_READONLY);
 
@@ -74,7 +74,7 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 
 	datasetCbb->Bind(wxEVT_COMBOBOX, [this, dict](wxCommandEvent& evt) {
 		dict->chooseLanguage(string(datasetCbb->GetStringSelection().mb_str(wxConvUTF8)));
-	});
+		});
 
 	//load
 	/*	searchByDef = new wxButton(mainPanel, wxID_ANY, "Def->Word", wxPoint(60, 200), wxSize(120, 40));
@@ -107,32 +107,32 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 
 
 	//events
-	
+
 	deleteword->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		Word get = wordView->getShowingWord();
 		if (get.empty()) return;
 		dict->deleteWord(get);
 		wordView->SetBackDefault();
-	});
-	
+		});
+
 	suggestBar->Bind(wxEVT_LEFT_DOWN, &SearchMenu::skip, this);
 	button->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		OnSearchButton(evt, dict);
-	});
+		});
 	searchBar->Bind(wxEVT_TEXT, [this, dict](wxCommandEvent& evt) {
 		OnSearchAndSuggestHandler(evt, dict);
-	});
+		});
 	//searchBar->Bind(wxEVT_BUTTON, bind(&SearchMenu::OnSearchAndSuggestHandler, this, placeholders::_1, ref(dict)));
 	suggestBar->Bind(wxEVT_LISTBOX, [this, dict](wxCommandEvent& evt) {
 		OnViewWord(evt, dict);
-	});
+		});
 	rd_button->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		OnRandomClicked(evt, dict);
-	});
+		});
 
 	resetbutton->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		OnResetButtonClicked(evt, dict);
-	});
+		});
 
 	wxProgressDialog progressDialog("Please Wait", "Performing a long task...", 100, this,
 		wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
@@ -163,7 +163,7 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt, Dictionary* dict) {
 			return;
 		}
 
-		
+
 
 		suggestBar->Clear();
 
@@ -242,7 +242,7 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt, Dictionary* dict) {
 		SearchedWord SW(key);
 		SW.setTime();
 		SW.setDate();
-		dict->getHistory().saveToFile(SW, dict->getActiveDataset());
+		dict->hist.saveToFile(SW, dict->getActiveDataset());
 		return;
 	}
 
@@ -287,7 +287,7 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt, Dictionary* dict) {
 
 	SW.setTime();
 	SW.setDate();
-	dict->getHistory().saveDevToWord(SW, def, dict->getActiveDataset());
+	dict->hist.saveDevToWord(SW, def, dict->getActiveDataset());
 }
 
 void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict) {

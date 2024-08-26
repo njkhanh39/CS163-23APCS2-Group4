@@ -30,4 +30,3 @@ private:
 	void OnViewButton(wxCommandEvent& evt, Dictionary* dict);
 	void OnBackButton(wxCommandEvent& evt, Dictionary* dict);
 };
-

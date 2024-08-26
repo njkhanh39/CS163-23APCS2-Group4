@@ -30,6 +30,7 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
 
 	
     //MainMenu* mainMenu = new MainMenu(simpleBook);
+    
 	SearchMenu* searchMenu = new SearchMenu(simpleBook, dict);
     QuizMenu* quizMenu = new QuizMenu(simpleBook, dict);
     AddWordMenu* addMenu = new AddWordMenu(simpleBook, dict);
@@ -75,7 +76,7 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
         });
 
     favpane->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
-        simpleBook->SetSelection(3);
+        simpleBook->SetSelection(4);
         searchpane->SetBackgroundColour(purple);
         addpane->SetBackgroundColour(black);
         hispane->SetBackgroundColour(purple);

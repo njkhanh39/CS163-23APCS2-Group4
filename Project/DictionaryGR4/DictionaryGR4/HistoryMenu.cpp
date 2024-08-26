@@ -45,14 +45,14 @@ HistoryMenu::HistoryMenu(wxWindow* parent, Dictionary*& dict)
     list->InsertColumn(3, "Word", wxLIST_FORMAT_LEFT, 426);
 
     // Populate list with history items
-    if (!dict->getHistory().loadFromFile(dict->getActiveDataset())) {
+    if (!dict->hist.loadFromFile(dict->getActiveDataset())) {
         wxLogError("Can't open file: %s", dict->getActiveDataset().c_str());
     }
     else {
         wxLogMessage("File loaded successfully.");
     }
 
-    auto searchList = dict->getHistory().getsearchList();
+    auto searchList = dict->hist.searchList;
     if (searchList.empty()) {
         wxLogMessage("No items in history.");
     }

@@ -8,16 +8,14 @@
 
 
 class History {
-private:
-	list<SearchedWord> searchList;  // for loading
+
+	
 	
 public:
 	History() {}
 
+	list<SearchedWord> searchList;  // for loading
 
-	list<SearchedWord> getsearchList() {
-		return searchList;
-	};
 
 
 	void addToHistory(SearchedWord w);

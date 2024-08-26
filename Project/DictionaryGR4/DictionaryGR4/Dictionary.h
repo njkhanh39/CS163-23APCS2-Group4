@@ -16,11 +16,11 @@ private:
 
 	const string EngEng = "Eng-Eng", EngVie = "Eng-Vie", VieEng = "Vie-Eng"; //datasets
 	string activeDataSet = EngEng; //changeable
-	History hist;
+	
 	list<string> favList;
 	
 public:
-
+	History hist;
 	WordFinder* activeSearcher = nullptr; //for def -> word in all datasets
 	WordFinder toolEngEng, toolEngVie, toolVieEng;
 	//WordFinder* activeSearcher = &toolEngEng; //for def -> word in all datasets
@@ -77,7 +77,7 @@ public:
 
 	void addToFavourite(Word& word);
 
-	History getHistory();
+
 
 	//setters & adders
 

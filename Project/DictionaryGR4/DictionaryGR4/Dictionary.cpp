@@ -515,9 +515,7 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 	}
 }
 
-History Dictionary::getHistory() {
-	return hist;
-}
+
 
 // edit 1-28.txt and addedWords.txt
 bool Dictionary::editDefInFile(string text, string olddef, string newdef, string dir) {

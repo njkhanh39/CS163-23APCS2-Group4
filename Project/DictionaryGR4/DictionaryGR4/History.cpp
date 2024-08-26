@@ -21,6 +21,7 @@ bool History::loadFromFile(string activeDataset) {
 	if (!in.is_open()) {
 		return false;
 	}
+
 	string line;
 	getline(in, line);   // ignore the first line
 
@@ -45,7 +46,7 @@ bool History::loadFromFile(string activeDataset) {
 	}
 
 	searchList.reverse();
-	return true;
+	return !searchList.empty();
 }
 
 void History::clearHistory() {
