@@ -11,7 +11,7 @@ bool Dictionary::chooseLanguage(string t) {
 	if (t == EngVie) activeSearcher = &toolEngVie;
 	if (t == VieEng) activeSearcher = &toolVieEng;
 
-	hist.setMode(activeDataSet);
+
 	return true;
 }
 

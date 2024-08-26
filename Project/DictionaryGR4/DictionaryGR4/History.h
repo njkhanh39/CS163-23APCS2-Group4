@@ -10,7 +10,7 @@
 class History {
 private:
 	list<SearchedWord> searchList;  // for loading
-	string mode;
+	
 public:
 	History() {}
 
@@ -19,11 +19,11 @@ public:
 		return searchList;
 	};
 
-	void setMode(string dataset);
+
 	void addToHistory(SearchedWord w);
-	void loadFromFile();
-	void saveToFile(SearchedWord w); // for saving word -> def
-	void saveDevToWord(SearchedWord w, string def);
+	bool loadFromFile(string activeDataset);
+	void saveToFile(SearchedWord w, string activeDataset); // for saving word -> def
+	void saveDevToWord(SearchedWord w, string def, string activeDataset);
 	void clearHistory();
 	void remove(string word);  // for removing a word
 

@@ -1,25 +1,26 @@
 #include "History.h"
 
 
-void History::setMode(string dataset) {
-	mode = dataset;
-}
+
 
 void History::addToHistory(SearchedWord w) {
 	searchList.push_back(w);
 }
 
-void History::saveToFile(SearchedWord w) {
+void History::saveToFile(SearchedWord w, string activeDataset) {
 	ofstream out;
-	out.open("History\\" + mode + "\\history.csv", ios::app);
+	out.open("History\\" + activeDataset + "\\history.csv", ios::app);
 	if (!out.is_open()) return;
 	out << w.getText() << "," << w.getTime() << "," << w.getDate() << endl;
 	out.close();
 }
 
-void History::loadFromFile() {
+bool History::loadFromFile(string activeDataset) {
 	ifstream in;
-	in.open("History\\" + mode + "\\history.csv");
+	in.open("History\\" + activeDataset + "\\history.csv");
+	if (!in.is_open()) {
+		return false;
+	}
 	string line;
 	getline(in, line);   // ignore the first line
 
@@ -44,7 +45,7 @@ void History::loadFromFile() {
 	}
 
 	searchList.reverse();
-
+	return true;
 }
 
 void History::clearHistory() {
@@ -56,9 +57,9 @@ void History::remove(string word) {
 }
 
 
-void History::saveDevToWord(SearchedWord w, string def) {
+void History::saveDevToWord(SearchedWord w, string def, string activeDataset) {
 	ofstream out;
-	out.open("History\\" + mode + "\\histDevWord.csv",ios::app);
+	out.open("History\\" + activeDataset + "\\histDevWord.csv",ios::app);
 	if (!out.is_open()) return;
 	out << w.getText() << "," << def << "," << w.getTime() << "," << w.getDate() << endl;
 	out.close();

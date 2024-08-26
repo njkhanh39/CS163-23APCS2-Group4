@@ -12,6 +12,7 @@
 #include <experimental/filesystem>
 #include "GUI_WordView.h"
 #include "Dictionary.h"
+#include <wx/listctrl.h>
 
 class HistoryMenu : public wxPanel
 {
@@ -22,7 +23,7 @@ private:
 	wxTextCtrl* searchBar;
 	WordView* wordView;
 	wxButton* back, * view;
-	wxListBox* list;
+	wxListCtrl* list;
 
 
 

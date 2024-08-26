@@ -391,7 +391,7 @@ public:
 		getShowingWord().markFavourite();
 	}
 
-	void OnPageTextFocus(wxFocusEvent& evt) {		
+	void OnPageTextFocus(wxFocusEvent& evt) {
 		pageText->SelectAll();
 		//evt.Skip();
 	}
@@ -428,15 +428,18 @@ public:
 	}
 
 	void Hide() {
+		panel->Hide();
 		text->Hide();
 		wordTypeText->Hide();
 		defText->Hide();
 		back->Hide();
 		next->Hide();
 		pageText->Hide();
+		
 
 	}
 	void Show() {
+		panel->Show();
 		text->Show();
 		wordTypeText->Show();
 		defText->Show();

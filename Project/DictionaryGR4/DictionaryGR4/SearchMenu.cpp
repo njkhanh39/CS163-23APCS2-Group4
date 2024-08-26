@@ -239,14 +239,10 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt, Dictionary* dict) {
 
 		//avoiding overlapping panels
 		//wordView->Enable();
-
 		SearchedWord SW(key);
 		SW.setTime();
 		SW.setDate();
-		dict->getHistory().saveToFile(SW);
-
-
-
+		dict->getHistory().saveToFile(SW, dict->getActiveDataset());
 		return;
 	}
 
@@ -291,7 +287,7 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt, Dictionary* dict) {
 
 	SW.setTime();
 	SW.setDate();
-	dict->getHistory().saveDevToWord(SW, def);
+	dict->getHistory().saveDevToWord(SW, def, dict->getActiveDataset());
 }
 
 void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict) {
