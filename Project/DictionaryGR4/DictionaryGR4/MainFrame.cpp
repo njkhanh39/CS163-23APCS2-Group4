@@ -39,7 +39,7 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
     simpleBook->AddPage(quizMenu, "Quiz Menu", true); //selection = 1
     simpleBook->AddPage(searchMenu, "Search Menu", true);//selection = 2
 	//simpleBook->AddPage(mainMenu, "Main Menu", true); //selection = 2
-    simpleBook->AddPage(histMenu, "History Menu", true);
+    //simpleBook->AddPage(histMenu, "History Menu", true);
 
     simpleBook->SetSelection(2);
    
@@ -84,7 +84,7 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
         });
 
     hispane->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
-        simpleBook->SetSelection(4);
+        simpleBook->SetSelection(3);
         searchpane->SetBackgroundColour(purple);
         addpane->SetBackgroundColour(black);
         hispane->SetBackgroundColour(purple);
