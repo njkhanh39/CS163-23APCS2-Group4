@@ -55,8 +55,8 @@ Word Dictionary::searchWordMatching(string word) {
 	//format word
 	for (auto& x : word) x = tolower(x);
 
-	if (!myTrie.empty()) w = myTrie.getWordMatching(word);
-	if (w.empty()) w = activeSearcher->searchWord(word);
+
+	w = activeSearcher->searchWord(word);
 	
 	//since some of w's definitions may be deleted by user, we have to check.
 	getAvailableWords(w);
