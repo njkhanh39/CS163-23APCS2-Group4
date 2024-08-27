@@ -57,7 +57,8 @@ HistoryMenu::HistoryMenu(wxWindow* parent, Dictionary*& dict)
         wxLogMessage("No items in history.");
     }
     else {
-        wxLogMessage("Loaded %d items.", searchList.size());
+        int tmp = searchList.size();
+        wxLogMessage("Loaded %d items.", tmp);
         int index = 0;
         for (auto& c : searchList) {
             wxString no = wxString::Format("%d", index + 1);
@@ -104,10 +105,9 @@ void HistoryMenu::OnViewButton(wxCommandEvent& evt, Dictionary* dict) {
 
     searchBar->SetValue(keyuni);
     Word word = dict->searchWordMatching(key);
-    wordView->processWord(word);
+    wordView->processWord(word, dict);
     Word* ptr = dict->getWordPtr(key);
     wordView->setWord(ptr);
-    wordView->setActiveDataset(dict->getActiveDataset());
 }
 
 void HistoryMenu::OnBackButton(wxCommandEvent& evt, Dictionary* dict) {

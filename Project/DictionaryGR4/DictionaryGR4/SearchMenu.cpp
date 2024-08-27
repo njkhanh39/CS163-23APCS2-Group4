@@ -200,11 +200,10 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt, Dictionary* dict) {
 
 		Word word = dict->searchWordMatching(key);
 
-		wordView->processWord(word);
+		wordView->processWord(word, dict);
 
 		Word* ptr = dict->getWordPtr(key);
 		wordView->setWord(ptr);
-		wordView->setActiveDataset(dict->getActiveDataset());
 	}
 }
 
@@ -228,11 +227,10 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt, Dictionary* dict) {
 		//we need to search for that word & all its definitions
 		Word word = dict->searchWordMatching(key);
 
-		wordView->processWord(word);
+		wordView->processWord(word, dict);
 
 		Word* ptr = dict->getWordPtr(key);
 		wordView->setWord(ptr);
-		wordView->setActiveDataset(dict->getActiveDataset());
 
 		//avoiding overlapping panels
 		//wordView->Enable();
@@ -273,7 +271,7 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt, Dictionary* dict) {
 
 
 	//process the word
-	wordView->processWord(mainWord);
+	wordView->processWord(mainWord, dict);
 	wordView->goToDefinition(def);
 
 	//avoiding overlapping panels
@@ -372,9 +370,8 @@ void SearchMenu::OnRandomClicked(wxCommandEvent& evt, Dictionary* dict) {
 	string wordText;
 	Word word = dict->getRandomWord(wordText);
 
-	wordView->processWord(word);
+	wordView->processWord(word, dict);
 
 	Word* ptr = dict->getWordPtr(word.getText());
 	wordView->setWord(ptr);
-	wordView->setActiveDataset(dict->getActiveDataset());
 }

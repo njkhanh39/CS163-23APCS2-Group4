@@ -10,11 +10,24 @@
 #include <cstring>
 #include <algorithm>
 #include <experimental/filesystem>
+#include <wx/listctrl.h>
 
 #include "Dictionary.h"
 #include "GUI_WordView.h"
 class FavouriteMenu : public wxPanel
 {
+public:
+	FavouriteMenu(wxWindow* parent, Dictionary*& dict);
+	~FavouriteMenu();
+private:
+	wxTextCtrl* searchBar;
+	WordView* wordView;
+	wxButton* back, * view;
+	wxListCtrl* list;
 
+
+
+	void OnViewButton(wxCommandEvent& evt, Dictionary* dict);
+	void OnBackButton(wxCommandEvent& evt, Dictionary* dict);
 };
 

@@ -18,23 +18,19 @@ class Word {
 private:
 	string text;
 	vector<Definition> defList;
-	bool isFavourite;
 	string dataset;
 public:
 	Word() {
 		text = "";
-		isFavourite = false;
 	}
 
 	Word(string word) {
 		text = word;
-		isFavourite = false;
 	}
 
 	Word(string word, string def) {
 		text = word;
 		addDefinition(def);
-		isFavourite = false;
 	}
 
 
@@ -83,8 +79,6 @@ public:
 	vector<Definition> getDefinitions();
 
 	vector<string> getStringDefinitions();
-
-	void markFavourite();
 
 	string getDataset();
 

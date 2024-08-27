@@ -39,8 +39,8 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
     simpleBook->AddPage(addMenu, "Add Menu", true); //selection = 0
     simpleBook->AddPage(quizMenu, "Quiz Menu", true); //selection = 1
     simpleBook->AddPage(searchMenu, "Search Menu", true);//selection = 2
-	//simpleBook->AddPage(mainMenu, "Main Menu", true); //selection = 2
     simpleBook->AddPage(histMenu, "History Menu", true);
+
 
     simpleBook->SetSelection(2);
    
