@@ -96,22 +96,7 @@ FavouriteMenu::FavouriteMenu(wxWindow* parent, Dictionary*& dict)
 	});
 
 	unfav->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
-		if (wordView->getShowingText() == "") {
-			return;
-		}
-
-		wxMessageDialog* ask = new wxMessageDialog(this,
-		"Are you sure to remove this word from favourite list?",
-		"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
-
-		if (ask->ShowModal() == wxID_YES) {
-			string word = wordView->getShowingText();
-			wordView->clearWordView();
-
-			dict->removeFavourite(word);
-
-			this->SetSelection(0);
-		}
+		OnFavButtonClicked(evt, dict);
 	});
 	//---LIST CTRL BIND---//
 
@@ -178,6 +163,21 @@ void FavouriteMenu::OnViewWord(wxListEvent& evt, Dictionary* dict) {
 }
 
 void FavouriteMenu::OnFavButtonClicked(wxCommandEvent& evt, Dictionary* dict) {
+	if (wordView->getShowingText() == "") {
+		return;
+	}
 
+	wxMessageDialog* ask = new wxMessageDialog(this,
+		"Are you sure to remove this word from favourite list?",
+		"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+
+	if (ask->ShowModal() == wxID_YES) {
+		string word = wordView->getShowingText();
+		wordView->clearWordView();
+
+		dict->removeFavourite(word);
+
+		this->SetSelection(0);
+	}
 }
 
