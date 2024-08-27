@@ -116,7 +116,7 @@ public:
 			OnRemoveDefClicked(evt, dict);
 			});
 		favDef->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
-			//OnAddAndUnFavourite(evt, dict);
+			OnAddAndUnFavourite(evt, dict);
 		});
 		defText->Bind(wxEVT_SET_FOCUS, &WordView::OnTextFocus, this);
 		defText->Bind(wxEVT_KILL_FOCUS, &WordView::OnDefTextKillFocus, this);
@@ -448,12 +448,25 @@ public:
 		}
 	}
 
-	void OnAddFavourite(wxCommandEvent& evt) {
-		ofstream out;
-		out.open("Favourite\\" + activeDataset + "\\fav.txt", ios::app);
-		if (!out.is_open()) return;
-		out << getShowingWord().getText() << endl;
-		out.close();
+	void OnAddAndUnFavourite(wxCommandEvent& evt, Dictionary* dict) {
+		if (pages == 0) return;
+		wxString wxstr = text->GetLabel();
+		string wordText = string(wxstr.mb_str(wxConvUTF8));
+
+		bool isFav = dict->checkFav(wordText);
+
+		//add to fav
+		if (!isFav) {
+			dict->addToFavourite(wordText);
+		}
+		else {
+			dict->removeFavourite(wordText);
+		}
+
+		if (favDef->GetBackgroundColour() == wxColour(184, 89, 89)) {
+			favDef->SetBackgroundColour(wxColour(255, 255, 255));
+		}
+		else favDef->SetBackgroundColour(wxColour(184, 89, 89));
 	}
 
 	void OnPageTextFocus(wxFocusEvent& evt) {
