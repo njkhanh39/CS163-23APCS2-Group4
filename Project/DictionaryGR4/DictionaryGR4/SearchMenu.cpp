@@ -295,6 +295,10 @@ void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict
 	//wordView->Disable();
 	//only for #case2, search by word
 	if (!(dict->isSearchingDefinition)) {
+		wordView->Lower();
+		suggestBar->Raise();
+		//suggestBar->SetFocus();
+
 		wxString s = evt.GetString();
 
 		string word = string(s.mb_str(wxConvUTF8));

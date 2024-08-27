@@ -21,7 +21,7 @@ private:
 	Word* word = nullptr;
 	string activeDataset;
 
-	int cur = 0;
+	int cur = -1;
 	int pages = 0;
 
 public:
@@ -152,6 +152,11 @@ public:
 		defText->SetLabel("def");
 	}
 
+	void Lower() {
+		panel->Lower();
+
+	}
+
 	Word getShowingWord() {
 		Word ans;
 		if (string(pageText->GetValue().mb_str(wxConvUTF8)) == "0/0") return ans;
@@ -258,7 +263,6 @@ public:
 			}
 		}
 	}
-
 
 	void OnEditDefClicked(wxCommandEvent& evt) {
 		defText->SetEditable(1);

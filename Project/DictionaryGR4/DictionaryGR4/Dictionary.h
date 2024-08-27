@@ -30,7 +30,7 @@ public:
 		activeSearcher = &toolEngEng;
 	}
 	~Dictionary() {
-		//saveToFile();
+		saveToFile();
 	}
 
 	//"Eng-Eng", "Eng-Vie", "Vie-Eng"
