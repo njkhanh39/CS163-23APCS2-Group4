@@ -24,6 +24,9 @@ private:
 	int cur = 0;
 	int pages = 0;
 
+	//---FOR ADD WORD MENU
+	wxButton* recover = nullptr;
+
 public:
 
 	WordView() {
@@ -101,6 +104,16 @@ public:
 
 		pageText->Bind(wxEVT_SET_FOCUS, &WordView::OnPageTextFocus, this);
 		pageText->Bind(wxEVT_TEXT_ENTER, &WordView::OnPageTextChanged, this);
+
+		//----ADD WORD
+		recover = new wxButton(panel, wxID_ANY, "Recover", wxPoint(15 * size.x / 20, 3 * size.y / 20), wxSize(100, 30));
+		recover->Hide();
+
+		if (recover) {
+			recover->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+				OnRecoverWord(evt, dict);
+			});
+		}
 
 		parentWindow = parent;
 	}
@@ -448,5 +461,60 @@ public:
 		next->Show();
 		pageText->Show();
 	}
+	//*editDef, *delDef, *favDef
 
+	//-----------FOR ADD WORD MENU EXTRA TASK-------------//
+	void HideButtons() {
+		editDef->Hide();
+		delDef->Hide();
+		favDef->Hide();
+	}
+
+	void ShowRecover() {
+		recover->Show();
+	}
+
+	void OnRecoverWord(wxCommandEvent& evt, Dictionary* dict) {
+		if (pages == 0) return;
+
+		int curIndex = cur;
+
+		wxString wxstr = text->GetLabel();
+		string wordText = string(wxstr.mb_str(wxConvUTF8));
+
+		string defstr;
+
+		if (wordtype[curIndex].empty()) {
+			defstr = defs[curIndex];
+		}
+		else {
+			defstr = wordtype[curIndex] + " " + defs[curIndex];
+		}
+
+		wxMessageDialog* ask = new wxMessageDialog(parentWindow,
+			"Are you sure to recover this definition?",
+			"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+
+		if (ask->ShowModal() == wxID_YES) {
+			defs.erase(defs.begin() + curIndex);
+			wordtype.erase(wordtype.begin() + curIndex);
+			--pages;
+			if (curIndex == pages)
+				--curIndex;
+			pageText->SetValue(to_string(curIndex + 1) + "/" + to_string(pages));
+
+			if (!wordtype.empty()) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[curIndex]));
+			else wordTypeText->SetLabel("");
+
+			if (curIndex != -1) defText->SetLabel(wxString::FromUTF8(defs[curIndex]));
+			else defText->SetLabel("");
+
+			if (curIndex == -1) text->SetLabel("");
+
+			cur = curIndex;
+			if (curIndex == -1) cur = 0;
+
+			dict->addNewWordOneDef(wordText, defstr);
+		}
+	}
 };
