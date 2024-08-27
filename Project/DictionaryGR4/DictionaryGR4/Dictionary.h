@@ -1,238 +1,240 @@
 #pragma once
+
+#include <wx/wx.h>
+#include <chrono>
+#include <random>
+
 #include "SearchTree.h"
 #include "History.h"
-#include <wx/wx.h>
+#include "randomfunc.h"
+#include <list>
 
 class Dictionary {
 private:
-	WordFinder tool;
-	Trie myTrie; //for word -> def in Eng-Eng
-	const string EngEng = "DataSetEngEng", EngVie = "DataSetEngVie", VieEng = "DataSetVieEng"; //datasets
 
-	string activeDataSet = EngEng; //can be changeable
-	
+	Trie myTrie; //for word -> def in Eng-Eng & Eng-Vie
+
+	const string EngEng = "Eng-Eng", EngVie = "Eng-Vie", VieEng = "Vie-Eng"; //datasets
+	string activeDataSet = EngEng; //changeable
+
+	list<string> favList;
+
 public:
+	History hist;
+	WordFinder* activeSearcher = nullptr; //for def -> word in all datasets
+	WordFinder toolEngEng, toolEngVie, toolVieEng;
+	//WordFinder* activeSearcher = &toolEngEng; //for def -> word in all datasets
+
 	bool isSearchingDefinition = false;
 	Dictionary() {
-		//tool.load(EngEng);
+		activeSearcher = &toolEngEng;
+	}
+	~Dictionary() {
+		saveToFile();
 	}
 
-	void runSearchDefinitionEngine() {
-		tool.load("Eng-Eng");
-		isSearchingDefinition = true;
-	}
-
-	void turnOffSearchDefinitionEngine() {
-		tool.unload();
-		isSearchingDefinition = false;
-	}
-
-	//string = DataSetEngEng, DataSetEngVie, DataSetVieEng
-	bool chooseLanguage(string t) {
-		if (t != EngEng && t != EngVie && t != VieEng) return false;
-		activeDataSet = t;
-		return true;
-	}
+	//"Eng-Eng", "Eng-Vie", "Vie-Eng"
+	bool chooseLanguage(string t);
 
 	//Pass in search bar's current word, true/false for LogMessaging on Status Bar.
-	void runSearchEngine(string word, bool yesLogMessage) {
-		if (activeDataSet == EngEng) EngineHelperENG_ENG(word, yesLogMessage);
-	}
+	void runSearchEngine(string word, bool yesLogMessage);
 
-	void turnOffSearchEngine() {
-		if (activeDataSet == EngEng) EngineHelperENG_ENG("", false);
-	}
+	//after calling, searchDefinitions function is ready.Turning off will disable that function.
+	void runSearchDefinitionEngine();
+
+	void turnOffSearchDefinitionEngine();
+
+	void reloadWordFinder(string dataset);
+
+	//save changed features. Automatically call when ending program
+	void saveToFile();
+
+	//user may delete words, those which are saved in a file, we will ignore these
+	bool getAvailableWords(Word& w);
+
+	string getActiveDataset();
 
 	//get a "Word" object that matches a string
-	Word searchWordMatching(string word) {
-		Word w;
-		//format word
-		for (auto& x : word) x = tolower(x);
-		
-		if (activeDataSet == EngEng) {
-			if (w.empty() && isSearchingDefinition) return tool.searchWord(word);
-			else w = myTrie.getWordMatching(word);
-		}
-		return w;
-	}
+	Word searchWordMatching(string word);
+
+	Word searchWordMatchingForcedWordFinder(string word);
+
+	Word* getWordPtr(string word);
+
+	Word getRandomWord(string& wordText);
 
 	//return definitions of keyword
-	vector<Definition> searchDefinitions(string word) {
-		vector<Definition> ans;
-		//format word
-		for (auto& x : word) x = tolower(x);
-		if (activeDataSet == EngEng) return myTrie.getDefinitions(word);
-		return ans;
-	}
+	vector<Definition> searchDefinitions(string word);
 
 	//return definitions of keyword as strings
-	vector<string> searchStringDefinitions(string word) {
-		vector<string> ans;
-		//format word
-		for (auto& x : word) x = tolower(x);
-		if (activeDataSet == EngEng) return myTrie.getStringDefinitions(word);
-		return ans;
-	}
+	vector<string> searchStringDefinitions(string word);
 
 	//search for words with same prefix + limit number of words
-	vector<Word> searchRelatedWords(string word, int limit) {
-		vector<Word> ans;
-		//format word
-		for (auto& x : word) x = tolower(x);
+	vector<Word> searchRelatedWords(string word, int limit);
 
-		if (activeDataSet == EngEng) return myTrie.getWordsWithPrefix(word, limit);
-		return ans;
-	}
+	//this one needs runSearchDefinitionsEngine
+	vector<Word> searchDefToWord(string& keyword, int limit);
 
-	//search def -> word + limit number of words
-	vector<Word> seachDefToWordOnFile(string keyword, int limit) {
-		//formatting is done in helper
 
-		vector<Word> ans;
+	//fav
 
-		if (activeDataSet == EngEng) return helperDefToWordENGENG(keyword, limit);
+	void addToFavourite(Word& word);
 
-		return ans;
-	}
+	void addToFavourite(string& word);
 
-	vector<Word> searchDefToWord(string keyword, int limit) {
-		return tool.searchDefinitionsToWord(keyword, limit);
-	}
-	
-	
+	void removeFavourite(Word& word);
 
-private:
+	void removeFavourite(string& word);
+
+	bool checkFav(string& word);
+
+
+	//setters & adders
+
+	bool editDefInFile(string text, string olddef, string newdef, string dir);
+
+	void editDefOnWordFinder(string text, string olddef, string newdef, string pop);
+
+	void editDefinition(string text, string olddef, string newdef, string pop);
+
+	void deleteWord(Word& word);
+
+	int	deleteWordOneDef(string& text, string& def);
+
+	void addNewWord(Word& newWord);
+
+	//return true if add word successfully
+	bool addNewWordOneDef(string& text, string& def);
+
+	vector<Word> getDeletedWords();
+
 	//helpers
-	
-	void EngineHelperENG_ENG(string keyword, bool yesLogMessage) {
-		//format the word
-		string word;
-		int i = 0, n = keyword.length();
-		while (i < n && keyword[i] == ' ') ++i;
 
+	vector<string> transformSentence(string& input);
 
-		for (int j = 0; j < n; ++j) {
-			word.push_back(tolower(keyword[j]));
-		}
+	vector<string> transformSentenceWithBracs(string& input);
 
-		int m = word.length(); --m;
+	void EngineHelper(string keyword, bool yesLogMessage);
 
-		while (m >= 0 && word[m] == ' ') word.pop_back();
+	string mapStringToFile(string word);
 
-		if ((int)word.length() == 1 && myTrie.empty()) {
-			char key = word[0];
-			myTrie.loadDataEngEng(key);
-			wxLogStatus("Loading data...");
-		}
-		else if ((int)word.length() == 0) {
-			if (!myTrie.empty()) myTrie.clear();
-			wxLogStatus("Clearing Search Tree...");
-		}
-		else {
-			wxLogStatus("Doing nothing...");
-		}
-	}
-	vector<Word> helperDefToWordENGENG(string keyword, int limit){
-		//format word
-		string word;
-
-		vector<Word> ans;
-
-		if (keyword.empty()) return ans;
-
-		int i = 0, n = (int)keyword.length();
-		while (i<n && keyword[i] == ' ') ++i;
-
-		if (i == n) return ans;
-
-		for (int j = i; j < n; ++j) {
-			if (j < n - 1 && (keyword[j] == ' ' && keyword[j + 1] == ' ')) continue;
-			if (j == n - 1 && keyword[j] == ' ') continue;
-			word.push_back(tolower(keyword[j]));
-		}
-
-
-		//loop through all files
-
-		for (int file = 1; file <= 28; ++file) {
-			fstream fin;
-			fin.open("DataSet\\" + to_string(file) + ".txt");
-
-			if (!fin.is_open()) {
-				fin.close();
-				continue;
-			}
-
-			string line;
-			while (getline(fin, line)) {
-
-				string s, t, u;
-				int i = 0;
-				while (line[i] != '\t') {
-					s.push_back(line[i]);
-					++i;
-				}
-
-				++i;
-
-				//format to lowercase, remove commas and dots
-				for (int j = i; j < (int)line.length(); ++j) {
-					if(line[j]!=',' && line[j]!=';' && line[j]!='.') t.push_back(tolower(line[j]));
-					u.push_back(line[j]);
-				}
-
-				
-				if (better_wordcheck(t, word)) {
-					Word w; w.setWord(s); w.addDefinition(u);
-					
-					ans.push_back(w);
-					if (ans.size() == limit) {
-						fin.close();
-						return ans;
-					}
-				}
-			}
-
-			fin.close();
-		}
-
-		return ans;
+	void sortVectorString(vector<string>& vec) {
+		int n = vec.size();
+		mergeSort(vec, 0, n - 1, n);
 	}
 
-	
+	void merge(vector<string>& a, int l, int r, int mid);
 
-	bool wordcheck(string& a, string& b, int position) {
-		for (int i = 0; i < (int)a.length(); ++i) {
-			if (i == 0 || (a[i] != ' ' && a[i - 1] == ' ')) {
-				bool S = true;
-				int j = i, k = position;
-				for (j, k; k != (int)b.length() && b[k] != ' '; ++j, ++k) {
-					if (j == (int)a.length() || a[j] == ' ') {
-						S = false;
-						break;
-					}
-					if (a[j] != b[k]) {
-						S = false;
-						break;
-					}
-				}
-				if (a[j] != ' ' && j < (int)a.length()) S = false;
-				if (S) return true;
-			}
-		}
-		return false;
-	}
-	bool better_wordcheck(string& a, string& b) {
-		vector<int> pos;
-		int spacecount = 0;
-		for (int i = 0; i < (int)b.length(); ++i) {
-			if (b[i] == ' ') ++spacecount;
-			if (i == 0 || (b[i - 1] == ' ')) pos.push_back(i);
-		}
-		int i = 0;
-		for (int i = 0; i <= spacecount; ++i) {
-			if (!wordcheck(a, b, pos[i])) return false;
-		}
-		return true;
-	}
+	void mergeSort(vector<string>& a, int l, int r, int n);
+
+	bool isUnwantedPunctuation(char c);
+
+	// Helper function to transform a single character
+	char transformChar(char c);
+
+	string normalizeString(string& sentence);
+
+	//vector<Word> helperDefToWordENGENG(string keyword, int limit){
+	//	//format word
+	//	string word;
+
+	//	vector<Word> ans;
+
+	//	if (keyword.empty()) return ans;
+
+	//	int i = 0, n = (int)keyword.length();
+	//	while (i<n && keyword[i] == ' ') ++i;
+
+	//	if (i == n) return ans;
+
+	//	for (int j = i; j < n; ++j) {
+	//		if (j < n - 1 && (keyword[j] == ' ' && keyword[j + 1] == ' ')) continue;
+	//		if (j == n - 1 && keyword[j] == ' ') continue;
+	//		word.push_back(tolower(keyword[j]));
+	//	}
+
+
+	//	//loop through all files
+
+	//	for (int file = 1; file <= 28; ++file) {
+	//		fstream fin;
+	//		fin.open("DataSet\\" + to_string(file) + ".txt");
+
+	//		if (!fin.is_open()) {
+	//			fin.close();
+	//			continue;
+	//		}
+
+	//		string line;
+	//		while (getline(fin, line)) {
+
+	//			string s, t, u;
+	//			int i = 0;
+	//			while (line[i] != '\t') {
+	//				s.push_back(line[i]);
+	//				++i;
+	//			}
+
+	//			++i;
+
+	//			//format to lowercase, remove commas and dots
+	//			for (int j = i; j < (int)line.length(); ++j) {
+	//				if(line[j]!=',' && line[j]!=';' && line[j]!='.') t.push_back(tolower(line[j]));
+	//				u.push_back(line[j]);
+	//			}
+
+	//			
+	//			if (better_wordcheck(t, word)) {
+	//				Word w; w.setWord(s); w.addDefinition(u);
+	//				
+	//				ans.push_back(w);
+	//				if (ans.size() == limit) {
+	//					fin.close();
+	//					return ans;
+	//				}
+	//			}
+	//		}
+
+	//		fin.close();
+	//	}
+
+	//	return ans;
+	//}
+
+	//bool wordcheck(string& a, string& b, int position) {
+	//	for (int i = 0; i < (int)a.length(); ++i) {
+	//		if (i == 0 || (a[i] != ' ' && a[i - 1] == ' ')) {
+	//			bool S = true;
+	//			int j = i, k = position;
+	//			for (j, k; k != (int)b.length() && b[k] != ' '; ++j, ++k) {
+	//				if (j == (int)a.length() || a[j] == ' ') {
+	//					S = false;
+	//					break;
+	//				}
+	//				if (a[j] != b[k]) {
+	//					S = false;
+	//					break;
+	//				}
+	//			}
+	//			if (a[j] != ' ' && j < (int)a.length()) S = false;
+	//			if (S) return true;
+	//		}
+	//	}
+	//	return false;
+	//}
+	//bool better_wordcheck(string& a, string& b) {
+	//	vector<int> pos;
+	//	int spacecount = 0;
+	//	for (int i = 0; i < (int)b.length(); ++i) {
+	//		if (b[i] == ' ') ++spacecount;
+	//		if (i == 0 || (b[i - 1] == ' ')) pos.push_back(i);
+	//	}
+	//	int i = 0;
+	//	for (int i = 0; i <= spacecount; ++i) {
+	//		if (!wordcheck(a, b, pos[i])) return false;
+	//	}
+	//	return true;
+	//}
 };
+
+int RandInt(int l, int r);

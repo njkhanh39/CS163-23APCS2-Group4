@@ -3,28 +3,32 @@
 
 
 
-
 void History::addToHistory(SearchedWord w) {
 	searchList.push_back(w);
 }
 
-void History::saveToFile(SearchedWord w) {
+void History::saveToFile(SearchedWord w, string activeDataset) {
 	ofstream out;
-	out.open("History/history.csv", ios::app);
+	out.open("History\\" + activeDataset + "\\history.csv", ios::app);
 	if (!out.is_open()) return;
-	out << w.getWord() << "," << w.getTime() << "," << w.getDate() << endl;
+	out << w.getText() << "," << w.getTime() << "," << w.getDate() << endl;
 	out.close();
 }
 
-void History::loadFromFile() {
+bool History::loadFromFile(string activeDataset) {
+	searchList.clear();
 	ifstream in;
-	in.open("History/history.csv");
+	in.open("History\\" + activeDataset + "\\history.csv");
+	if (!in.is_open()) {
+		return false;
+	}
+
 	string line;
 	getline(in, line);   // ignore the first line
 
 	while (getline(in, line)) {
 		SearchedWord word;
-		stringstream ss(line); 
+		stringstream ss(line);
 		string temp;
 
 		getline(ss, temp, ',');
@@ -43,13 +47,31 @@ void History::loadFromFile() {
 	}
 
 	searchList.reverse();
-
+	return !searchList.empty();
 }
 
-void History::clearHistory() {
-
+bool History::clearHistory(string activeDataset) {
+	ofstream out;
+	out.open("History\\" + activeDataset + "\\history.csv");
+	if (!out.is_open()) {
+		return false;
+	}
+	out << "word,time,date" << endl;
+	out.close();
+	return true;
 }
 
 void History::remove(string word) {
+
+}
+
+
+void History::saveDevToWord(SearchedWord w, string def, string activeDataset) {
+	ofstream out;
+	out.open("History\\" + activeDataset + "\\histDevWord.csv", ios::app);
+	if (!out.is_open()) return;
+	out << w.getText() << "," << def << "," << w.getTime() << "," << w.getDate() << endl;
+	out.close();
+
 
 }

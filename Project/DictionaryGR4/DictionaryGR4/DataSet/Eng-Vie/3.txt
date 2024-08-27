@@ -1912,10 +1912,10 @@ adder	(danh từ) con chuồn chuồn.
 adder accumulator	(danh từ) (kỹ thuật) bộ cộng tích lũy/tăng trữ.
 adder amplifier	(danh từ) (kỹ thuật) bộ khuếch đại cộng.
 adder subtracter	(danh từ) (kỹ thuật) bộ gia giảm, bộ cộng trừ.
-adders tongue	(danh từ) (thực vật học) cây lưỡi rắn (dương xỉ).
 adder-in	(danh từ) (kỹ thuật) phụ kiện tăng cường, phụ tùng tăng cường, tăng thiết.
 adder-spit	(danh từ) (thực vật học) cây lưỡi rắn (dương xỉ).
 adder-subtractor	(danh từ) bộ cộng và trừ.
+adders tongue	(danh từ) (thực vật học) cây lưỡi rắn (dương xỉ).
 addible	(tính từ) xem add.
 addict	(danh từ) người nghiện.
 addict	(ngoại động từ) nghiện.

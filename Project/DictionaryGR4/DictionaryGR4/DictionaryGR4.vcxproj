@@ -109,6 +109,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(WXWIN)\include\msvc;$(WXWIN)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -125,6 +126,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(WXWIN)\include\msvc;$(WXWIN)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,10 +140,17 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Definition.cpp" />
     <ClCompile Include="Dictionary.cpp" />
+    <ClCompile Include="FavouriteMenu.cpp" />
+    <ClCompile Include="GUI_AddWordMenu.cpp" />
     <ClCompile Include="History.cpp" />
+    <ClCompile Include="HistoryMenu.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="QuizMenu.cpp" />
+    <ClCompile Include="randomfunc.cpp" />
     <ClCompile Include="SearchedWord.cpp" />
+    <ClCompile Include="SearchMenu.cpp" />
     <ClCompile Include="SearchTree.cpp" />
     <ClCompile Include="Word.cpp" />
   </ItemGroup>
@@ -149,10 +158,17 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="Definition.h" />
     <ClInclude Include="Dictionary.h" />
+    <ClInclude Include="FavouriteMenu.h" />
+    <ClInclude Include="GUI_AddWordMenu.h" />
     <ClInclude Include="GUI_WordView.h" />
     <ClInclude Include="History.h" />
+    <ClInclude Include="HistoryMenu.h" />
     <ClInclude Include="MainFrame.h" />
+    <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="QuizMenu.h" />
+    <ClInclude Include="randomfunc.h" />
     <ClInclude Include="SearchedWord.h" />
+    <ClInclude Include="SearchMenu.h" />
     <ClInclude Include="SearchTree.h" />
     <ClInclude Include="Word.h" />
   </ItemGroup>

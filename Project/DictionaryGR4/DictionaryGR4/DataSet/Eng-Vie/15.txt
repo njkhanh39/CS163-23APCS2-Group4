@@ -1245,7 +1245,7 @@ manufactory	(danh từ) xí nghiệp.
 manufacturable	(tính từ) có thể sản xuất; có thể chế tạo.
 manufacture	(danh từ) sự chế tạo, sự sản xuất.
 manufacture	(danh từ) công nghiệp.
-manufacture	(danh từ) ��t.
+manufacture	(danh từ)   t.
 manufacturer	(danh từ) người chế tạo, người sản xuất.
 manufacturer	(danh từ) nhà công nghiệp; chủ xí nghiệp, chủ xưởng.
 manufactures	(danh từ) sự sản xuất; sự gia công; sự xử lý.
@@ -5082,7 +5082,6 @@ money price	(danh từ) (kinh tế học) giá của tiền.
 money stock	(danh từ) (kinh tế học) dung lượng tiền.
 money supply	(danh từ) (kinh tế học) cung tiền.
 money terms	(danh từ) (kinh tế học) (biểu thị giá trị) bằng tiền.
-moneys-worth	(danh từ) vật thay tiền.
 money-bag	(danh từ) túi đựng tiền; ví đựng tiền.
 money-bag	(danh từ) (số nhiều) của cải, tài sản.
 money-bag	(danh từ) (số nhiều) người có của, người tham tiền.
@@ -5116,6 +5115,7 @@ money-taker	(danh từ) người thu tiền, thủ qu.
 moneyed	(tính từ) có nhiều tiền, giàu có.
 moneyed	(tính từ) bằng tiền.
 moneyless	(tính từ) không tiền; (thông tục) không một xu dính túi, nghèo rớt mồng tơi.
+moneys-worth	(danh từ) vật thay tiền.
 moneywort	(danh từ) (thực vật học) cây trân châu.
 monger	(danh từ) lái, lái buôn (chủ yếu dùng trong từ ghép).
 mongering	(danh từ) sự buôn bán; nghề lái buôn.

@@ -1322,9 +1322,9 @@ harshness	(danh từ) tính lỗ mãng, tính thô bỉ, tính thô bạo, tính
 harshness	(danh từ) tính gay gắt; tính khe khắt, tính ác nghiệt, tính khắc nghiệt, tính cay nghiệt; tính nhẫn tâm, tính tàn nhẫn.
 harslet	(danh từ) bộ lòng (chủ yếu là lợn).
 hart	(danh từ) (động vật học) hươu đực (từ 5 tuổi trở lên).
-harts-tongue	(danh từ) cây dương xỉ.
 hartal	(danh từ) sự đóng cửa hiệu (để tỏ thái độ chính trị, hay để tỏ sự đau buồn).
 hartebeest	(danh từ) (động vật học) linh dương to có sừng cong.
+harts-tongue	(danh từ) cây dương xỉ.
 hartshorn	(danh từ) sừng hươu.
 hartshorn	(danh từ) (hoá học) dung dịch amoniac ((cũng) spirit of hartshorn).
 harum-scarum	(tính từ) liều lĩnh, khinh suất.
@@ -3900,8 +3900,6 @@ hog	(nội động từ) (thông tục) lái ẩu, đi ẩu (lái ô tô, đi xe
 hog cholera	(danh từ) (thú y học) dịch tả lợn.
 hog mane	(danh từ) bờm ngựa xén ngắn.
 hog wild	(tính từ) cuống lên.
-hogs pudding	(danh từ) món dồi lợn.
-hogs-back	(danh từ) dây núi đồi sống trâu (có sống nhọn).
 hog-wash	(danh từ) nước rửa bát vo gạo (cho lợn ăn).
 hog-weed	(danh từ) rong bèo (cho lợn ăn).
 hogan	(danh từ) nhà làm bằng cành cây, trát bùn người da đỏ navaho ở.
@@ -3918,6 +3916,8 @@ hoggish	(tính từ) (nghĩa bóng) tham ăn; thô tục; bẩn thỉu (như l�
 hoggishness	(danh từ) tính tham ăn; tính thô tục; tính bẩn thỉu (như lợn).
 hogmanay	(danh từ) (ự cốt) ngày tất niên.
 hogpen	(danh từ) chuồng lợn.
+hogs pudding	(danh từ) món dồi lợn.
+hogs-back	(danh từ) dây núi đồi sống trâu (có sống nhọn).
 hogsback	(danh từ) cũng hogs back.
 hogsback	(danh từ) dãy núi đồi sống trâu.
 hogshead	(danh từ) thùng lớn (đựng rượu).

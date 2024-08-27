@@ -8,21 +8,22 @@
 
 
 class History {
-private:
-	list<SearchedWord> searchList;
+
+	
+	
 public:
 	History() {}
 
+	list<SearchedWord> searchList;  // for loading
 
-	list<SearchedWord> getsearchList() {
-		return searchList;
-	};
 
 
 	void addToHistory(SearchedWord w);
-	void loadFromFile();
-	void saveToFile(SearchedWord w);
-	void clearHistory();
+	bool loadFromFile(string activeDataset);
+	void saveToFile(SearchedWord w, string activeDataset); // for saving word -> def
+	void saveDevToWord(SearchedWord w, string def, string activeDataset);
+	bool clearHistory(string activeDataset);
+	void clearHistoryDevToWord();
 	void remove(string word);  // for removing a word
 
 };

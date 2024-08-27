@@ -4,6 +4,10 @@
 #include <algorithm>
 #include <vector>
 #include <list>
+#include <cctype>
+#include <sstream>
+#include "Unicode/utf8.h"
+
 #include "Definition.h"
 
 using namespace std;
@@ -19,9 +23,15 @@ public:
 		text = "";
 	}
 
-	Word(const string word) {
+	Word(string word) {
 		text = word;
 	}
+
+	Word(string word, string def) {
+		text = word;
+		addDefinition(def);
+	}
+
 
 	// Equality operator
 	bool operator==(const Word& other) const {
@@ -45,27 +55,31 @@ public:
 		return false;
 	}
 
-	bool empty() {
-		if (text == "") return true;
-		return false;
+	//check for emptiness
+	bool empty();
+
+	int findDefinition(string& def) {
+		for (int i = 0; i < (defList).size(); ++i) {
+			if (defList[i].getStringDefinition() == def) {
+				return i;
+			}
+		}
+		return -1;
 	}
+
 	//getters
 
-	string getWord();
+	string getText();
 
-	int getNumberOfDefinitions() {
-		return (int)defList.size();
-	}
+	int getNumberOfDefinitions();
 
-	Definition getDefinitionAt(int i) {
-		if(i<(int)defList.size() && i>=0) return defList[i];
-		Definition trash;
-		return trash;
-	}
+	Definition getDefinitionAt(int i);
 	
 	vector<Definition> getDefinitions();
 
 	vector<string> getStringDefinitions();
+
+	string getDataset();
 
 	//adders and setters
 
@@ -73,13 +87,27 @@ public:
 
 	void addDefinition(Definition& def);
 
-	void setWord(string word) {
-		text = word;
-	}
+	void setWord(string word);
 
-	void clear() {
-		text = "";
-		defList.clear();
-	}
+	void setDefinition(string def, int index);
+
+	void clear();
+
+	//adjust-er
+
+	void sortDefinitions();
+
+	void modifyDefinition(string def, int index);
+
+	void removeDefinition(int index);
+
+	void removeDefinition(string& def);
+
+	//helpers
+
+	void merge(vector<Definition>& a, int l, int r, int mid);
+
+	void mergeSort(vector<Definition>& a, int l, int r, int n);
+	
 
 };
