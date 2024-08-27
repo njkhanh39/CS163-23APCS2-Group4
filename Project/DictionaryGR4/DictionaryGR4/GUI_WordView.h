@@ -69,9 +69,9 @@ public:
 		wxBitmap bitmapedit(wxT("IMG/editbutton.png"), wxBITMAP_TYPE_PNG);
 		wxBitmap bitmapfav(wxT("IMG/favbutton.png"), wxBITMAP_TYPE_PNG);
 
-		editDef = new wxBitmapButton(panel, wxID_ANY, bitmapedit, wxPoint(744, 20), wxSize(44, 44));
-		delDef = new wxBitmapButton(panel, wxID_ANY, bitmapdel, wxPoint(808, 20), wxSize(44, 44));
-		favDef = new wxBitmapButton(panel, wxID_ANY, bitmapfav, wxPoint(872, 20), wxSize(44, 44));
+		editDef = new wxBitmapButton(panel, wxID_ANY, bitmapedit, wxPoint(744, 20), wxSize(44, 44), wxBORDER_NONE);
+		delDef = new wxBitmapButton(panel, wxID_ANY, bitmapdel, wxPoint(808, 20), wxSize(44, 44), wxBORDER_NONE);
+		favDef = new wxBitmapButton(panel, wxID_ANY, bitmapfav, wxPoint(872, 20), wxSize(44, 44), wxBORDER_NONE);
 
 		confirmEdit = new wxButton(panel, wxID_ANY, "Confirm", wxPoint(744, 380), wxSize(91,44));
 		confirmEdit->SetBackgroundColour(wxColour(67, 57, 97));
@@ -287,7 +287,6 @@ public:
 
 	void OnConfirmEditClicked(wxCommandEvent& evt, Dictionary* dict) {
 		int curIndex = cur;
-
 
 		wxMessageDialog* ask = new wxMessageDialog(parentWindow,
 			"Are you sure to modify this definition?",

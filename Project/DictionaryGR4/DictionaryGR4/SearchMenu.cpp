@@ -62,9 +62,6 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	wxArrayString languages = { "Eng-Eng", "Eng-Vie", "Vie-Eng"};
 	datasetCbb = new wxComboBox(this, wxID_ANY, "", wxPoint(53, 41), wxSize(154, -1), languages, wxCB_READONLY);
 
-	datasetCbb->SetBackgroundColour(green);
-	datasetCbb->SetForegroundColour(white);
-
 	wxFont cbbfnt = fnt;
 	cbbfnt.SetPointSize(24);
 	datasetCbb->SetFont(cbbfnt);

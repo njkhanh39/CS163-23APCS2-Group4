@@ -20,24 +20,27 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 
 	mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE);
 
-	wordText = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(114, 101), wxSize(635, 60));
-	wordText->SetFont(font);
+	wordText = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(114, 101), wxSize(705, 60));
+	wordText->SetFont(fontCB);
 
 
 	wxArrayString datasets = { "Eng-Eng", "Eng-Vie", "Vie-Eng" };
-	datasetCbb = new wxComboBox(mainPanel, wxID_ANY, "Eng-Eng", wxPoint(773, 101), wxSize(154,-1), datasets, wxCB_READONLY);
-	datasetCbb->SetFont(fontCB);
+	datasetCbb = new wxComboBox(mainPanel, wxID_ANY, "", wxPoint(843, 101), wxSize(154, -1), datasets, wxCB_READONLY);
 	datasetCbb->SetSize(154, 60);
+	fontCB.SetPointSize(24);
+	datasetCbb->SetFont(fontCB);
+	datasetCbb->SetSelection(0);
 	datasetCbb->Refresh();
 	
 
-	defText = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(110, 240), wxSize(1000, 300), wxTE_MULTILINE);
+	defText = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(110, 240), wxSize(1070, 300), wxTE_MULTILINE | wxTE_NO_VSCROLL);
 	defText->SetFont(font);
 
-	wordTypeText = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(951, 101), wxSize(154, 60));
+	wordTypeText = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(1021, 101), wxSize(154, 60));
 	wordTypeText->SetFont(fontCB);
+	wordTypeText->SetMargins(-1, 50);
 		
-	submit = new wxButton(mainPanel, wxID_ANY, "ADD", wxPoint(951, 600), wxSize(154,60));
+	submit = new wxButton(mainPanel, wxID_ANY, "ADD", wxPoint(1021, 590), wxSize(154,60), wxBORDER_NONE);
 	auto fntSubmit = submit->GetFont();
 	fntSubmit.SetPointSize(16);
 	submit->SetFont(fntSubmit);
@@ -45,7 +48,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 	submit->SetBackgroundColour(green);
 
 
-	deletedWords = new wxButton(mainPanel, wxID_ANY, "VIEW DELETED WORDS", wxPoint(651, 600), wxSize(254, 60));
+	deletedWords = new wxButton(mainPanel, wxID_ANY, "VIEW DELETED WORDS", wxPoint(721, 590), wxSize(254, 60), wxBORDER_NONE);
 	deletedWords->SetFont(fntSubmit);
 	deletedWords->SetForegroundColour(white);
 	deletedWords->SetBackgroundColour(purple);
@@ -58,7 +61,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 	wordBarText->SetBackgroundColour(black);
 	wordBarText->SetForegroundColour(white);
 
-	wxStaticText* dataSetBarText = new wxStaticText(mainPanel, wxID_ANY, "DATASET", wxPoint(773, 60), wxSize(100, 20));
+	wxStaticText* dataSetBarText = new wxStaticText(mainPanel, wxID_ANY, "DATASET", wxPoint(843, 60), wxSize(100, 20));
 	dataSetBarText->SetFont(fnt);
 	dataSetBarText->SetBackgroundColour(black);
 	dataSetBarText->SetForegroundColour(white);
@@ -68,7 +71,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 	defBarText->SetBackgroundColour(black);
 	defBarText->SetForegroundColour(white);
 
-	wxStaticText* wordTypeBarText = new wxStaticText(mainPanel, wxID_ANY, "WORDTYPE", wxPoint(951, 60), wxSize(100, 20));
+	wxStaticText* wordTypeBarText = new wxStaticText(mainPanel, wxID_ANY, "WORDTYPE", wxPoint(1021, 60), wxSize(100, 20));
 	wordTypeBarText->SetFont(fnt);
 	wordTypeBarText->SetBackgroundColour(black);
 	wordTypeBarText->SetForegroundColour(white);
@@ -119,7 +122,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 
 	secondPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE);
 
-	backToMain = new wxButton(secondPanel, wxID_ANY, "BACK", wxPoint(951, 600), wxSize(154, 60));
+	backToMain = new wxButton(secondPanel, wxID_ANY, "BACK", wxPoint(951, 600), wxSize(154, 60), wxBORDER_NONE);
 
 	backToMain->SetFont(fntSubmit);
 	backToMain->SetForegroundColour(white);
@@ -127,25 +130,24 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 
 	
 
-	datasetCbb2 = new wxComboBox(secondPanel, wxID_ANY, "Eng-Eng", wxPoint(696, 30), wxSize(154, -1), datasets, wxCB_READONLY);
-	datasetCbb2->SetFont(fontCB);
-	datasetCbb2->SetSize(154, 60);
+	datasetCbb2 = new wxComboBox(secondPanel, wxID_ANY, "Eng-Eng", wxPoint(250, 90), wxSize(154, -1), datasets, wxCB_READONLY);
+	datasetCbb2->SetFont(wxFont(18, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
 	datasetCbb2->Refresh();
 
-	wxStaticText* listCtrlText = new wxStaticText(secondPanel, wxID_ANY,"DELETED WORDS/DEFINITION", wxPoint(250, 59), wxSize(400, 20));
-	listCtrlText->SetFont(fnt);
+	wxStaticText* listCtrlText = new wxStaticText(secondPanel, wxID_ANY, "DELETED WORDS/DEFINITIONS", wxPoint(250, 59), wxSize(400, 20));
+	listCtrlText->SetFont(wxFont(16, wxFONTFAMILY_SWISS, wxFONTSTYLE_MAX, wxFONTWEIGHT_BOLD));
 	listCtrlText->SetBackgroundColour(black);
 	listCtrlText->SetForegroundColour(white);
 
 	
 
-	listCtrl = new wxListCtrl(secondPanel, wxID_ANY, wxPoint(250, 100), wxSize(700, 500),
+	listCtrl = new wxListCtrl(secondPanel, wxID_ANY, wxPoint(250, 150), wxSize(700, 500),
 		wxLC_REPORT | wxBORDER_SUNKEN);
 
-	listCtrl->SetFont(font);
+	listCtrl->SetFont(wxFont(16, wxFONTFAMILY_SWISS, wxFONTSTYLE_MAX, wxFONTWEIGHT_NORMAL));
 
 	// Adding columns
-	listCtrl->InsertColumn(0, "Word", wxLIST_FORMAT_LEFT, 250);
+	listCtrl->InsertColumn(0, "Word", wxLIST_FORMAT_CENTRE, 250);
 	listCtrl->InsertColumn(1, "Deleted definitions / Total", wxLIST_FORMAT_LEFT, 450);
 
 
