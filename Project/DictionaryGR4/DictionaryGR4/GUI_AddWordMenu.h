@@ -3,6 +3,9 @@
 #include <wx/wx.h>
 #include <wx/simplebook.h>
 #include <wx/spinctrl.h>
+#include <wx/grid.h>
+#include <wx/listctrl.h>
+
 #include <iostream>
 #include <string.h>
 #include <cstring>
@@ -11,7 +14,7 @@
 #include "Dictionary.h"
 #include "GUI_WordView.h"
 
-class AddWordMenu : public wxPanel {
+class AddWordMenu : public wxSimplebook {
 public:
 	wxButton* back_to_home;
 	AddWordMenu(wxWindow* parent, Dictionary*& dict);
@@ -19,12 +22,33 @@ public:
 
 private:
 	Dictionary dict;
-	wxPanel* titleBar, * mainPanel;
+
+	//PAGE 1
+
+	wxPanel* mainPanel;
+
 	wxTextCtrl* wordText, * defText, *wordTypeText;
 	wxComboBox* datasetCbb;
-	wxButton* submit;
 
-	void OnDatasetChosen(wxCommandEvent& evt);
+	wxButton* submit, *deletedWords;
 
-	void OnSubmitClicked(wxCommandEvent& evt);
+
+	//PAGE 2
+
+	
+	wxPanel* secondPanel;
+
+	wxListCtrl* listCtrl;
+	wxComboBox* datasetCbb2;
+
+	wxButton* backToMain;
+
+	//PAGE 3
+	
+	wxPanel* thirdPanel;
+
+	WordView* wordView;
+
+	wxButton* backToSecond;
+	wxButton* recover;
 };
