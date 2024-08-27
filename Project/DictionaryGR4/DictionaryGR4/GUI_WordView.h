@@ -13,6 +13,7 @@ private:
 	wxTextCtrl* defText, *pageText;
 	wxButton* confirmEdit, *cancelEdit;
 	wxBitmapButton* back, * next, *editDef, *delDef, *favDef;
+	wxBitmap favon,  favoff;
 		
 	vector<string> defs;
 	vector<string> wordtype;
@@ -74,11 +75,12 @@ public:
 
 		wxBitmap bitmapdel(wxT("IMG/delbutton.png"), wxBITMAP_TYPE_PNG);
 		wxBitmap bitmapedit(wxT("IMG/editbutton.png"), wxBITMAP_TYPE_PNG);
-		wxBitmap bitmapfav(wxT("IMG/favbutton.png"), wxBITMAP_TYPE_PNG);
+		favoff = wxBitmap(wxT("IMG/favbutton.png"), wxBITMAP_TYPE_PNG);
+		favon = wxBitmap(wxT("IMG/favon.png"), wxBITMAP_TYPE_PNG);
 
 		editDef = new wxBitmapButton(panel, wxID_ANY, bitmapedit, wxPoint(744, 20), wxSize(44, 44), wxBORDER_NONE);
 		delDef = new wxBitmapButton(panel, wxID_ANY, bitmapdel, wxPoint(808, 20), wxSize(44, 44), wxBORDER_NONE);
-		favDef = new wxBitmapButton(panel, wxID_ANY, bitmapfav, wxPoint(872, 20), wxSize(44, 44), wxBORDER_NONE);
+		favDef = new wxBitmapButton(panel, wxID_ANY, favoff, wxPoint(872, 20), wxSize(44, 44), wxBORDER_NONE);
 
 		editDef->SetBackgroundColour(white);
 		delDef->SetBackgroundColour(white);
@@ -264,9 +266,9 @@ public:
 
 		if (isFav) {
 			//red
-			favDef->SetBackgroundColour(wxColour(184, 89, 89));
+			favDef->SetBitmap(favon);
 		}
-		else favDef->SetBackgroundColour(wxColour(255, 255, 255));
+		else favDef->SetBitmap(favoff);
 
 		// Update the layout to reflect the new size
 		//Layout();
