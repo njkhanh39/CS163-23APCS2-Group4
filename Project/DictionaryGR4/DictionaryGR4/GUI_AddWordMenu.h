@@ -35,10 +35,20 @@ private:
 
 	//PAGE 2
 
+	
 	wxPanel* secondPanel;
 
 	wxListCtrl* listCtrl;
 	wxComboBox* datasetCbb2;
 
 	wxButton* backToMain;
+
+	//PAGE 3
+	
+	wxPanel* thirdPanel;
+
+	WordView* wordView;
+
+	wxButton* backToSecond;
+	wxButton* recover;
 };
