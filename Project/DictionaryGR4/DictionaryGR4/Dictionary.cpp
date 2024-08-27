@@ -759,11 +759,122 @@ void Dictionary::editDefinition(string text, string olddef, string newdef, strin
 
 void Dictionary::addToFavourite(Word& word) {
 	ofstream out;
-	out.open("Favourite\\" + activeDataSet + "\\favList.txt", ios::app);
+	out.open("Favourite\\" + activeDataSet + "\\fav.txt", ios::app);
 	if (!out.is_open()) return;
 	out << word.getText() << endl;
 	out.close();
-	word.markFavourite();
+}
+
+void Dictionary::addToFavourite(string& word) {
+	ofstream out;
+	out.open("Favourite\\" + activeDataSet + "\\fav.txt", ios::app);
+	if (!out.is_open()) return;
+	out << word << endl;
+	out.close();
+}
+
+void Dictionary::removeFavourite(Word& word) {
+	string file = "Favourite\\" + activeDataSet + "\\fav.txt";
+	string wrd = word.getText();
+
+	vector<string> all;
+
+	ifstream fin; fin.open(file);
+
+	if (!fin.is_open()) {
+		fin.close();
+		return;
+	}
+
+	string line;
+	while (getline(fin, line)) {
+		if (line == wrd) {
+			continue;
+		}
+		all.push_back(line);
+	}
+
+	fin.close();
+
+
+	ofstream fout; fout.open(file);
+
+	if (!fout.is_open()) {
+		fout.close();
+		return;
+	}
+
+	for (auto& str : all) {
+		fout << str << '\n';
+	}
+
+	fout.close();
+}
+
+void Dictionary::removeFavourite(string& word) {
+	string file = "Favourite\\" + activeDataSet + "\\fav.txt";
+
+	vector<string> all;
+
+	ifstream fin; fin.open(file);
+
+	if (!fin.is_open()) {
+		fin.close();
+		return;
+	}
+
+	string line;
+	while (getline(fin, line)) {
+		if (line == word) {
+			continue;
+		}
+		all.push_back(line);
+	}
+
+	fin.close();
+
+
+	ofstream fout; fout.open(file);
+
+	if (!fout.is_open()) {
+		fout.close();
+		return;
+	}
+
+	for (auto& str : all) {
+		fout << str << '\n';
+	}
+
+	fout.close();
+}
+
+bool Dictionary::checkFav(string& word) {
+	if (word.empty()) return false;
+	string file = "Favourite\\" + activeDataSet + "\\fav.txt";
+
+	ifstream fin; fin.open(file);
+
+	if (!fin.is_open()) {
+		fin.close();
+		return false;
+	}
+
+
+	string comp;
+	while (getline(fin, comp)) {
+		if (comp.empty()) continue;
+
+		if (comp.back() == '\n') comp.pop_back();
+
+		if (comp == word) {
+			fin.close();
+			return true;
+		}
+	}
+
+	fin.close();
+
+	return false;
 }
 
 void Dictionary::merge(vector<string>& a, int l, int r, int mid) {

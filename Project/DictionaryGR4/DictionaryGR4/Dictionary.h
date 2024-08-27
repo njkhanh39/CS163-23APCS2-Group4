@@ -76,9 +76,17 @@ public:
 	vector<Word> searchDefToWord(string& keyword, int limit);
 
 
+	//fav
 
 	void addToFavourite(Word& word);
 
+	void addToFavourite(string& word);
+
+	void removeFavourite(Word& word);
+
+	void removeFavourite(string& word);
+
+	bool checkFav(string& word);
 
 
 	//setters & adders
