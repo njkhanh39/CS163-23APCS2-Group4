@@ -48,7 +48,7 @@ private:
 	string GetWordType(Word word, string& str);
 
 	wxTimer timer;
-
+	wxFont fnt, boldfnt;
 	wxPoint boxPosition = wxPoint(78, 40), optPosition[4] =  {wxPoint(78, 348),wxPoint(648, 348),wxPoint(78, 494) ,wxPoint(648, 494) };
 	wxSize boxSize = wxSize(1124, 292), optSize = wxSize(554,130);
 
