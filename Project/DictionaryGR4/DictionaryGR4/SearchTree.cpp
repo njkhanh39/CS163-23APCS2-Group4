@@ -624,7 +624,7 @@ void WordFinder::load(string dataset) {
 }
 
 void WordFinder::unload() {
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size+numWordsAdded; ++i) {
         slots[i].clear();
     }
 }
