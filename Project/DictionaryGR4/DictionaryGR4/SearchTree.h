@@ -165,6 +165,8 @@ public:
     
 	void addSubDef(string subdef, int order);
 
+    void setDefinition(string newdef, int index);
+
     void load(string dataset);
 
     void unload();

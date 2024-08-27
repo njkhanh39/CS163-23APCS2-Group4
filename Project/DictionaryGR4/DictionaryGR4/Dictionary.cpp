@@ -38,9 +38,18 @@ void Dictionary::turnOffSearchDefinitionEngine() {
 }
 
 void Dictionary::reloadWordFinder(string dataset) {
-	if (dataset == "Eng-Eng") toolEngEng.load(dataset);
-	else if (dataset == "Eng-Vie") toolEngVie.load(dataset);
-	else if (dataset == "Vie-Eng") toolVieEng.load(dataset);
+	if (dataset == "Eng-Eng") {
+		toolEngEng.unload();
+		toolEngEng.load(dataset);
+	}
+	else if (dataset == "Eng-Vie") {
+		toolEngVie.unload();
+		toolEngVie.load(dataset);
+	}
+	else if (dataset == "Vie-Eng") {
+		toolVieEng.unload();
+		toolVieEng.load(dataset);
+	}
 }
 
 void Dictionary::saveToFile() {
@@ -640,17 +649,18 @@ void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef, 
 
 	// find in the added-part of wordFinder and edit in sortedAddedWords.txt
 	olddef = pop + " " + olddef;
-	vector<string> sortedOlddef = transformSentence(olddef);
-	sortVectorString(sortedOlddef);
 
-	newdef = pop + " " + newdef;
+	if (!pop.empty())
+		newdef = pop + " " + newdef;
 	vector<string> sortedNewdef = transformSentence(newdef);
 	sortVectorString(sortedNewdef);
 
 	for (int i = size; i < size + added; ++i) {
-		vector<string> test = *(activeSearcher->getSubDef(i));
-		if (activeSearcher->getWord(i).getText() == text and *(activeSearcher->getSubDef(i)) == sortedOlddef) {
+		string def = activeSearcher->getWord(i).getDefinitions().back().getStringDefinition();
+
+		if (activeSearcher->getWord(i).getText() == text and def == olddef) {
 			*(activeSearcher->getSubDef(i)) = sortedNewdef;
+			activeSearcher->setDefinition(newdef, i);
 
 			string prev, after, line;
 
@@ -663,6 +673,7 @@ void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef, 
 				}
 				getline(fin, line);
 				prev += line.substr(0, line.find("\t") + 1);
+
 				while (getline(fin, line))
 					after += line + "\n";
 				fin.close();
@@ -682,10 +693,7 @@ void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef, 
 	}
 
 	// find and edit in normal part of wordFinder
-	sortedOlddef = transformSentenceWithBracs(olddef);
-	sortVectorString(sortedOlddef);
-
-	sortedNewdef = transformSentenceWithBracs(newdef);
+	sortedNewdef = transformSentence(newdef);
 	sortVectorString(sortedNewdef);
 
 	if (!done) {
@@ -693,8 +701,12 @@ void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef, 
 		int t = i;
 
 		bool doneUpper = 0;
-		vector<string> test = *(activeSearcher->getSubDef(t));
-		while (*(activeSearcher->getSubDef(t)) != sortedOlddef) {
+
+		auto def = activeSearcher->getWord(t).getDefinitions().back();
+
+		string defstr = def.getStringDefinition();
+
+		while (defstr != olddef) {
 			if (!doneUpper)
 				--t;
 			else
@@ -704,9 +716,11 @@ void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef, 
 				t = i;
 				doneUpper = 1;
 			}
+			defstr = activeSearcher->getWord(t).getDefinitions().back().getStringDefinition();
 		}
 
 		*(activeSearcher->getSubDef(t)) = sortedNewdef;
+		activeSearcher->setDefinition(newdef, t);
 
 		//ifstream fin;
 		//string prev, after;

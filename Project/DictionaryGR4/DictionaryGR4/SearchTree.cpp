@@ -499,6 +499,10 @@ void WordFinder::addSubDef(string subdef, int order) {
     slots[order].addSubDef(subdef);
 }
 
+void WordFinder::setDefinition(string newdef, int index) {
+    slots[index].word.setDefinition(newdef, 0);
+}
+
 void WordFinder::load(string dataset) {
     //load from processed data
     int curbucket = 0;
@@ -624,7 +628,7 @@ void WordFinder::load(string dataset) {
 }
 
 void WordFinder::unload() {
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size+numWordsAdded; ++i) {
         slots[i].clear();
     }
 }
@@ -730,19 +734,21 @@ Word WordFinder::searchWord(string text) {
 
 int WordFinder::searchWordIndex(string text) {
     int left = 0, right = size - 1;
-    int mid = left + (right - left) / 2;
+    //int mid = left + (right - left) / 2;
 
     while (left <= right) {
-        if (text.compare(slots[mid].word.getText()) < 0) {
-            right = mid;
-            mid = left + (right - left) / 2;
-        }
-        else if (text.compare(slots[mid].word.getText()) > 0) {
-            left = mid;
-            mid = left + (right - left) / 2;
-        }
-        else
+        int mid = left + (right - left) / 2;
+        string cur = slots[mid].word.getText();
+
+        u16string u16text = tou16(text);
+        u16string midstr = tou16(cur);
+
+        if (midstr == u16text)
             return mid;
+        else if (compare(midstr, u16text) == 0)
+            left = mid + 1;
+        else
+            right = mid - 1;
     }
 
     return -1;

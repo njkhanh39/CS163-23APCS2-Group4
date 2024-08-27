@@ -1,4 +1,6 @@
 #include "SearchMenu.h"
+#include <wx/font.h>
+#include "randomfunc.h"
 
 using namespace std;
 namespace fs = std::experimental::filesystem;
@@ -9,10 +11,7 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	auto purple = wxColour(101, 86, 142), red = wxColour(184, 89, 89), green = wxColour(11, 199, 189), white = wxColour(255, 255, 255), black = wxColour(34, 36, 40);
 
 	//font
-	wxFont font(14, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
-	wxFont fontTitle(18, wxFONTFAMILY_MODERN, wxFONTSTYLE_MAX, wxFONTWEIGHT_NORMAL);
-	wxFont fontCB(22, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
-	fontTitle.MakeBold();
+	wxFont fnt, boldfnt;
 
 	SetBackgroundColour(black);
 
@@ -20,15 +19,17 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 
 	wxBitmap bitmap(wxT("IMG/image.png"), wxBITMAP_TYPE_PNG);
 
+	rd_button = new wxButton(this, wxID_ANY, "RANDOM", wxPoint(1097, 41), wxSize(116, 60), wxBORDER_NONE);
+	fnt = rd_button->GetFont();
+	fnt.SetPointSize(16);
+	boldfnt = fnt;
+	boldfnt.SetWeight(wxFONTWEIGHT_BOLD);
+
 	// Create a wxBitmapButton
 	button = new wxBitmapButton(this, wxID_ANY, bitmap, wxPoint(1010, 41), wxSize(60, 60));
 	//button->SetBackgroundColour(purple);
 	searchBar = new wxTextCtrl(this, wxID_ANY, "", wxPoint(234, 41), wxSize(776, 60));
-	searchBar->SetFont(fontCB);
-
-	rd_button = new wxButton(this, wxID_ANY, "RANDOM", wxPoint(1097, 41), wxSize(116, 60), wxBORDER_NONE);
-	auto fnt = rd_button->GetFont();
-	fnt.SetPointSize(16);
+	searchBar->SetFont(fnt);
 
 	rd_button->SetFont(fnt);
 	rd_button->SetBackgroundColour(purple);
@@ -58,16 +59,15 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 
 	// Create combo box to choose dataset
 
-	wxArrayString languages = { "Eng-Eng", "Eng-Vie", "Vie-Eng" };
+	wxArrayString languages = { "Eng-Eng", "Eng-Vie", "Vie-Eng"};
 	datasetCbb = new wxComboBox(this, wxID_ANY, "", wxPoint(53, 41), wxSize(154, -1), languages, wxCB_READONLY);
-
-	datasetCbb->SetFont(fontCB);
-	datasetCbb->SetSize(154, 60);
 
 	datasetCbb->SetBackgroundColour(green);
 	datasetCbb->SetForegroundColour(white);
 
-	datasetCbb->SetFont(fontCB);
+	wxFont cbbfnt = fnt;
+	cbbfnt.SetPointSize(24);
+	datasetCbb->SetFont(cbbfnt);
 	datasetCbb->SetSize(154, 60);
 	datasetCbb->SetSelection(0);
 	datasetCbb->Refresh();
@@ -93,15 +93,15 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 
 	//init height = 0
 	suggestBar = new wxListBox(this, wxID_ANY, wxPoint(357, 100), wxSize(450, 0));
-	suggestBar->SetFont(font);
+	suggestBar->SetFont(fnt);
 
-	deleteword = new wxButton(this, wxID_ANY, "DELETE WORD", wxPoint(1042, 610), wxSize(172, 60));
+	deleteword = new wxButton(this, wxID_ANY, "DELETE WORD", wxPoint(1042, 610), wxSize(172, 60), wxBORDER_NONE);
 	deleteword->SetFont(fnt);
 	deleteword->SetBackgroundColour(red);
 	deleteword->SetForegroundColour(white);
 
-	resetbutton = new wxButton(this, wxID_ANY, "RESET", wxPoint(53, 495), wxSize(154, 98)/*, wxBORDER_NONE*/);
-	resetbutton->SetFont(fnt);
+	resetbutton = new wxButton(this, wxID_ANY, "RESET", wxPoint(53, 495), wxSize(154, 98), wxBORDER_NONE);
+	resetbutton->SetFont(boldfnt);
 	resetbutton->SetBackgroundColour(red);
 	resetbutton->SetForegroundColour(white);
 
@@ -292,6 +292,10 @@ void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict
 	//wordView->Disable();
 	//only for #case2, search by word
 	if (!(dict->isSearchingDefinition)) {
+		wordView->Lower();
+		suggestBar->Raise();
+		//suggestBar->SetFocus();
+
 		wxString s = evt.GetString();
 
 		string word = string(s.mb_str(wxConvUTF8));
@@ -358,6 +362,7 @@ void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt, Dictionary* dict) {
 	}
 
 	dict->reloadWordFinder(curDataset);
+	wordView->SetBackDefault();
 }
 
 void SearchMenu::OnRandomClicked(wxCommandEvent& evt, Dictionary* dict) {

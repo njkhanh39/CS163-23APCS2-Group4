@@ -2,7 +2,6 @@
 #include <codecvt>
 #include "Dictionary.h"
 
-
 class WordView {
 private:
 
@@ -21,7 +20,7 @@ private:
 	Word* word = nullptr;
 	string activeDataset;
 
-	int cur = 0;
+	int cur = -1;
 	int pages = 0;
 
 	//---FOR ADD WORD MENU
@@ -154,15 +153,20 @@ public:
 	}
 
 	void SetBackDefault() {
-		cur = 0;
+		cur = -1;
 		pages = 0;
 		defs.clear();
 		wordtype.clear();
 
 		pageText->SetValue("0/0");
-		text->SetLabel("hello");
-		wordTypeText->SetLabel("wordtype");
-		defText->SetLabel("def");
+		text->SetLabel("Hello");
+		wordTypeText->SetLabel("Wordtype");
+		defText->SetLabel("Definition");
+	}
+
+	void Lower() {
+		panel->Lower();
+
 	}
 
 	Word getShowingWord() {
@@ -271,7 +275,6 @@ public:
 			}
 		}
 	}
-
 
 	void OnEditDefClicked(wxCommandEvent& evt) {
 		defText->SetEditable(1);

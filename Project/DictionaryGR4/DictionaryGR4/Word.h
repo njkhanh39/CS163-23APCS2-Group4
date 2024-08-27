@@ -96,9 +96,12 @@ public:
 
 	void setWord(string word);
 
+	void setDefinition(string def, int index);
+
 	void setFavourite(bool state);
 
 	void setDataset(string dataset);
+
 	void clear();
 
 	//adjust-er

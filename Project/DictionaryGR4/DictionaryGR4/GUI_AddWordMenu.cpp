@@ -45,7 +45,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 	submit->SetBackgroundColour(green);
 
 
-	deletedWords = new wxButton(mainPanel, wxID_ANY, "VIEW DELETED WORDS", wxPoint(701, 600), wxSize(204, 60));
+	deletedWords = new wxButton(mainPanel, wxID_ANY, "VIEW DELETED WORDS", wxPoint(651, 600), wxSize(254, 60));
 	deletedWords->SetFont(fntSubmit);
 	deletedWords->SetForegroundColour(white);
 	deletedWords->SetBackgroundColour(purple);
@@ -175,26 +175,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 		}
 	});
 
-	listCtrl->Bind(wxEVT_LIST_ITEM_SELECTED, [this, dict](wxListEvent& evt) {
-		long selectedRow = evt.GetIndex();
-
-		wxString wxtext = listCtrl->GetItemText(selectedRow);
-
-		string str = string(wxtext.mb_str(wxConvUTF8));
-
-		dict->chooseLanguage(datasetCbb2->GetStringSelection().ToStdString());
-
-		vector<Word> get = dict->getDeletedWords();
-
-		for (auto& w : get) {
-			if (w.getText() == str) {
-				wordView->processWord(w);
-				break;
-			}
-		}
-
-		this->SetSelection(2);
-	});
+	//listctrl bind at the end
 
 	//----------------Third panel-------------------//
 
@@ -213,10 +194,15 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 	recover->SetForegroundColour(white);
 	recover->SetBackgroundColour(red);
 
-	wxStaticText* viewingWord = new wxStaticText(thirdPanel, wxID_ANY, "VIEWING WORD", wxPoint(134,60), wxSize(200,60));
+	wxStaticText* viewingWord = new wxStaticText(thirdPanel, wxID_ANY, "VIEWING DELETED WORD", wxPoint(134,60), wxSize(200,60));
 	viewingWord->SetFont(fnt);
 	viewingWord->SetBackgroundColour(black);
 	viewingWord->SetForegroundColour(white);
+
+	wxStaticText* viewingDataSet = new wxStaticText(thirdPanel, wxID_ANY, "ENG ENG", wxPoint(434, 60), wxSize(200, 60));
+	viewingDataSet->SetFont(fnt);
+	viewingDataSet->SetBackgroundColour(black);
+	viewingDataSet->SetForegroundColour(white);
 
 	wordView = new WordView(thirdPanel, wxPoint(134, 133), wxSize(979, 460), dict);
 	wordView->SetColor(white);
@@ -238,6 +224,32 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 		}
 	});
 
+
+	//----LIST CTRL BIND
+
+	listCtrl->Bind(wxEVT_LIST_ITEM_SELECTED, [this, dict, viewingDataSet](wxListEvent& evt) {
+		long selectedRow = evt.GetIndex();
+
+		wxString wxtext = listCtrl->GetItemText(selectedRow);
+
+		//set viewing data set
+		viewingDataSet->SetLabel(datasetCbb2->GetStringSelection());
+
+		string str = string(wxtext.mb_str(wxConvUTF8));
+
+		dict->chooseLanguage(datasetCbb2->GetStringSelection().ToStdString());
+
+		vector<Word> get = dict->getDeletedWords();
+
+		for (auto& w : get) {
+			if (w.getText() == str) {
+				wordView->processWord(w);
+				break;
+			}
+		}
+
+		this->SetSelection(2);
+	});
 
 	//----Simple Book----//
 	deletedWords->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
