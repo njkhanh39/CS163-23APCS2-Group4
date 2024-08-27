@@ -17,7 +17,7 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 
 	//mainPanel->SetBackgroundColour((0xff, 0xcc, 0xcc));
 
-	wxBitmap bitmap(wxT("IMG/image.png"), wxBITMAP_TYPE_PNG);
+	wxBitmap bitmap(wxT("IMG/search.png"), wxBITMAP_TYPE_PNG);
 
 	rd_button = new wxButton(this, wxID_ANY, "RANDOM", wxPoint(1097, 41), wxSize(116, 60), wxBORDER_NONE);
 	fnt = rd_button->GetFont();
@@ -29,18 +29,15 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	button = new wxBitmapButton(this, wxID_ANY, bitmap, wxPoint(1010, 41), wxSize(60, 60));
 	//button->SetBackgroundColour(purple);
 	searchBar = new wxTextCtrl(this, wxID_ANY, "", wxPoint(234, 41), wxSize(776, 60));
-	searchBar->SetFont(fnt);
 
-	rd_button->SetFont(fnt);
+	rd_button->SetFont(boldfnt);
 	rd_button->SetBackgroundColour(purple);
 	rd_button->SetForegroundColour(white);
 
 
-	wxBitmap bitmaphexa(wxT("IMG/Hexagon.png"), wxBITMAP_TYPE_PNG);
+	searchByDef = new wxBitmapButton(this, wxID_ANY, defbm[1], wxPoint(40, 123), wxSize(181, 181), wxBORDER_NONE);
 
-	searchByDef = new wxBitmapButton(this, wxID_ANY, bitmaphexa, wxPoint(40, 123), wxSize(181, 181), wxBORDER_NONE);
-
-	searchByWord = new wxBitmapButton(this, wxID_ANY, bitmaphexa, wxPoint(40, 304), wxSize(181, 181), wxBORDER_NONE);
+	searchByWord = new wxBitmapButton(this, wxID_ANY, wordbm[0], wxPoint(40, 304), wxSize(181, 181), wxBORDER_NONE);
 
 	//def2word->SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
 	//word2def->SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
@@ -49,9 +46,13 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	searchByWord->SetBackgroundColour(black);
 
 	searchByDef->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+		searchByDef->SetBitmap(defbm[1]);
+		searchByWord->SetBitmap(wordbm[0]);
 		OnSearchingByDef(evt, dict);
 		});
 	searchByWord->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+		searchByDef->SetBitmap(defbm[0]);
+		searchByWord->SetBitmap(wordbm[1]);
 		OnSearchingByWord(evt, dict);
 		});
 
@@ -68,6 +69,8 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	datasetCbb->SetSize(154, 60);
 	datasetCbb->SetSelection(0);
 	datasetCbb->Refresh();
+
+	searchBar->SetFont(cbbfnt);
 
 	datasetCbb->Bind(wxEVT_COMBOBOX, [this, dict](wxCommandEvent& evt) {
 		dict->chooseLanguage(string(datasetCbb->GetStringSelection().mb_str(wxConvUTF8)));
@@ -89,11 +92,11 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	wordView->SetColor(white);
 
 	//init height = 0
-	suggestBar = new wxListBox(this, wxID_ANY, wxPoint(357, 100), wxSize(450, 0));
+	suggestBar = new wxListBox(this, wxID_ANY, wxPoint(234, 101), wxSize(776, 0));
 	suggestBar->SetFont(fnt);
 
 	deleteword = new wxButton(this, wxID_ANY, "DELETE WORD", wxPoint(1042, 610), wxSize(172, 60), wxBORDER_NONE);
-	deleteword->SetFont(fnt);
+	deleteword->SetFont(boldfnt);
 	deleteword->SetBackgroundColour(red);
 	deleteword->SetForegroundColour(white);
 
@@ -139,7 +142,7 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	wxLogMessage("Task completed!");
 }
 
-SearchMenu::~SearchMenu() {
+SearchMenu::~SearchMenu() { 
 
 }
 

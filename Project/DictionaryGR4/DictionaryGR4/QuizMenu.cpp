@@ -381,6 +381,11 @@ vector<string> QuizMenu::GenQuest( Dictionary* dict, int& correctans, string& qu
 	string wordText, ans_def;
 	Word chosen_word = RandomWord(wordText,dict);
 	string ans_type = GetWordType(chosen_word, ans_def);
+	while (wordText == "" or ans_def == "")
+	{
+		chosen_word = RandomWord(wordText, dict);
+		ans_type = GetWordType(chosen_word, ans_def);
+	}
 	correctans = RandInt(0,3);
 
 	vector <string> opt_list;
@@ -404,9 +409,9 @@ vector<string> QuizMenu::GenQuest( Dictionary* dict, int& correctans, string& qu
 		{
 			string tmp, tmp_type, tmp_def;
 			Word tmp_word = RandomWord(tmp,dict);
-			if (tmp_word != chosen_word)
+			tmp_type = GetWordType(tmp_word, tmp_def);
+			if (tmp_word != chosen_word && tmp != "" && tmp_def != "")
 			{
-				tmp_type = GetWordType(tmp_word, tmp_def);
 				if (gametype == 1) opt_list[j] = tmp_def;
 				else opt_list[j] = tmp;
 				++j;

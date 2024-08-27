@@ -1,1 +1,4 @@
+<<<<<<< HEAD
 varsal	(tính từ) toàn bộ.
+=======
+>>>>>>> HiuK

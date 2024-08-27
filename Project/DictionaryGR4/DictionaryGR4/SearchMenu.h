@@ -29,6 +29,14 @@ private:
 	wxTextCtrl* searchBar;
 	wxComboBox* datasetCbb;
 	WordView* wordView;
+	wxBitmap defbm[2] = {
+	wxBitmap("IMG/defoff.png", wxBITMAP_TYPE_PNG),
+	wxBitmap("IMG/defon.png", wxBITMAP_TYPE_PNG)
+	};
+	wxBitmap wordbm[2] = {
+	wxBitmap("IMG/wordoff.png", wxBITMAP_TYPE_PNG),
+	wxBitmap("IMG/wordon.png", wxBITMAP_TYPE_PNG)
+	};
 
 	void skip(wxMouseEvent& evt);
 

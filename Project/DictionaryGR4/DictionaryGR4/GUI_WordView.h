@@ -27,6 +27,8 @@ private:
 
 public:
 
+	wxColour  purple = wxColour(101, 86, 142), red = wxColour(184, 89, 89), green = wxColour(11, 199, 189), white = wxColour(255, 255, 255), black = wxColour(34, 36, 40);
+
 	WordView() {
 
 	}
@@ -36,21 +38,27 @@ public:
 		wxFont largerFont(16, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 		largerFont.MakeBold();
 
+		wxFont fnt, ifnt, bfnt;
+
 		frame = new wxBoxSizer(wxVERTICAL);
 
 		panel = new wxPanel(parent, wxID_ANY, pos, size, wxTAB_TRAVERSAL | wxBORDER_SIMPLE);
 		frame->Add(panel, 1, wxEXPAND | wxALL, 5);
 		
+		text = new wxStaticText(panel, wxID_ANY, "Word-displayed-here", wxPoint(size.x / 20, size.y/20), wxDefaultSize);
+		fnt = text->GetFont();
+		ifnt = fnt; bfnt = fnt;
+		ifnt.MakeItalic(); bfnt.MakeBold();
+		ifnt.SetPointSize(13); fnt.SetPointSize(15); bfnt.SetPointSize(25);
+		text->SetFont(bfnt);
 
-		text = new wxStaticText(panel, wxID_ANY, "hello", wxPoint(size.x / 20, size.y/20), wxDefaultSize);
-		text->SetFont(largerFont);
+		wordTypeText = new wxStaticText(panel, wxID_ANY, "(Wordtype displayed here.)", wxPoint(size.x / 20, 3.5 *size.y / 20), wxSize(500,200));
+		wordTypeText->SetFont(ifnt);
 
-		wordTypeText = new wxStaticText(panel, wxID_ANY, "wordtype", wxPoint(size.x / 20, 3*size.y / 20), wxDefaultSize);
-		wordTypeText->SetFont(font);
-
-		defText = new wxTextCtrl(panel, wxID_ANY, "def", wxPoint(size.x / 20, size.y/3), wxSize(500, 200), wxTE_MULTILINE);
+		defText = new wxTextCtrl(panel, wxID_ANY, "Definition displayed here.", wxPoint(size.x / 10, size.y/ 3.5), wxSize(8 * size.x/10, 250), wxTE_MULTILINE | wxTE_NO_VSCROLL | wxBORDER_NONE);
+		defText->SetBackgroundColour(white);
 		defText->SetEditable(0);
-		defText->SetFont(font);
+		defText->SetFont(fnt);
 
 		//next = new wxButton(panel, 10017, "Next", wxPoint(5 * size.x / 6, 0), size / 6);
 		//back = new wxButton(panel, 10016, "Back", wxPoint(2 * size.x / 3, 0), size / 6);
@@ -58,11 +66,11 @@ public:
 		wxBitmap bitmapnext(wxT("IMG/nextdef.png"), wxBITMAP_TYPE_PNG);
 		wxBitmap bitmapback(wxT("IMG/prevdef.png"), wxBITMAP_TYPE_PNG);
 
-		back = new wxBitmapButton(panel, 10016, bitmapback, wxPoint(0, 194), wxSize(53, 53));
-		next = new wxBitmapButton(panel, 10017, bitmapnext, wxPoint(926, 194), wxSize(53, 53));
-		
-		pageText = new wxTextCtrl(panel, wxID_ANY, "0/0", wxPoint(6*size.x / 10, 0), wxDefaultSize, wxTE_CENTRE | wxTE_PROCESS_ENTER);
-		pageText->SetFont(font);
+		back = new wxBitmapButton(panel, 10016, bitmapback, wxPoint(0, 194), wxSize(53, 53), wxBORDER_NONE);
+		next = new wxBitmapButton(panel, 10017, bitmapnext, wxPoint(926, 194), wxSize(53, 53), wxBORDER_NONE);
+		back->SetBackgroundColour(white);
+		next->SetBackgroundColour(white);
+	
 
 		wxBitmap bitmapdel(wxT("IMG/delbutton.png"), wxBITMAP_TYPE_PNG);
 		wxBitmap bitmapedit(wxT("IMG/editbutton.png"), wxBITMAP_TYPE_PNG);
@@ -71,6 +79,10 @@ public:
 		editDef = new wxBitmapButton(panel, wxID_ANY, bitmapedit, wxPoint(744, 20), wxSize(44, 44), wxBORDER_NONE);
 		delDef = new wxBitmapButton(panel, wxID_ANY, bitmapdel, wxPoint(808, 20), wxSize(44, 44), wxBORDER_NONE);
 		favDef = new wxBitmapButton(panel, wxID_ANY, bitmapfav, wxPoint(872, 20), wxSize(44, 44), wxBORDER_NONE);
+
+		editDef->SetBackgroundColour(white);
+		delDef->SetBackgroundColour(white);
+		favDef->SetBackgroundColour(white);
 
 		confirmEdit = new wxButton(panel, wxID_ANY, "Confirm", wxPoint(744, 380), wxSize(91,44));
 		confirmEdit->SetBackgroundColour(wxColour(67, 57, 97));
@@ -82,6 +94,10 @@ public:
 
 		//removeDef = new wxButton(panel, wxID_ANY, "Remove", wxPoint(size.x * 5 / 6, size.y * 2 / 6));
 
+		pageText = new wxTextCtrl(panel, wxID_ANY, "0/0", wxPoint(808, 3 * size.y / 20), wxSize(100,30), wxTE_RIGHT | wxTE_PROCESS_ENTER | wxBORDER_NONE);
+		pageText->SetFont(ifnt);
+		//pageText->SetBackgroundColour(purple);
+		
 		confirmEdit->Hide();
 		cancelEdit->Hide();
 
@@ -107,7 +123,7 @@ public:
 		pageText->Bind(wxEVT_TEXT_ENTER, &WordView::OnPageTextChanged, this);
 
 		//----ADD WORD
-		recover = new wxButton(panel, wxID_ANY, "Recover", wxPoint(15 * size.x / 20, 3 * size.y / 20), wxSize(100, 30));
+		recover = new wxButton(panel, wxID_ANY, "Recover", wxPoint(10 * size.x / 20, 2 * size.y / 20), wxSize(100, 30));
 		recover->Hide();
 
 		if (recover) {

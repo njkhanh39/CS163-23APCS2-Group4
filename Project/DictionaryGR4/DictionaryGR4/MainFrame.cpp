@@ -3,6 +3,10 @@
 MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize) : wxFrame(NULL, wxID_ANY, Title, wxDefaultPosition, FrameSize) {
 	simpleBook = new wxSimplebook(this, wxID_ANY);
     
+    wxStaticText* togetfont = new wxStaticText(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
+    wxFont fnt = togetfont->GetFont();
+    fnt.SetPointSize(12);
+    fnt.MakeBold();
 
     NavPane = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 80), wxBORDER_NONE);
     NavPane->SetBackgroundColour(purple);
@@ -10,23 +14,27 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
     searchpane = new wxButton(NavPane, wxID_ANY, "SEARCH", wxPoint(344, 18), wxSize(147, 44), wxBORDER_NONE);
     searchpane->SetBackgroundColour(black);
     searchpane->SetForegroundColour(white);
+    searchpane->SetFont(fnt);
 
     addpane = new wxButton(NavPane, wxID_ANY, "ADD TO DATASET", wxPoint(524, 18), wxSize(147, 44), wxBORDER_NONE);
     addpane->SetBackgroundColour(purple);
     addpane->SetForegroundColour(white);
+    addpane->SetFont(fnt);
 
     quizpane = new wxButton(NavPane, wxID_ANY, "QUIZ GAME", wxPoint(704, 18), wxSize(147, 44), wxBORDER_NONE);
     quizpane->SetBackgroundColour(purple);
     quizpane->SetForegroundColour(white);
+    quizpane->SetFont(fnt);
 
     hispane = new wxButton(NavPane, wxID_ANY, "HISTORY", wxPoint(884, 18), wxSize(147, 44), wxBORDER_NONE);
     hispane->SetBackgroundColour(purple);
     hispane->SetForegroundColour(white);
+    hispane->SetFont(fnt);
 
     favpane = new wxButton(NavPane, wxID_ANY, "FAVOURITE", wxPoint(1064, 18), wxSize(147, 44), wxBORDER_NONE);
     favpane->SetBackgroundColour(purple);
     favpane->SetForegroundColour(white);
-
+    favpane->SetFont(fnt);
 
 	
     //MainMenu* mainMenu = new MainMenu(simpleBook);
