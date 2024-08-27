@@ -88,6 +88,29 @@ public:
 
 	bool checkFav(string& word);
 
+	vector<string> getFavWords() {
+		string file = "Favourite\\" + activeDataSet + "\\fav.txt";
+
+		vector<string> ans;
+
+		ifstream fin; fin.open(file);
+
+		if (!fin.is_open()) {
+			fin.close();
+			return ans;
+		}
+
+		string line;
+		while (getline(fin, line)) {
+			if (line.empty()) continue;
+			if (line.back() == '\n') line.pop_back();
+			ans.push_back(line);
+		}
+		fin.close();
+
+		return ans;
+	}
+
 
 	//setters & adders
 

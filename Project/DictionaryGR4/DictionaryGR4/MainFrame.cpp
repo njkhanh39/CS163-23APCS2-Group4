@@ -35,12 +35,14 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
     QuizMenu* quizMenu = new QuizMenu(simpleBook, dict);
     AddWordMenu* addMenu = new AddWordMenu(simpleBook, dict);
     HistoryMenu* histMenu = new HistoryMenu(simpleBook, dict);
+    FavouriteMenu* favMenu = new FavouriteMenu(simpleBook, dict);
 
     simpleBook->AddPage(addMenu, "Add Menu", true); //selection = 0
     simpleBook->AddPage(quizMenu, "Quiz Menu", true); //selection = 1
     simpleBook->AddPage(searchMenu, "Search Menu", true);//selection = 2
     //simpleBook->AddPage(mainMenu, "Main Menu", true); //selection = 2
     simpleBook->AddPage(histMenu, "History Menu", true);
+    simpleBook->AddPage(favMenu, "Favourtie Menu", true);
 
     simpleBook->SetSelection(2);
 
@@ -76,13 +78,16 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
         favpane->SetBackgroundColour(purple);
         });
 
-    favpane->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+    favpane->Bind(wxEVT_BUTTON, [this, favMenu, dict](wxCommandEvent& evt) {
+        favMenu->SetSelection(0);
         simpleBook->SetSelection(4);
         searchpane->SetBackgroundColour(purple);
         addpane->SetBackgroundColour(purple);
         hispane->SetBackgroundColour(purple);
         quizpane->SetBackgroundColour(purple);
         favpane->SetBackgroundColour(black);
+        //as soon as entering, we load
+        favMenu->OnLoadFavourite(evt, dict);
         });
 
     hispane->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {

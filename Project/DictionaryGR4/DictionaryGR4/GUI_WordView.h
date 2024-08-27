@@ -457,16 +457,19 @@ public:
 
 		//add to fav
 		if (!isFav) {
+			favDef->SetBitmap(favon);
 			dict->addToFavourite(wordText);
 		}
 		else {
 			dict->removeFavourite(wordText);
+			favDef->SetBitmap(favoff);
 		}
 
-		if (favDef->GetBackgroundColour() == wxColour(184, 89, 89)) {
+		/*if (favDef->GetBackgroundColour() == wxColour(184, 89, 89)) {
 			favDef->SetBackgroundColour(wxColour(255, 255, 255));
 		}
-		else favDef->SetBackgroundColour(wxColour(184, 89, 89));
+		else favDef->SetBackgroundColour(wxColour(184, 89, 89));*/
+
 	}
 
 	void OnPageTextFocus(wxFocusEvent& evt) {
@@ -580,5 +583,12 @@ public:
 
 			dict->addNewWordOneDef(wordText, defstr);
 		}
+	}
+
+	string getShowingText() {
+		wxString wxstr = text->GetLabel();
+		string str = string(wxstr.mb_str(wxConvUTF8));
+
+		return str;
 	}
 };

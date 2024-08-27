@@ -14,20 +14,29 @@
 
 #include "Dictionary.h"
 #include "GUI_WordView.h"
-class FavouriteMenu : public wxPanel
+class FavouriteMenu : public wxSimplebook
 {
 public:
 	FavouriteMenu(wxWindow* parent, Dictionary*& dict);
 	~FavouriteMenu();
 private:
-	wxTextCtrl* searchBar;
+
+	//----FIRST PAN----//
+	wxPanel* mainPanel;
+
+	wxComboBox* datasetCbb;
+	wxListCtrl* listCtrl;
+
+	//----SECOND PAN----//
+	wxPanel* secondPanel;
+
 	WordView* wordView;
-	wxButton* back, * view;
-	wxListCtrl* list;
+	wxButton* back, *unfav;
 
+public:
 
-
-	void OnViewButton(wxCommandEvent& evt, Dictionary* dict);
-	void OnBackButton(wxCommandEvent& evt, Dictionary* dict);
+	void OnLoadFavourite(wxCommandEvent& evt, Dictionary* dict);
+	void OnViewWord(wxListEvent& evt, Dictionary* dict);
+	void OnFavButtonClicked(wxCommandEvent& evt, Dictionary* dict);
 };
 
