@@ -11,7 +11,7 @@ private:
 	
 	wxStaticText* text, *wordTypeText;
 	wxTextCtrl* defText, *pageText;
-	wxButton* fav, *confirmEdit, *cancelEdit;
+	wxButton* confirmEdit, *cancelEdit;
 	wxBitmapButton* back, * next, *editDef, *delDef, *favDef;
 		
 	vector<string> defs;

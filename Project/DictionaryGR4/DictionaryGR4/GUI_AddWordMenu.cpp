@@ -101,7 +101,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 
 			if (type[0] != '(') {
 				reverse(type.begin(), type.end());
-				type.push_back(')');
+				type.push_back('(');
 				reverse(type.begin(), type.end());
 			}
 

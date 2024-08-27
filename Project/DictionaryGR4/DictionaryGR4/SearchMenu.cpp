@@ -292,9 +292,9 @@ void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict
 	//wordView->Disable();
 	//only for #case2, search by word
 	if (!(dict->isSearchingDefinition)) {
-		wordView->Lower();
+		this->SetCursor(wxCURSOR_WAIT);
+
 		suggestBar->Raise();
-		//suggestBar->SetFocus();
 
 		wxString s = evt.GetString();
 
@@ -316,6 +316,8 @@ void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict
 		}
 
 		adjustSuggestBar(300, 14);
+		
+		this->SetCursor(wxNullCursor);
 	}
 
 	//if (suggestBar->IsEmpty()) wordView->Enable();
@@ -358,11 +360,12 @@ void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt, Dictionary* dict) {
 		"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
 
 	if (ask->ShowModal() == wxID_YES) {
+		this->SetCursor(wxCURSOR_WAIT);
 		fs::copy("DataSet - Backup\\" + curDataset, "DataSet\\" + curDataset, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
+		dict->reloadWordFinder(curDataset);
+		wordView->SetBackDefault();
+		this->SetCursor(wxNullCursor);
 	}
-
-	dict->reloadWordFinder(curDataset);
-	wordView->SetBackDefault();
 }
 
 void SearchMenu::OnRandomClicked(wxCommandEvent& evt, Dictionary* dict) {
