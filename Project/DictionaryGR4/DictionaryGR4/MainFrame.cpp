@@ -66,7 +66,8 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
         favpane->SetBackgroundColour(purple);
         });
 
-    addpane->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+    addpane->Bind(wxEVT_BUTTON, [this, addMenu](wxCommandEvent& evt) {
+        addMenu->SetSelection(0);
         simpleBook->SetSelection(0);
         searchpane->SetBackgroundColour(purple);
         addpane->SetBackgroundColour(black);

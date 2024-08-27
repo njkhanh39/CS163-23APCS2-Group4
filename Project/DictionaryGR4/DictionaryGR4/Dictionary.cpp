@@ -65,6 +65,18 @@ Word Dictionary::searchWordMatching(string word) {
 	return w;
 }
 
+Word Dictionary::searchWordMatchingForcedWordFinder(string word) {
+	Word w;
+
+	for (auto& x : word) x = tolower(x);
+
+	w = activeSearcher->searchWord(word);
+
+	getAvailableWords(w);
+
+	return w;
+}
+
 Word* Dictionary::getWordPtr(string word) {
 	return myTrie.getWordPointer(word);
 }
@@ -249,6 +261,55 @@ bool Dictionary::addNewWordOneDef(string& text, string& def) {
 	fout.close();
 
 	return true;
+}
+vector<Word> Dictionary::getDeletedWords() {
+	vector<Word> ans;
+
+	string file = "DataSet\\" + activeDataSet + "\\deletedWords.txt";
+
+	vector<string> lines;
+
+	ifstream fin; fin.open(file);
+
+	string line;
+
+	while (getline(fin, line)) {
+		if (line != "") lines.push_back(line);
+	}
+
+
+	fin.close();
+
+	if ((int)lines.size() == 0) return ans;
+
+	sortVectorString(lines);
+
+	for (int i = 0; i < (int)lines.size(); ++i) {
+		string wrd, def;
+		int j = 0;
+		while (lines[i][j] != '\t') {
+			wrd.push_back(lines[i][j]);
+			++j;
+		}
+		++j;
+		def = lines[i].substr(j);
+		if (def.back() == '\n') def.pop_back();
+
+		if (ans.empty()) {
+			ans.push_back(Word(wrd, def));
+			continue;
+		}
+
+		string cmpWrd = ans.back().getText();
+		if (wrd == cmpWrd) {
+			ans.back().addDefinition(def);
+			continue;
+		}
+
+		ans.push_back(Word(wrd, def));
+	}
+
+	return ans;
 }
 
 void Dictionary::deleteWord(Word& word) {
