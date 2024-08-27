@@ -18,7 +18,6 @@ private:
 	vector<string> wordtype;
 
 	Word* word = nullptr;
-	string activeDataset;
 
 	int cur = -1;
 	int pages = 0;
@@ -86,6 +85,7 @@ public:
 		confirmEdit->Hide();
 		cancelEdit->Hide();
 
+
 		//panel->Bind(wxEVT_LEFT_DOWN, &WordView::skip, this);
 		next->Bind(wxEVT_BUTTON, &WordView::showWord, this);
 		back->Bind(wxEVT_BUTTON, &WordView::showWord, this);
@@ -97,7 +97,9 @@ public:
 		delDef->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 			OnRemoveDefClicked(evt, dict);
 		});
-		favDef->Bind(wxEVT_BUTTON, &WordView::OnAddFavourite, this);
+		favDef->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+			OnAddAndUnFavourite(evt, dict);
+		});
 		defText->Bind(wxEVT_SET_FOCUS, &WordView::OnTextFocus, this);
 		defText->Bind(wxEVT_KILL_FOCUS, &WordView::OnDefTextKillFocus, this);
 
@@ -131,10 +133,6 @@ public:
 
 	void setWord(Word* newWord) {
 		word = newWord;
-	}
-
-	void setActiveDataset(string dataset) {
-		activeDataset = dataset;
 	}
 
 	void skip(wxMouseEvent& evt){
@@ -193,7 +191,7 @@ public:
 		return ans;
 	}
 
-	void processWord(Word& processWord) {
+	void processWord(Word& processWord, Dictionary* dict) {
 		//careful with this, must set cur = 0 when loading new word
 		if (processWord.empty()) return;
 
@@ -237,6 +235,23 @@ public:
 			pageText->SetValue(show);
 		}
 
+		bool isFav = true;
+
+		//check fav
+		if (text) {
+			wxString checkFavwx = text->GetLabel();
+
+			string checkFavStr = string(checkFavwx.mb_str(wxConvUTF8));
+
+			isFav = dict->checkFav(checkFavStr);
+		}
+
+		if (isFav) {
+			//red
+			favDef->SetBackgroundColour(wxColour(184, 89, 89));
+		}
+		else favDef->SetBackgroundColour(wxColour(255, 255, 255));
+
 		// Update the layout to reflect the new size
 		//Layout();
 	}
@@ -251,7 +266,7 @@ public:
 		}
 
 		if (!(cur >= 0 && cur < pages)) return;
-		
+	
 		if (wordTypeText) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
 		if (defText) defText->SetLabel(wxString::FromUTF8(defs[cur]));
 		if (pageText) {
@@ -398,13 +413,25 @@ public:
 		}
 	}
 
-	void OnAddFavourite(wxCommandEvent& evt) {
-		ofstream out;
-		out.open("Favourite\\" + activeDataset + "\\fav.txt", ios::app);
-		if (!out.is_open()) return;
-		out << getShowingWord().getText()  << endl;
-		out.close();
-		getShowingWord().markFavourite();
+	void OnAddAndUnFavourite(wxCommandEvent& evt, Dictionary* dict) {
+		if (pages == 0) return;
+		wxString wxstr = text->GetLabel();
+		string wordText = string(wxstr.mb_str(wxConvUTF8));
+
+		bool isFav = dict->checkFav(wordText);
+
+		//add to fav
+		if (!isFav) {
+			dict->addToFavourite(wordText);
+		}
+		else {
+			dict->removeFavourite(wordText);
+		}
+
+		if (favDef->GetBackgroundColour() == wxColour(184, 89, 89)) {
+			favDef->SetBackgroundColour(wxColour(255, 255, 255));
+		}
+		else favDef->SetBackgroundColour(wxColour(184, 89, 89));
 	}
 
 	void OnPageTextFocus(wxFocusEvent& evt) {

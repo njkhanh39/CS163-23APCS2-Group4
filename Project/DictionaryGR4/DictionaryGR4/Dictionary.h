@@ -11,14 +11,14 @@
 
 class Dictionary {
 private:
-	
+
 	Trie myTrie; //for word -> def in Eng-Eng & Eng-Vie
 
 	const string EngEng = "Eng-Eng", EngVie = "Eng-Vie", VieEng = "Vie-Eng"; //datasets
 	string activeDataSet = EngEng; //changeable
-	
+
 	list<string> favList;
-	
+
 public:
 	History hist;
 	WordFinder* activeSearcher = nullptr; //for def -> word in all datasets
@@ -76,9 +76,17 @@ public:
 	vector<Word> searchDefToWord(string& keyword, int limit);
 
 
+	//fav
 
 	void addToFavourite(Word& word);
 
+	void addToFavourite(string& word);
+
+	void removeFavourite(Word& word);
+
+	void removeFavourite(string& word);
+
+	bool checkFav(string& word);
 
 
 	//setters & adders

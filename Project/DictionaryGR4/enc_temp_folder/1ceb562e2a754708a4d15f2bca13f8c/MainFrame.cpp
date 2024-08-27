@@ -35,7 +35,6 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
     QuizMenu* quizMenu = new QuizMenu(simpleBook, dict);
     AddWordMenu* addMenu = new AddWordMenu(simpleBook, dict);
     HistoryMenu* histMenu = new HistoryMenu(simpleBook, dict);
-    FavouriteMenu* favMenu = new FavouriteMenu(simpleBook, dict);
  
     simpleBook->AddPage(addMenu, "Add Menu", true); //selection = 0
     simpleBook->AddPage(quizMenu, "Quiz Menu", true); //selection = 1

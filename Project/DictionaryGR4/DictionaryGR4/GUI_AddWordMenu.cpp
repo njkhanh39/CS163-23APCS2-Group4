@@ -245,7 +245,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 
 		for (auto& w : get) {
 			if (w.getText() == str) {
-				wordView->processWord(w);
+				wordView->processWord(w, dict);
 				break;
 			}
 		}
