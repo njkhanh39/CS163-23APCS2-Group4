@@ -36,9 +36,6 @@ vector<string> Word::getStringDefinitions() {
 	return ans;
 }
 
-string Word::getDataset() {
-	return dataset;
-}
 
 //adders and setters
 
@@ -63,11 +60,6 @@ void Word::clear() {
 	text = "";
 	defList.clear();
 }
-
-void Word::setDataset(string dataset) {
-	this->dataset = dataset;
-}
-
 //adjust-er
 
 void Word::sortDefinitions() {

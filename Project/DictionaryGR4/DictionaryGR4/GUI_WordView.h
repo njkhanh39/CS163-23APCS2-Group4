@@ -8,12 +8,13 @@ private:
 	wxWindow* parentWindow;
 	wxPanel* panel;
 	wxBoxSizer* frame;
-
-	wxStaticText* text, * wordTypeText;
-	wxTextCtrl* defText, * pageText;
-	wxButton* fav, * confirmEdit, * cancelEdit;
-	wxBitmapButton* back, * next, * editDef, * delDef, * favDef;
-
+	
+	wxStaticText* text, *wordTypeText;
+	wxTextCtrl* defText, *pageText;
+	wxButton* confirmEdit, *cancelEdit;
+	wxBitmapButton* back, * next, *editDef, *delDef, *favDef;
+	wxBitmap favon,  favoff;
+		
 	vector<string> defs;
 	vector<string> wordtype;
 
@@ -67,11 +68,12 @@ public:
 
 		wxBitmap bitmapdel(wxT("IMG/delbutton.png"), wxBITMAP_TYPE_PNG);
 		wxBitmap bitmapedit(wxT("IMG/editbutton.png"), wxBITMAP_TYPE_PNG);
-		wxBitmap bitmapfav(wxT("IMG/favbutton.png"), wxBITMAP_TYPE_PNG);
+		favoff = wxBitmap(wxT("IMG/favbutton.png"), wxBITMAP_TYPE_PNG);
+		favon = wxBitmap(wxT("IMG/favon.png"), wxBITMAP_TYPE_PNG);
 
-		editDef = new wxBitmapButton(panel, wxID_ANY, bitmapedit, wxPoint(744, 20), wxSize(44, 44));
-		delDef = new wxBitmapButton(panel, wxID_ANY, bitmapdel, wxPoint(808, 20), wxSize(44, 44));
-		favDef = new wxBitmapButton(panel, wxID_ANY, bitmapfav, wxPoint(872, 20), wxSize(44, 44));
+		editDef = new wxBitmapButton(panel, wxID_ANY, bitmapedit, wxPoint(744, 20), wxSize(44, 44), wxBORDER_NONE);
+		delDef = new wxBitmapButton(panel, wxID_ANY, bitmapdel, wxPoint(808, 20), wxSize(44, 44), wxBORDER_NONE);
+		favDef = new wxBitmapButton(panel, wxID_ANY, favoff, wxPoint(872, 20), wxSize(44, 44), wxBORDER_NONE);
 
 		confirmEdit = new wxButton(panel, wxID_ANY, "Confirm", wxPoint(744, 380), wxSize(91, 44));
 		confirmEdit->SetBackgroundColour(wxColour(67, 57, 97));
@@ -236,6 +238,23 @@ public:
 			string show = to_string(cur + 1) + "/" + to_string(pages);
 			pageText->SetValue(show);
 		}
+
+		bool isFav = true;
+
+		//check fav
+		if (text) {
+			wxString checkFavwx = text->GetLabel();
+
+			string checkFavStr = string(checkFavwx.mb_str(wxConvUTF8));
+
+			isFav = dict->checkFav(checkFavStr);
+		}
+
+		if (isFav) {
+			//red
+			favDef->SetBitmap(favon);
+		}
+		else favDef->SetBitmap(favoff);
 
 		// Update the layout to reflect the new size
 		//Layout();

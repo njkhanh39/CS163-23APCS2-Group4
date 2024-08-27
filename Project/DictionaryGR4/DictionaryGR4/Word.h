@@ -18,7 +18,6 @@ class Word {
 private:
 	string text;
 	vector<Definition> defList;
-	string dataset;
 public:
 	Word() {
 		text = "";
@@ -91,10 +90,6 @@ public:
 	void setWord(string word);
 
 	void setDefinition(string def, int index);
-
-	void setFavourite(bool state);
-
-	void setDataset(string dataset);
 
 	void clear();
 
