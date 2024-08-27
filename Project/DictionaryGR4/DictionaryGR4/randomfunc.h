@@ -11,4 +11,5 @@ extern std::mt19937 rng;
 
 int RandInt(int l, int r);
 
+
 #endif

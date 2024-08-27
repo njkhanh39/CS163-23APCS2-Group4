@@ -14,6 +14,7 @@
 #include "Dictionary.h"
 #include "GUI_WordView.h"
 
+
 class SearchMenu : public wxPanel {
 public:
 	SearchMenu(wxWindow* parent, Dictionary*& dict);

@@ -57,6 +57,8 @@ public:
 	//get a "Word" object that matches a string
 	Word searchWordMatching(string word);
 
+	Word searchWordMatchingForcedWordFinder(string word);
+
 	Word* getWordPtr(string word);
 
 	Word getRandomWord(string& wordText);
@@ -95,6 +97,8 @@ public:
 
 	//return true if add word successfully
 	bool addNewWordOneDef(string& text, string& def);
+
+	vector<Word> getDeletedWords();
 
 	//helpers
 

@@ -2,6 +2,7 @@
 #include <wx/wx.h>
 #include "MainFrame.h"
 
+
 class App : public wxApp {
 public:
 	Dictionary dictionary;

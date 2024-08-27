@@ -10,35 +10,59 @@ QuizMenu::QuizMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(parent, w
 	gamevar = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE);
 	gamevar->SetBackgroundColour(black);
 
+	game = new wxStaticText(gamevar, wxID_ANY, "GAMETYPE", wxPoint(601, 67));
 
-	game = new wxStaticText(gamevar, wxID_ANY, "GAMETYPE", wxPoint(601, 66));
-	datachose = new wxStaticText(gamevar, wxID_ANY, "DATASET", wxPoint(601, 211));
-	numberques = new wxStaticText(gamevar, wxID_ANY, "NUMBER OF QUESTIONS", wxPoint(562, 347));
+	datachose = new wxStaticText(gamevar, wxID_ANY, "DATASET", wxPoint(601, 206));
+
+	numberques = new wxStaticText(gamevar, wxID_ANY, "NUMBER OF QUESTIONS", wxPoint(562, 345));
+	
+
+	fnt = game->GetFont();
+	fnt.SetPointSize(16);
+	boldfnt = fnt;
+	boldfnt.MakeBold();
+
+	game->SetFont(boldfnt);
+	datachose->SetFont(boldfnt);
+	numberques->SetFont(boldfnt);
+
+	int w = game->GetSize().GetWidth();
+	game->SetPosition(wxPoint(640 - w / 2, 67));
+	w = datachose->GetSize().GetWidth();
+	datachose->SetPosition(wxPoint(640 - w / 2, 206));
+	w = numberques->GetSize().GetWidth();
+	numberques->SetPosition(wxPoint(640 - w / 2, 337));
 
 	GuessWord = new wxButton(gamevar, wxID_ANY, "GUESS WORD", wxPoint(238, 110), wxSize(402, 65));
 	GuessWord->SetBackgroundColour(green);
+	GuessWord->SetFont(fnt);
 	GuessDef = new wxButton(gamevar, wxID_ANY, "GUESS DEFINITION", wxPoint(640, 110), wxSize(402, 65));
+	GuessDef->SetFont(fnt);
 
 	EngEng = new wxButton(gamevar, wxID_ANY, "ENG-ENG", wxPoint(238, 249), wxSize(268, 65));
 	EngEng->SetBackgroundColour(green);
+	EngEng->SetFont(fnt);
 	EngVie = new wxButton(gamevar, wxID_ANY, "ENG-VIE", wxPoint(506, 249), wxSize(268, 65));
+	EngVie->SetFont(fnt);
 	VieEng = new wxButton(gamevar, wxID_ANY, "VIE-ENG", wxPoint(774, 249), wxSize(268, 65));
+	VieEng->SetFont(fnt);
 
 	wxBitmap bitin(wxT("IMG/Plus.png"), wxBITMAP_TYPE_PNG);
 	wxBitmap bitde(wxT("IMG/Minus.png"), wxBITMAP_TYPE_PNG);
 
-	decrease = new wxBitmapButton(gamevar, wxID_ANY, bitde, wxPoint(451, 388), wxSize(48, 48), wxBORDER_NONE);
-	increase = new wxBitmapButton(gamevar, wxID_ANY, bitin, wxPoint(791, 388), wxSize(48, 48), wxBORDER_NONE);
+	decrease = new wxBitmapButton(gamevar, wxID_ANY, bitde, wxPoint(451, 396), wxSize(48, 48), wxBORDER_NONE);
+	increase = new wxBitmapButton(gamevar, wxID_ANY, bitin, wxPoint(791, 396), wxSize(48, 48), wxBORDER_NONE);
 	increase->SetBackgroundColour(white);
 	decrease->SetBackgroundColour(white);
 
-	displaynum = new wxButton(gamevar, wxID_ANY, std::to_string(numquest), wxPoint(439, 380), wxSize(402, 65), wxBORDER_NONE);
+	displaynum = new wxButton(gamevar, wxID_ANY, std::to_string(numquest), wxPoint(439, 388), wxSize(402, 65), wxBORDER_NONE);
+	displaynum->SetFont(fnt);
 
 	wxBitmap bitendless(wxT("IMG/endless.png"), wxBITMAP_TYPE_PNG);
 	wxBitmap bitstart(wxT("IMG/start.png"), wxBITMAP_TYPE_PNG);
 
 	start = new wxBitmapButton(gamevar, wxID_ANY, bitstart, wxPoint(238, 500), wxSize(296, 78), wxBORDER_NONE);
-	endlessmode = new wxBitmapButton(gamevar, wxID_ANY, bitendless, wxPoint(640, 500), wxSize(296, 78), wxBORDER_NONE);
+	endlessmode = new wxBitmapButton(gamevar, wxID_ANY, bitendless, wxPoint(746, 500), wxSize(296, 78), wxBORDER_NONE);
 
 	displayGameMode(dict);
 	start->Bind(wxEVT_BUTTON, [this,dict](wxCommandEvent& evt) {
@@ -62,26 +86,33 @@ QuizMenu::QuizMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(parent, w
 	chosen_box->SetBackgroundColour(white);
 
 	chosen_quest = new wxStaticText(chosen_box, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+	chosen_quest->SetFont(boldfnt);
 
 	wxBitmap bitnext(wxT("IMG/nextdef.png"), wxBITMAP_TYPE_PNG);
 	nextquest = new wxBitmapButton(question, wxID_ANY, bitnext, wxPoint(1218, 333), wxSize(53, 53), wxBORDER_NONE);
+	nextquest->Disable();
 	nextquest->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& event) {
 		OnNextQuestion(dict);
 		});
 
-	currquestno = new wxStaticText(question, wxID_ANY, "", wxPoint(20, 10), wxDefaultSize, wxBORDER_NONE);
+	currquestno = new wxStaticText(question, wxID_ANY, "", wxPoint(20, 5), wxDefaultSize, wxBORDER_NONE);
 	currquestno->SetForegroundColour(white);
+	currquestno->SetFont(fnt);
 
 	for (int i = 0; i < 4; ++i)
 	{
 		options[i] = new wxButton(question, 1000+i, "", optPosition[i], optSize, wxBORDER_NONE);
 		options[i]->SetBackgroundColour(purple);
+		options[i]->SetForegroundColour(white);
+		options[i]->SetFont(boldfnt);
 		options[i]->Bind(wxEVT_BUTTON, &QuizMenu::OnOptionSelected, this);
 		//options_label[i] = new ClickThroughStaticText(question, 2000 + i, "", wxDefaultPosition, wxDefaultSize);
 	}
 
-	exit = new wxButton(question, wxID_ANY, "END QUIZ", wxPoint(906, 640), wxSize(296, 51), wxBORDER_NONE);
+	exit = new wxButton(question, wxID_ANY, "END QUIZ", wxPoint(906, 640), wxSize(296, 48), wxBORDER_NONE);
+	exit->SetFont(boldfnt);
 	exit->SetBackgroundColour(green);
+	//exit->SetForegroundColour(white);
 	exit->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
 		this->SetSelection(0);
 		displayscore();
@@ -98,6 +129,9 @@ QuizMenu::QuizMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(parent, w
 	announce = new wxStaticText(score_announce,wxID_ANY, "", wxPoint(51,244), wxDefaultSize);
 	restart = new wxButton(score_announce, wxID_ANY, "RESTART", wxPoint(344,297), wxSize(240,78), wxBORDER_NONE);
 	backmenu = new wxButton(score_announce, wxID_ANY, "MENU", wxPoint(696,297), wxSize(240, 78), wxBORDER_NONE);
+	announce->SetFont(fnt);
+	restart->SetFont(fnt);
+	backmenu->SetFont(fnt);
 
 	restart->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& event) {
 		current_question = 0; score = 0;
@@ -124,6 +158,7 @@ void QuizMenu::displayscore()
 {
 	announce->SetLabel("Your score: " + std::to_string(score) + "/" + std::to_string(current_question));
 	int X = 640 - announce->GetSize().GetWidth() / 2;
+	announce->SetFont(fnt);
 	announce->SetPosition(wxPoint(X, 244));
 	announce->SetForegroundColour(white);
 }
@@ -216,6 +251,8 @@ void QuizMenu::modeQuestion(wxSize boxSize)
 void QuizMenu::processQuestion(Dictionary* dict)
 {
 	currquestno->SetLabel("Question " + std::to_string(current_question+1));
+	
+	nextquest->Disable();
 
 	if (current_question < numquest || (is_endless))
 	{
@@ -228,7 +265,7 @@ void QuizMenu::processQuestion(Dictionary* dict)
 		}
 
 		chosen_quest->SetLabel(wxString::FromUTF8(quest));
-		chosen_quest->Wrap(1100);
+		chosen_quest->Wrap(1050);
 
 		// Calculate center position within the static box
 		int textWidth = chosen_quest->GetBestSize().GetWidth();
@@ -256,12 +293,15 @@ void QuizMenu::processQuestion(Dictionary* dict)
 wxString QuizMenu::getlabelLineBreak(wxButton* opt)
 {
 	wxString newdef;
-	int cnt = 1;
+	int cnt = 0, cnt_row = 1;
+
 	wxString mau = opt->GetLabel();
 	for (int i = 0; i < mau.size(); ++i)
 	{
-		if (cnt >= 30 && mau[i] == ' ')
+		if (cnt > 40 && mau[i] == ' ')
 		{
+			++cnt_row;
+			if (cnt_row > 6) return newdef;
 			newdef += "\n";
 			cnt = 0;
 		}
@@ -291,6 +331,7 @@ void QuizMenu::OnOptionSelected(wxCommandEvent& event) {
 			options[i]->Disable();
 	}
 	++current_question;
+	nextquest->Enable();
 }
 
 void QuizMenu::OnNextQuestion(Dictionary* dict)
@@ -314,12 +355,9 @@ string QuizMenu::GetWordType(Word word, string& def)
 
 	int j = 0;
 	if (str[j] == '(') {
-		while (j < (int)str.length() && (j == 0 || str[j - 1] != ')')) {
-			wordtype += str[j];
-			++j;
-		}
+		while (str[j] != ')') ++j;
 	}
-
+	++j;
 	while (j < str.length()) { def += str[j]; ++j; }
 
 	return wordtype;
