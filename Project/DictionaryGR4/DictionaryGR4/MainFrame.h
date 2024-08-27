@@ -5,15 +5,14 @@
 #include "GUI_AddWordMenu.h"
 #include "QuizMenu.h"
 #include "HistoryMenu.h"
-class MainFrame: public wxFrame {
+class MainFrame : public wxFrame {
 private:
 	wxSimplebook* simpleBook;
 
-public: 
-	HistoryMenu* histMenu;
+public:
 	MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize);
 
-    void OnPreviousPage(wxCommandEvent& event);
+	void OnPreviousPage(wxCommandEvent& event);
 
 	void OnNextPage(wxCommandEvent& event);
 

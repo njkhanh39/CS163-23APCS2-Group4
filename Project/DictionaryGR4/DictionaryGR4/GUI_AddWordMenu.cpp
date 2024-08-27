@@ -25,19 +25,19 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 
 
 	wxArrayString datasets = { "Eng-Eng", "Eng-Vie", "Vie-Eng" };
-	datasetCbb = new wxComboBox(mainPanel, wxID_ANY, "Eng-Eng", wxPoint(773, 101), wxSize(154,-1), datasets, wxCB_READONLY);
+	datasetCbb = new wxComboBox(mainPanel, wxID_ANY, "Eng-Eng", wxPoint(773, 101), wxSize(154, -1), datasets, wxCB_READONLY);
 	datasetCbb->SetFont(fontCB);
 	datasetCbb->SetSize(154, 60);
 	datasetCbb->Refresh();
-	
+
 
 	defText = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(110, 240), wxSize(1000, 300), wxTE_MULTILINE);
 	defText->SetFont(font);
 
 	wordTypeText = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(951, 101), wxSize(154, 60));
 	wordTypeText->SetFont(fontCB);
-		
-	submit = new wxButton(mainPanel, wxID_ANY, "ADD", wxPoint(951, 600), wxSize(154,60));
+
+	submit = new wxButton(mainPanel, wxID_ANY, "ADD", wxPoint(951, 600), wxSize(154, 60));
 	auto fntSubmit = submit->GetFont();
 	fntSubmit.SetPointSize(16);
 	submit->SetFont(fntSubmit);
@@ -77,7 +77,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 
 	datasetCbb->Bind(wxEVT_COMBOBOX, [this, dict](wxCommandEvent& evt) {
 		dict->chooseLanguage(datasetCbb->GetStringSelection().ToStdString());
-	});
+		});
 
 	submit->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		wxString typeunicode = wordTypeText->GetValue();
@@ -112,9 +112,9 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 			"Are you sure to add word \"" + wunicode + "\"?",
 			"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
 
-		if(ask->ShowModal() == wxID_YES) dict->addNewWordOneDef(text, def);
-	});
-	
+		if (ask->ShowModal() == wxID_YES) dict->addNewWordOneDef(text, def);
+		});
+
 	//----Second Panel----//
 
 	secondPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE);
@@ -125,19 +125,19 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 	backToMain->SetForegroundColour(white);
 	backToMain->SetBackgroundColour(purple);
 
-	
+
 
 	datasetCbb2 = new wxComboBox(secondPanel, wxID_ANY, "Eng-Eng", wxPoint(696, 30), wxSize(154, -1), datasets, wxCB_READONLY);
 	datasetCbb2->SetFont(fontCB);
 	datasetCbb2->SetSize(154, 60);
 	datasetCbb2->Refresh();
 
-	wxStaticText* listCtrlText = new wxStaticText(secondPanel, wxID_ANY,"DELETED WORDS/DEFINITION", wxPoint(250, 59), wxSize(400, 20));
+	wxStaticText* listCtrlText = new wxStaticText(secondPanel, wxID_ANY, "DELETED WORDS/DEFINITION", wxPoint(250, 59), wxSize(400, 20));
 	listCtrlText->SetFont(fnt);
 	listCtrlText->SetBackgroundColour(black);
 	listCtrlText->SetForegroundColour(white);
 
-	
+
 
 	listCtrl = new wxListCtrl(secondPanel, wxID_ANY, wxPoint(250, 100), wxSize(700, 500),
 		wxLC_REPORT | wxBORDER_SUNKEN);
@@ -173,7 +173,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 
 			listCtrl->SetItem(itemIndex, 1, wxString::Format(numstr, cur + 1));
 		}
-	});
+		});
 
 	//listctrl bind at the end
 
@@ -194,7 +194,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 	recover->SetForegroundColour(white);
 	recover->SetBackgroundColour(red);
 
-	wxStaticText* viewingWord = new wxStaticText(thirdPanel, wxID_ANY, "VIEWING DELETED WORD", wxPoint(134,60), wxSize(200,60));
+	wxStaticText* viewingWord = new wxStaticText(thirdPanel, wxID_ANY, "VIEWING DELETED WORD", wxPoint(134, 60), wxSize(200, 60));
 	viewingWord->SetFont(fnt);
 	viewingWord->SetBackgroundColour(black);
 	viewingWord->SetForegroundColour(white);
@@ -209,10 +209,10 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 	wordView->HideButtons();
 	wordView->ShowRecover();
 
-	recover -> Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+	recover->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		wxMessageDialog* ask = new wxMessageDialog(this,
-		"Are you sure to recover this whole word?",
-		"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+			"Are you sure to recover this whole word?",
+			"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
 
 		if (ask->ShowModal() == wxID_YES) {
 			Word wrd = wordView->getShowingWord();
@@ -222,7 +222,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 				this->SetSelection(1);
 			}
 		}
-	});
+		});
 
 
 	//----LIST CTRL BIND
@@ -249,7 +249,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 		}
 
 		this->SetSelection(2);
-	});
+		});
 
 	//----Simple Book----//
 	deletedWords->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
@@ -261,11 +261,11 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 		for (auto& w : show) {
 			string str = w.getText();
 
-			
+
 			wxString wxstr = wxString::FromUTF8(str);
 
 			int num = w.getNumberOfDefinitions();
-			
+
 
 			int size = dict->searchWordMatchingForcedWordFinder(str).getNumberOfDefinitions() + num;
 
@@ -279,15 +279,15 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 
 		//-----//
 		this->SetSelection(1);
-	});
+		});
 
 	backToMain->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		this->SetSelection(0);
-	});
+		});
 
 	backToSecond->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		this->SetSelection(1);
-	});
+		});
 
 	this->AddPage(mainPanel, "ADD WORD", true);
 	this->AddPage(secondPanel, "VIEW DELETED DEFINITIONS", true);

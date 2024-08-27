@@ -48,4 +48,3 @@ public:
 	void setDefinition(string newText);
 
 };
-

@@ -22,7 +22,8 @@ public:
 	bool loadFromFile(string activeDataset);
 	void saveToFile(SearchedWord w, string activeDataset); // for saving word -> def
 	void saveDevToWord(SearchedWord w, string def, string activeDataset);
-	void clearHistory();
+	bool clearHistory(string activeDataset);
+	void clearHistoryDevToWord();
 	void remove(string word);  // for removing a word
 
 };

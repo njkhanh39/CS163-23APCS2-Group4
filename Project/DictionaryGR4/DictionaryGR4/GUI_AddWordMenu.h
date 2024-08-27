@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <wx/wx.h>
 #include <wx/simplebook.h>
@@ -27,15 +27,15 @@ private:
 
 	wxPanel* mainPanel;
 
-	wxTextCtrl* wordText, * defText, *wordTypeText;
+	wxTextCtrl* wordText, * defText, * wordTypeText;
 	wxComboBox* datasetCbb;
 
-	wxButton* submit, *deletedWords;
+	wxButton* submit, * deletedWords;
 
 
 	//PAGE 2
 
-	
+
 	wxPanel* secondPanel;
 
 	wxListCtrl* listCtrl;
@@ -44,7 +44,7 @@ private:
 	wxButton* backToMain;
 
 	//PAGE 3
-	
+
 	wxPanel* thirdPanel;
 
 	WordView* wordView;

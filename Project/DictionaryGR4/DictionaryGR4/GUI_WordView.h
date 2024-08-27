@@ -8,12 +8,12 @@ private:
 	wxWindow* parentWindow;
 	wxPanel* panel;
 	wxBoxSizer* frame;
-	
-	wxStaticText* text, *wordTypeText;
-	wxTextCtrl* defText, *pageText;
-	wxButton* fav, *confirmEdit, *cancelEdit;
-	wxBitmapButton* back, * next, *editDef, *delDef, *favDef;
-		
+
+	wxStaticText* text, * wordTypeText;
+	wxTextCtrl* defText, * pageText;
+	wxButton* fav, * confirmEdit, * cancelEdit;
+	wxBitmapButton* back, * next, * editDef, * delDef, * favDef;
+
 	vector<string> defs;
 	vector<string> wordtype;
 
@@ -41,15 +41,15 @@ public:
 
 		panel = new wxPanel(parent, wxID_ANY, pos, size, wxTAB_TRAVERSAL | wxBORDER_SIMPLE);
 		frame->Add(panel, 1, wxEXPAND | wxALL, 5);
-		
 
-		text = new wxStaticText(panel, wxID_ANY, "hello", wxPoint(size.x / 20, size.y/20), wxDefaultSize);
+
+		text = new wxStaticText(panel, wxID_ANY, "hello", wxPoint(size.x / 20, size.y / 20), wxDefaultSize);
 		text->SetFont(largerFont);
 
-		wordTypeText = new wxStaticText(panel, wxID_ANY, "wordtype", wxPoint(size.x / 20, 3*size.y / 20), wxDefaultSize);
+		wordTypeText = new wxStaticText(panel, wxID_ANY, "wordtype", wxPoint(size.x / 20, 3 * size.y / 20), wxDefaultSize);
 		wordTypeText->SetFont(font);
 
-		defText = new wxTextCtrl(panel, wxID_ANY, "def", wxPoint(size.x / 20, size.y/3), wxSize(500, 200), wxTE_MULTILINE);
+		defText = new wxTextCtrl(panel, wxID_ANY, "def", wxPoint(size.x / 20, size.y / 3), wxSize(500, 200), wxTE_MULTILINE);
 		defText->SetEditable(0);
 		defText->SetFont(font);
 
@@ -61,8 +61,8 @@ public:
 
 		back = new wxBitmapButton(panel, 10016, bitmapback, wxPoint(0, 194), wxSize(53, 53));
 		next = new wxBitmapButton(panel, 10017, bitmapnext, wxPoint(926, 194), wxSize(53, 53));
-		
-		pageText = new wxTextCtrl(panel, wxID_ANY, "0/0", wxPoint(6*size.x / 10, 0), wxDefaultSize, wxTE_CENTRE | wxTE_PROCESS_ENTER);
+
+		pageText = new wxTextCtrl(panel, wxID_ANY, "0/0", wxPoint(6 * size.x / 10, 0), wxDefaultSize, wxTE_CENTRE | wxTE_PROCESS_ENTER);
 		pageText->SetFont(font);
 
 		wxBitmap bitmapdel(wxT("IMG/delbutton.png"), wxBITMAP_TYPE_PNG);
@@ -73,11 +73,11 @@ public:
 		delDef = new wxBitmapButton(panel, wxID_ANY, bitmapdel, wxPoint(808, 20), wxSize(44, 44));
 		favDef = new wxBitmapButton(panel, wxID_ANY, bitmapfav, wxPoint(872, 20), wxSize(44, 44));
 
-		confirmEdit = new wxButton(panel, wxID_ANY, "Confirm", wxPoint(744, 380), wxSize(91,44));
+		confirmEdit = new wxButton(panel, wxID_ANY, "Confirm", wxPoint(744, 380), wxSize(91, 44));
 		confirmEdit->SetBackgroundColour(wxColour(67, 57, 97));
 		confirmEdit->SetForegroundColour(wxColour(255, 255, 255));
 
-		cancelEdit = new wxButton(panel, wxID_ANY, "Cancel", wxPoint(845,380), wxSize(91,44));
+		cancelEdit = new wxButton(panel, wxID_ANY, "Cancel", wxPoint(845, 380), wxSize(91, 44));
 		cancelEdit->SetBackgroundColour(wxColour(67, 57, 97));
 		cancelEdit->SetForegroundColour(wxColour(255, 255, 255));
 
@@ -92,11 +92,11 @@ public:
 		editDef->Bind(wxEVT_BUTTON, &WordView::OnEditDefClicked, this);
 		confirmEdit->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 			OnConfirmEditClicked(evt, dict);
-		});
+			});
 		cancelEdit->Bind(wxEVT_BUTTON, &WordView::OnCancelEditClicked, this);
 		delDef->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 			OnRemoveDefClicked(evt, dict);
-		});
+			});
 		favDef->Bind(wxEVT_BUTTON, &WordView::OnAddFavourite, this);
 		defText->Bind(wxEVT_SET_FOCUS, &WordView::OnTextFocus, this);
 		defText->Bind(wxEVT_KILL_FOCUS, &WordView::OnDefTextKillFocus, this);
@@ -111,7 +111,7 @@ public:
 		if (recover) {
 			recover->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 				OnRecoverWord(evt, dict);
-			});
+				});
 		}
 
 		parentWindow = parent;
@@ -137,7 +137,7 @@ public:
 		activeDataset = dataset;
 	}
 
-	void skip(wxMouseEvent& evt){
+	void skip(wxMouseEvent& evt) {
 		evt.Skip();
 	}
 	void Disable() {
@@ -215,7 +215,7 @@ public:
 				++j;
 			}
 			else wordtype[i] = "";
-			
+
 
 			defs[i] = str.substr(j, (int)str.length() - j);
 
@@ -241,6 +241,18 @@ public:
 		//Layout();
 	}
 
+	void clearWordView() {
+		cur = -1;
+		pages = 0;
+		defs.clear();
+		wordtype.clear();
+
+		pageText->SetValue("");
+		text->SetLabel("");
+		wordTypeText->SetLabel("");
+		defText->SetLabel("");
+	}
+
 	void showWord(wxCommandEvent& evt) {
 		int id = evt.GetId();
 		if (pages == 0) return;
@@ -251,7 +263,7 @@ public:
 		}
 
 		if (!(cur >= 0 && cur < pages)) return;
-		
+
 		if (wordTypeText) wordTypeText->SetLabel(wxString::FromUTF8(wordtype[cur]));
 		if (defText) defText->SetLabel(wxString::FromUTF8(defs[cur]));
 		if (pageText) {
@@ -359,7 +371,7 @@ public:
 		if (pages == 0) return;
 
 		int curIndex = cur;
-		
+
 		wxString wxstr = text->GetLabel();
 		string wordText = string(wxstr.mb_str(wxConvUTF8));
 
@@ -389,7 +401,7 @@ public:
 
 			if (curIndex != -1) defText->SetLabel(wxString::FromUTF8(defs[curIndex]));
 			else defText->SetLabel("");
-		
+
 			if (curIndex == -1) text->SetLabel("");
 
 			cur = curIndex;
@@ -403,7 +415,7 @@ public:
 		ofstream out;
 		out.open("Favourite\\" + activeDataset + "\\fav.txt", ios::app);
 		if (!out.is_open()) return;
-		out << getShowingWord().getText()  << endl;
+		out << getShowingWord().getText() << endl;
 		out.close();
 		getShowingWord().markFavourite();
 	}
@@ -416,7 +428,7 @@ public:
 	void OnPageTextChanged(wxCommandEvent& evt) {
 		wxString page = pageText->GetValue();
 		int enteredPage = wxAtoi(page.Left(page.First('/')));
-		
+
 		if (enteredPage > pages)
 			cur = pages - 1;
 		else if (enteredPage <= 0)
@@ -452,7 +464,7 @@ public:
 		back->Hide();
 		next->Hide();
 		pageText->Hide();
-		
+
 
 	}
 	void Show() {

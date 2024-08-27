@@ -18,7 +18,7 @@ public:
     wxButton* tmp_Quiz;
     MainMenu(wxWindow* parent);
 
-private:   
+private:
     wxPanel* titleBar, * mainPanel;
 
 };

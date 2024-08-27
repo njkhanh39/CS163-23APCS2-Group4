@@ -9,10 +9,10 @@ wxIMPLEMENT_APP(App);
 
 bool App::OnInit() {
 	Dictionary* dict = &dictionary;
-	
+
 	wxImage::AddHandler(new wxPNGHandler);
-	MainFrame* frame = new MainFrame(dict,"Dictionary", wxSize(1280,800));
+	MainFrame* frame = new MainFrame(dict, "Dictionary", wxSize(1280, 800));
 	frame->Show(true);
-	
+
 	return true;
 }

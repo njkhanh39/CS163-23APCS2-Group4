@@ -3,17 +3,17 @@
 using namespace std;
 
 //"Eng-Eng", "Eng-Vie", "Vie-Eng"
-bool Dictionary::chooseLanguage(string t, MainFrame*& frame) {
+bool Dictionary::chooseLanguage(string t) {
 	if (t != EngEng && t != EngVie && t != VieEng) return false;
 	activeDataSet = t;
-	
+
 	if (t == EngEng) activeSearcher = &toolEngEng;
 	if (t == EngVie) activeSearcher = &toolEngVie;
 	if (t == VieEng) activeSearcher = &toolVieEng;
-	frame->histMenu->Refresh();
-	
+
+	// refresh the history here
 	return true;
-}
+}   
 
 //Pass in search bar's current word, true/false for LogMessaging on Status Bar.
 void Dictionary::runSearchEngine(string word, bool yesLogMessage) {
@@ -67,7 +67,7 @@ Word Dictionary::searchWordMatching(string word) {
 	//cautious with trie, it should be clear after searching
 	if (!myTrie.empty()) w = myTrie.getWordMatching(word);
 	if (w.empty()) w = activeSearcher->searchWord(word);
-	
+
 	//since some of w's definitions may be deleted by user, we have to check.
 	getAvailableWords(w);
 
@@ -527,7 +527,7 @@ string Dictionary::mapStringToFile(string word) {
 		}
 
 	}
-    temp = to_string(num);
+	temp = to_string(num);
 
 	file = "DataSet\\" + activeDataSet + "\\" + temp + ".txt";
 
@@ -568,10 +568,10 @@ void Dictionary::EngineHelper(string keyword, bool yesLogMessage) {
 	if (!word.empty()) {
 		file = mapStringToFile(word);
 	}
-	
+
 
 	if (realLength == 1 && myTrie.empty()) {
-		myTrie.loadData(file,activeDataSet);
+		myTrie.loadData(file, activeDataSet);
 		wxLogStatus("Loading data...");
 	}
 	else if (realLength == 0) {

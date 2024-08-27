@@ -15,5 +15,3 @@ public:
 	//entry point
 	virtual bool OnInit();
 };
-
-

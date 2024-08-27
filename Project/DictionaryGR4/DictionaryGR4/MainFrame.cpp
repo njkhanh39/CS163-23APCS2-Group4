@@ -1,8 +1,8 @@
 #include "MainFrame.h"
 
 MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize) : wxFrame(NULL, wxID_ANY, Title, wxDefaultPosition, FrameSize) {
-	simpleBook = new wxSimplebook(this, wxID_ANY);
-    
+    simpleBook = new wxSimplebook(this, wxID_ANY);
+
 
     NavPane = new wxPanel(this, 10001, wxDefaultPosition, wxSize(1280, 80), wxBORDER_NONE);
     NavPane->SetBackgroundColour(purple);
@@ -28,28 +28,28 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
     favpane->SetForegroundColour(white);
 
 
-	
+
     //MainMenu* mainMenu = new MainMenu(simpleBook);
-    
-	SearchMenu* searchMenu = new SearchMenu(simpleBook, dict);
+
+    SearchMenu* searchMenu = new SearchMenu(simpleBook, dict);
     QuizMenu* quizMenu = new QuizMenu(simpleBook, dict);
     AddWordMenu* addMenu = new AddWordMenu(simpleBook, dict);
-    histMenu = new HistoryMenu(simpleBook, dict);
- 
+    HistoryMenu* histMenu = new HistoryMenu(simpleBook, dict);
+
     simpleBook->AddPage(addMenu, "Add Menu", true); //selection = 0
     simpleBook->AddPage(quizMenu, "Quiz Menu", true); //selection = 1
     simpleBook->AddPage(searchMenu, "Search Menu", true);//selection = 2
-	//simpleBook->AddPage(mainMenu, "Main Menu", true); //selection = 2
+    //simpleBook->AddPage(mainMenu, "Main Menu", true); //selection = 2
     simpleBook->AddPage(histMenu, "History Menu", true);
 
     simpleBook->SetSelection(2);
-   
+
 
     //binding
 
 
     searchpane->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
-        simpleBook->SetSelection(2); 
+        simpleBook->SetSelection(2);
         searchpane->SetBackgroundColour(black);
         addpane->SetBackgroundColour(purple);
         hispane->SetBackgroundColour(purple);
@@ -58,7 +58,7 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
         });
 
     quizpane->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
-        simpleBook->SetSelection(1); 
+        simpleBook->SetSelection(1);
         searchpane->SetBackgroundColour(purple);
         addpane->SetBackgroundColour(purple);
         hispane->SetBackgroundColour(purple);
@@ -104,7 +104,7 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
     frameSizer->Add(simpleBook, 5, wxEXPAND | wxALL, 0);
 
     SetSizerAndFit(frameSizer);
-    
+
 }
 
 void MainFrame::OnPreviousPage(wxCommandEvent& event)
@@ -112,7 +112,7 @@ void MainFrame::OnPreviousPage(wxCommandEvent& event)
     int selection = simpleBook->GetSelection();
     if (selection > 0)
     {
-       simpleBook->SetSelection(selection - 1);
+        simpleBook->SetSelection(selection - 1);
     }
 }
 

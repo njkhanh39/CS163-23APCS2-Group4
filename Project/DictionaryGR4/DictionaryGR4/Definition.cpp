@@ -8,7 +8,7 @@ Definition::Definition(string& defText, Word* owningWord) {
 
 //getters2
 
-	
+
 string Definition::getStringDefinition() {
 	return text;
 }

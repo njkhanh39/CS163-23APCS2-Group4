@@ -126,6 +126,7 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	suggestBar->Bind(wxEVT_LISTBOX, [this, dict](wxCommandEvent& evt) {
 		OnViewWord(evt, dict);
 		});
+
 	rd_button->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
 		OnRandomClicked(evt, dict);
 		});

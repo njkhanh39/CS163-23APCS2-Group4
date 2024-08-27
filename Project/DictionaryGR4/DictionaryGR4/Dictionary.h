@@ -8,17 +8,17 @@
 #include "History.h"
 #include "randomfunc.h"
 #include <list>
-#include "MainFrame.h"
+
 class Dictionary {
 private:
-	
+
 	Trie myTrie; //for word -> def in Eng-Eng & Eng-Vie
 
 	const string EngEng = "Eng-Eng", EngVie = "Eng-Vie", VieEng = "Vie-Eng"; //datasets
 	string activeDataSet = EngEng; //changeable
-	
+
 	list<string> favList;
-	
+
 public:
 	History hist;
 	WordFinder* activeSearcher = nullptr; //for def -> word in all datasets
@@ -34,7 +34,7 @@ public:
 	}
 
 	//"Eng-Eng", "Eng-Vie", "Vie-Eng"
-	bool chooseLanguage(string t, MainFrame* &frame);
+	bool chooseLanguage(string t);
 
 	//Pass in search bar's current word, true/false for LogMessaging on Status Bar.
 	void runSearchEngine(string word, bool yesLogMessage);
@@ -105,7 +105,7 @@ public:
 	vector<string> transformSentence(string& input);
 
 	vector<string> transformSentenceWithBracs(string& input);
-	
+
 	void EngineHelper(string keyword, bool yesLogMessage);
 
 	string mapStringToFile(string word);

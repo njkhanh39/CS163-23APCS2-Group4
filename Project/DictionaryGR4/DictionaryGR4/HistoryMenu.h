@@ -23,12 +23,14 @@ public:
 private:
 	wxTextCtrl* searchBar;
 	WordView* wordView;
-	wxButton* back, * view;
+	wxButton* back, * view, * clear;
 	wxListCtrl* list;
-
-
+	wxComboBox* datasetCbb;
+	string ViewedDataset;
 
 	void OnViewButton(wxCommandEvent& evt, Dictionary* dict);
 	void OnBackButton(wxCommandEvent& evt, Dictionary* dict);
-	
+	void OnDataSetChanged(wxCommandEvent& evt, Dictionary* dict);
+	void OnClearButton(wxCommandEvent& evt, Dictionary* dict);
+
 };
