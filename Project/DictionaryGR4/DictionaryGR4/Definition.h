@@ -44,5 +44,8 @@ public:
 	}
 
 	string getStringDefinition();
+
+	void setDefinition(string newText);
+
 };
 

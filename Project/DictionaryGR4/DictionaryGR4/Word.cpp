@@ -59,6 +59,10 @@ void Word::setWord(string word) {
 	text = word;
 }
 
+void Word::setDefinition(string def, int index) {
+	defList[index].setDefinition(def);
+}
+
 void Word::clear() {
 	text = "";
 	defList.clear();

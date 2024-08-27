@@ -656,10 +656,11 @@ void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef, 
 	sortVectorString(sortedNewdef);
 
 	for (int i = size; i < size + added; ++i) {
-		string def = activeSearcher->getWord(i).getDefinitionAt(0).getStringDefinition();
+		string def = activeSearcher->getWord(i).getDefinitions().back().getStringDefinition();
 
 		if (activeSearcher->getWord(i).getText() == text and def == olddef) {
 			*(activeSearcher->getSubDef(i)) = sortedNewdef;
+			activeSearcher->setDefinition(newdef, i);
 
 			string prev, after, line;
 
@@ -719,6 +720,7 @@ void Dictionary::editDefOnWordFinder(string text, string olddef, string newdef, 
 		}
 
 		*(activeSearcher->getSubDef(t)) = sortedNewdef;
+		activeSearcher->setDefinition(newdef, t);
 
 		//ifstream fin;
 		//string prev, after;

@@ -12,3 +12,7 @@ Definition::Definition(string& defText, Word* owningWord) {
 string Definition::getStringDefinition() {
 	return text;
 }
+
+void Definition::setDefinition(string newText) {
+	text = newText;
+}

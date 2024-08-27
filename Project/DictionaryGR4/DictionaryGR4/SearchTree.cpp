@@ -499,6 +499,10 @@ void WordFinder::addSubDef(string subdef, int order) {
     slots[order].addSubDef(subdef);
 }
 
+void WordFinder::setDefinition(string newdef, int index) {
+    slots[index].word.setDefinition(newdef, 0);
+}
+
 void WordFinder::load(string dataset) {
     //load from processed data
     int curbucket = 0;

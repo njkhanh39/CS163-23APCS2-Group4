@@ -362,6 +362,7 @@ void SearchMenu::OnResetButtonClicked(wxCommandEvent& evt, Dictionary* dict) {
 	}
 
 	dict->reloadWordFinder(curDataset);
+	wordView->SetBackDefault();
 }
 
 void SearchMenu::OnRandomClicked(wxCommandEvent& evt, Dictionary* dict) {
