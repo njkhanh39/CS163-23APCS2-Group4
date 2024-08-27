@@ -195,7 +195,7 @@ public:
 		return ans;
 	}
 
-	void processWord(Word& processWord) {
+	void processWord(Word& processWord, Dictionary* dict) {
 		//careful with this, must set cur = 0 when loading new word
 		if (processWord.empty()) return;
 
@@ -436,7 +436,6 @@ public:
 		if (!out.is_open()) return;
 		out << getShowingWord().getText() << endl;
 		out.close();
-		getShowingWord().markFavourite();
 	}
 
 	void OnPageTextFocus(wxFocusEvent& evt) {

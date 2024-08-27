@@ -140,7 +140,7 @@ void HistoryMenu::OnViewButton(wxCommandEvent& evt, Dictionary* dict) {
     else {
         //string tmp = dict->getActiveDataset();
         dict->chooseLanguage(ViewedDataset);
-        wordView->processWord(word);
+        wordView->processWord(word, dict);
         Word* ptr = dict->getWordPtr(key);
         wordView->setWord(ptr);
         wordView->setActiveDataset(ViewedDataset);
