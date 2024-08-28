@@ -5,7 +5,7 @@ using namespace std;
 AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(parent, wxID_ANY, wxDefaultPosition, wxSize(1280, 720), wxBORDER_NONE) {
 
 	//font
-	wxFont font(16, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+	wxFont font(16, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	wxFont fontTitle(18, wxFONTFAMILY_MODERN, wxFONTSTYLE_MAX, wxFONTWEIGHT_NORMAL);
 	wxFont fontCB(22, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	fontTitle.MakeBold();
@@ -37,7 +37,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 	wordTypeText = new wxTextCtrl(mainPanel, wxID_ANY, "", wxPoint(951, 101), wxSize(154, 60));
 	wordTypeText->SetFont(fontCB);
 
-	submit = new wxButton(mainPanel, wxID_ANY, "ADD", wxPoint(951, 600), wxSize(154, 60));
+	submit = new wxButton(mainPanel, wxID_ANY, "ADD", wxPoint(951, 600), wxSize(154, 60), wxBORDER_NONE);
 	auto fntSubmit = submit->GetFont();
 	fntSubmit.SetPointSize(16);
 	submit->SetFont(fntSubmit);
@@ -45,7 +45,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 	submit->SetBackgroundColour(green);
 
 
-	deletedWords = new wxButton(mainPanel, wxID_ANY, "VIEW DELETED WORDS", wxPoint(651, 600), wxSize(254, 60));
+	deletedWords = new wxButton(mainPanel, wxID_ANY, "VIEW DELETED WORDS", wxPoint(651, 600), wxSize(254, 60), wxBORDER_NONE);
 	deletedWords->SetFont(fntSubmit);
 	deletedWords->SetForegroundColour(white);
 	deletedWords->SetBackgroundColour(purple);

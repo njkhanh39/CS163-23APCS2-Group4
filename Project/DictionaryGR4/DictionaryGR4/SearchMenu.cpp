@@ -87,13 +87,13 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	searchByWord->SetFont(font);*/
 
 
-	//word view appears first
-	wordView = new WordView(this, wxPoint(234, 133), wxSize(979, 460), dict);
-	wordView->SetColor(white);
-
 	//init height = 0
 	suggestBar = new wxListBox(this, wxID_ANY, wxPoint(234, 101), wxSize(776, 0));
 	suggestBar->SetFont(fnt);
+
+	//word view appears first
+	wordView = new WordView(this, wxPoint(234, 133), wxSize(979, 460), dict);
+	wordView->SetColor(white);
 
 	deleteword = new wxButton(this, wxID_ANY, "DELETE WORD", wxPoint(1042, 610), wxSize(172, 60), wxBORDER_NONE);
 	deleteword->SetFont(boldfnt);
@@ -152,6 +152,8 @@ void SearchMenu::skip(wxMouseEvent& evt) {
 }
 
 void SearchMenu::OnSearchButton(wxCommandEvent& evt, Dictionary* dict) {
+	this->SetCursor(wxCURSOR_WAIT);
+
 	//#case 1: search by definition, press the button will list out
 	if (dict->isSearchingDefinition) {
 		wxString wunicode = searchBar->GetValue();
@@ -206,6 +208,8 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt, Dictionary* dict) {
 		Word* ptr = dict->getWordPtr(key);
 		wordView->setWord(ptr);
 	}
+
+	this->SetCursor(wxNullCursor);
 }
 
 void SearchMenu::OnViewWord(wxCommandEvent& evt, Dictionary* dict) {

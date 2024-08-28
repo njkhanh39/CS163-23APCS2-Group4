@@ -179,14 +179,18 @@ public:
 		wordtype.clear();
 
 		pageText->SetValue("0/0");
-		text->SetLabel("Hello");
-		wordTypeText->SetLabel("Wordtype");
-		defText->SetLabel("Definition");
+		text->SetLabel("Word-displayed here");
+		wordTypeText->SetLabel("Wordtype displayed here");
+		defText->SetLabel("Definition displayed here.");
 	}
 
 	void Lower() {
 		panel->Lower();
-
+		text->Lower();
+		wordTypeText->Lower();
+		defText->Lower();
+		back->Lower();
+		next->Lower();
 	}
 
 	Word getShowingWord() {
@@ -337,16 +341,20 @@ public:
 	void OnConfirmEditClicked(wxCommandEvent& evt, Dictionary* dict) {
 		int curIndex = cur;
 
-
 		wxMessageDialog* ask = new wxMessageDialog(parentWindow,
 			"Are you sure to modify this definition?",
 			"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
 
 		if (ask->ShowModal() == wxID_YES and curIndex >= 0) {
+			parentWindow->SetCursor(wxCURSOR_WAIT);
+
 			string newDef = string(defText->GetValue().mb_str(wxConvUTF8));
 			dict->editDefinition(string(text->GetLabel().mb_str(wxConvUTF8)), defs[curIndex], newDef, string(wordTypeText->GetLabel().mb_str(wxConvUTF8)));
 			defs[curIndex] = newDef;
-			word->modifyDefinition(newDef, curIndex);
+			if (word->empty())
+				word->modifyDefinition(newDef, curIndex);
+
+			parentWindow->SetCursor(wxNullCursor);
 		}
 
 		defText->SetEditable(0);
@@ -361,7 +369,7 @@ public:
 		int curIndex = cur;
 
 		if (curIndex < 0)
-			defText->SetLabel(wxString("Definition."));
+			defText->SetLabel(wxString("Definition displayed here."));
 		else
 			defText->SetLabel(wxString::FromUTF8(defs[curIndex]));
 

@@ -40,7 +40,6 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
     simpleBook->AddPage(addMenu, "Add Menu", true); //selection = 0
     simpleBook->AddPage(quizMenu, "Quiz Menu", true); //selection = 1
     simpleBook->AddPage(searchMenu, "Search Menu", true);//selection = 2
-    //simpleBook->AddPage(mainMenu, "Main Menu", true); //selection = 2
     simpleBook->AddPage(histMenu, "History Menu", true);
     simpleBook->AddPage(favMenu, "Favourtie Menu", true);
 
@@ -90,13 +89,15 @@ MainFrame::MainFrame(Dictionary*& dict, const wxString& Title, wxSize FrameSize)
         favMenu->OnLoadFavourite(evt, dict);
         });
 
-    hispane->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {
+    hispane->Bind(wxEVT_BUTTON, [this, histMenu, dict](wxCommandEvent& evt) {
         simpleBook->SetSelection(3);
         searchpane->SetBackgroundColour(purple);
         addpane->SetBackgroundColour(purple);
         hispane->SetBackgroundColour(black);
         quizpane->SetBackgroundColour(purple);
         favpane->SetBackgroundColour(purple);
+
+        histMenu->Refresh(dict);
         });
 
     //searchMenu->back_to_home->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt) {simpleBook->SetSelection(0); });

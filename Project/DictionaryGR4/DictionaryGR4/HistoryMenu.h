@@ -18,12 +18,12 @@ class HistoryMenu : public wxPanel
 {
 public:
 	HistoryMenu(wxWindow* parent, Dictionary*& dict);
-	void Refresh(Dictionary*& dict);
+	void Refresh(Dictionary* dict);
 	~HistoryMenu();
 private:
 	wxTextCtrl* searchBar;
 	WordView* wordView;
-	wxButton* back, * view, * clear;
+	wxButton* back, * clear;
 	wxListCtrl* list;
 	wxComboBox* datasetCbb;
 	string ViewedDataset;
