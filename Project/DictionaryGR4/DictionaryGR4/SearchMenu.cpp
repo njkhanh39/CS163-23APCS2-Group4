@@ -283,7 +283,7 @@ void SearchMenu::OnViewWord(wxCommandEvent& evt, Dictionary* dict) {
 
 	SW.setTime();
 	SW.setDate();
-	dict->hist.saveDevToWord(SW, def, dict->getActiveDataset());
+	dict->hist.saveToFile(SW,dict->getActiveDataset());
 }
 
 void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict) {
