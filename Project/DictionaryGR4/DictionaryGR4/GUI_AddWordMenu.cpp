@@ -253,6 +253,7 @@ AddWordMenu::AddWordMenu(wxWindow* parent, Dictionary*& dict) : wxSimplebook(par
 
 	//----Simple Book----//
 	deletedWords->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
+
 		dict->chooseLanguage(datasetCbb2->GetStringSelection().ToStdString());
 		listCtrl->DeleteAllItems();
 

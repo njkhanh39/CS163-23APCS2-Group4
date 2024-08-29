@@ -35,9 +35,9 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	rd_button->SetForegroundColour(white);
 
 
-	searchByDef = new wxBitmapButton(this, wxID_ANY, defbm[1], wxPoint(40, 123), wxSize(181, 181), wxBORDER_NONE);
+	searchByDef = new wxBitmapButton(this, wxID_ANY, defbm[0], wxPoint(40, 123), wxSize(181, 181), wxBORDER_NONE);
 
-	searchByWord = new wxBitmapButton(this, wxID_ANY, wordbm[0], wxPoint(40, 304), wxSize(181, 181), wxBORDER_NONE);
+	searchByWord = new wxBitmapButton(this, wxID_ANY, wordbm[1], wxPoint(40, 304), wxSize(181, 181), wxBORDER_NONE);
 
 	//def2word->SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
 	//word2def->SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
@@ -109,11 +109,18 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	//events
 
 	deleteword->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
-		Word get = wordView->getShowingWord();
-		if (get.empty()) return;
-		dict->deleteWord(get);
-		wordView->SetBackDefault();
-		});
+		wxMessageDialog* ask = new wxMessageDialog(this,
+		"Are you sure to delete this whole word?",
+		"Confirmation", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+
+		if (ask->ShowModal() == wxID_YES) {
+
+			Word get = wordView->getShowingWord();
+			if (get.empty()) return;
+			dict->deleteWord(get);
+			wordView->SetBackDefault();
+		}
+	});
 
 	suggestBar->Bind(wxEVT_LEFT_DOWN, &SearchMenu::skip, this);
 	button->Bind(wxEVT_BUTTON, [this, dict](wxCommandEvent& evt) {
@@ -139,6 +146,7 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 		wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
 
 	dict->runSearchDefinitionEngine();
+	dict->isSearchingDefinition = false;
 
 	wxLogMessage("Task completed!");
 }
@@ -152,7 +160,7 @@ void SearchMenu::skip(wxMouseEvent& evt) {
 }
 
 void SearchMenu::OnSearchButton(wxCommandEvent& evt, Dictionary* dict) {
-	this->SetCursor(wxCURSOR_WAIT);
+	//this->SetCursor(wxCURSOR_WAIT);
 
 	//#case 1: search by definition, press the button will list out
 	if (dict->isSearchingDefinition) {
@@ -209,7 +217,7 @@ void SearchMenu::OnSearchButton(wxCommandEvent& evt, Dictionary* dict) {
 		wordView->setWord(ptr);
 	}
 
-	this->SetCursor(wxNullCursor);
+	//this->SetCursor(wxNullCursor);
 }
 
 void SearchMenu::OnViewWord(wxCommandEvent& evt, Dictionary* dict) {
@@ -295,7 +303,7 @@ void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict
 	//wordView->Disable();
 	//only for #case2, search by word
 	if (!(dict->isSearchingDefinition)) {
-		this->SetCursor(wxCURSOR_WAIT);
+		//this->SetCursor(wxCURSOR_WAIT);
 
 		suggestBar->Raise();
 
@@ -320,7 +328,7 @@ void SearchMenu::OnSearchAndSuggestHandler(wxCommandEvent& evt, Dictionary* dict
 
 		adjustSuggestBar(300, 14);
 		
-		this->SetCursor(wxNullCursor);
+		//this->SetCursor(wxNullCursor);
 	}
 
 	//if (suggestBar->IsEmpty()) wordView->Enable();

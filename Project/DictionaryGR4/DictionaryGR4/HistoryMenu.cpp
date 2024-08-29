@@ -135,6 +135,7 @@ void HistoryMenu::OnViewButton(wxCommandEvent& evt, Dictionary* dict) {
     Word word = dict->searchWordMatching(key);
     if (word.empty()) {
         wordView->clearWordView();
+        searchBar->SetValue(keyuni + "(word was deleted!)");
     }
     else {
         //string tmp = dict->getActiveDataset();
@@ -181,10 +182,12 @@ void HistoryMenu::Refresh(Dictionary* dict) {
             wxString time = c.getTime();
             wxString word = c.getText();
 
+            wxString wxword = wxString::FromUTF8(word);
+
             long itemIndex = list->InsertItem(index, no);
             list->SetItem(itemIndex, 1, date);
             list->SetItem(itemIndex, 2, time);
-            list->SetItem(itemIndex, 3, word);
+            list->SetItem(itemIndex, 3, wxword);
             index++;
         }
     }
