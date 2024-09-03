@@ -85,15 +85,15 @@ SearchMenu::SearchMenu(wxWindow* parent, Dictionary*& dict) : wxPanel(parent, 10
 	searchByWord = new wxButton(mainPanel, wxID_ANY, "Word->Def", wxPoint(60, 240), wxSize(120, 40));
 	searchByWord->Bind(wxEVT_BUTTON, &SearchMenu::OnUnLoadTool, this);
 	searchByWord->SetFont(font);*/
-
+	//word view appears first
+	wordView = new WordView(this, wxPoint(234, 133), wxSize(979, 460), dict);
+	wordView->SetColor(white);
 
 	//init height = 0
 	suggestBar = new wxListBox(this, wxID_ANY, wxPoint(234, 101), wxSize(776, 0));
 	suggestBar->SetFont(fnt);
 
-	//word view appears first
-	wordView = new WordView(this, wxPoint(234, 133), wxSize(979, 460), dict);
-	wordView->SetColor(white);
+
 
 	deleteword = new wxButton(this, wxID_ANY, "DELETE WORD", wxPoint(1042, 610), wxSize(172, 60), wxBORDER_NONE);
 	deleteword->SetFont(boldfnt);

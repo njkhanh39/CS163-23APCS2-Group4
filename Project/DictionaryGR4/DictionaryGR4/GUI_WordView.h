@@ -121,7 +121,6 @@ public:
 		defText->Bind(wxEVT_SET_FOCUS, &WordView::OnTextFocus, this);
 		defText->Bind(wxEVT_KILL_FOCUS, &WordView::OnDefTextKillFocus, this);
 
-		pageText->Bind(wxEVT_SET_FOCUS, &WordView::OnPageTextFocus, this);
 		pageText->Bind(wxEVT_TEXT_ENTER, &WordView::OnPageTextChanged, this);
 
 		//----ADD WORD
@@ -478,11 +477,6 @@ public:
 		}
 		else favDef->SetBackgroundColour(wxColour(184, 89, 89));*/
 
-	}
-
-	void OnPageTextFocus(wxFocusEvent& evt) {
-		pageText->SelectAll();
-		//evt.Skip();
 	}
 
 	void OnPageTextChanged(wxCommandEvent& evt) {

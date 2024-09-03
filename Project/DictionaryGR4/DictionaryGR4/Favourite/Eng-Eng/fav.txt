@@ -1,5 +1,4 @@
 accountable
-run
 for
 hell
 fast

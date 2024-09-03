@@ -1,0 +1,7 @@
+﻿  SearchMenu.cpp
+  Generating code
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+C:\Users\Admin\Documents\HCMUS\GitHub\CS163-23APCS2-Group4\Project\DictionaryGR4\DictionaryGR4\Dictionary.cpp(641): warning C4715: 'Dictionary::editDefInFile': not all control paths return a value
+  All 3047 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  DictionaryGR4.vcxproj -> C:\Users\Admin\Documents\HCMUS\GitHub\CS163-23APCS2-Group4\Project\DictionaryGR4\x64\Release\DictionaryGR4.exe
